@@ -1,6 +1,7 @@
 package g.sants.challenge_e_commerce.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,8 @@ public class Kart {
    private double totalPriceDiscount;
    private List<Item> items = new ArrayList<Item>();
 
+   @OneToOne
+   
 
    public Kart(User user) {
       this.user = user;
