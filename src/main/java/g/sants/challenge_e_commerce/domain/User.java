@@ -1,13 +1,10 @@
 package g.sants.challenge_e_commerce.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+@Table(name = "user")
 @Entity
 public class User {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +13,9 @@ public class User {
     private String name;
     private String lastName;
     private String email;
+    private Kart shoppingkart;
+
+    @OneToOne(mappedBy = "user")
     private Kart kart;
 
     public User(){}
@@ -26,7 +26,7 @@ public class User {
         this.name = name;
         this.lastName = lastName;
         this.email = email;
-        this.kart = kart;
+        this.shoppingkart = shoppingkart;
     }
 
     public long getId() {

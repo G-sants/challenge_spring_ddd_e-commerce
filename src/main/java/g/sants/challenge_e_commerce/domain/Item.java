@@ -1,11 +1,9 @@
 package g.sants.challenge_e_commerce.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "item")
 public class Item {
 
     @Id
@@ -13,6 +11,10 @@ public class Item {
     private long id;
     private double price;
     private String itemName;
+
+        @ManyToOne
+        @JoinColumn(name = "item_id")
+        private Item item;
 
     public Item(long id, double price, String itemName) {
         this.id = id;

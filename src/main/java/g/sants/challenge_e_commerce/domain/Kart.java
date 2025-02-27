@@ -1,35 +1,39 @@
 package g.sants.challenge_e_commerce.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Table(name= "kart")
 @Entity
 public class Kart {
 
    private User user;
    private double totalPrice;
    private double totalPriceDiscount;
-   private List<Item> items = new ArrayList<Item>();
+   private List<Item> itemsList = new ArrayList<Item>();
+
+   @OneToMany(mappedBy = "item")
+   private List<Item> items;
 
    @OneToOne
-   
+   @JoinColumn(name = "user_id")
+   User users;
 
    public Kart(User user) {
       this.user = user;
       this.totalPrice = totalPrice;
       this.totalPriceDiscount = totalPrice;
-      this.items = items;
+      this.itemsList = itemsList;
    }
 
    public void addItems(Item item) {
-      items.add(item);
+      itemsList.add(item);
    }
 
    public void removeItems(Item item) {
-      items.remove(item);
+      itemsList.remove(item);
    }
 
    public double getTotalPrice() {
