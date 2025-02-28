@@ -18,7 +18,7 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Kart kart;
 
-    public User(){}
+    public User() {}
 
     public User(long id, long customerID, String name, String lastName, String email) {
         this.id = id;

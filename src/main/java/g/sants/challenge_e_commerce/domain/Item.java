@@ -6,10 +6,12 @@ import jakarta.persistence.*;
 @Table(name = "item")
 public class Item {
 
+    public Item() {}
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private double price;
+    private static double price;
     private String itemName;
 
         @ManyToOne
@@ -26,7 +28,7 @@ public class Item {
         return id;
     }
 
-    public double getPrice() {
+    public static double getPrice() {
         return price;
     }
 

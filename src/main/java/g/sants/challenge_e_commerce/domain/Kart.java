@@ -21,9 +21,11 @@ public class Kart {
    @JoinColumn(name = "user_id")
    User users;
 
+   public Kart() {}
+
    public Kart(User user) {
       this.user = user;
-      this.totalPrice = totalPrice;
+      this.totalPrice = getTotalPrice();
       this.totalPriceDiscount = totalPrice;
       this.itemsList = itemsList;
    }
@@ -40,8 +42,11 @@ public class Kart {
       return totalPrice;
    }
 
-   public void setTotalPrice(double totalPrice) {
-      this.totalPrice = totalPrice;
+   public void setTotalPrice() {
+      for (int i = 0; i<itemsList.size(); i++){
+         Item item = itemsList.get(i);
+         this.totalPrice += item.getPrice();
+      }
    }
 
    public double getTotalPriceDiscount() {
