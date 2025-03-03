@@ -1,5 +1,6 @@
 package g.sants.challenge_e_commerce.domain;
 
+import g.sants.challenge_e_commerce.application.schemas.KartSchema;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -25,8 +26,8 @@ public class Kart {
 
    public Kart(User user) {
       this.user = user;
-      this.totalPrice = getTotalPrice();
-      this.totalPriceDiscount = totalPrice;
+      this.totalPrice = 0.0;
+      this.totalPriceDiscount = 0.0;
       this.itemsList = itemsList;
    }
 
@@ -53,15 +54,8 @@ public class Kart {
       return totalPriceDiscount;
    }
 
-   public void setTotalPriceDiscount(double totalPrice) {
-      if (this.totalPrice >=500 & this.totalPrice <1000){
-         this.totalPriceDiscount = this.totalPrice -(this.totalPrice *0.1);
-      }else if (this.totalPrice >=1000 & this.totalPrice <5000) {
-         this.totalPriceDiscount = this.totalPrice -(this.totalPrice *0.15);
-      }else if (this.totalPrice >=5000){
-         this.totalPriceDiscount = this.totalPrice - (this.totalPrice *0.2);
-      } else {
-         this.totalPriceDiscount = this.totalPrice;
-      }
+   public void setTotalPriceDiscount(double totalPrice){
+      totalPriceDiscount = KartSchema.totalPriceDiscount(totalPrice);
+      this.totalPriceDiscount = totalPriceDiscount;
    }
 }
