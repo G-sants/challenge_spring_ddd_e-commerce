@@ -18,8 +18,8 @@ public class Item {
         @JoinColumn(name = "item_id")
         private Item item;
 
-    public Item(long id, double price, String itemName) {
-        this.id = id;
+    public Item(long item_id, double price, String itemName) {
+        this.id = item_id;
         this.price = price;
         this.itemName = itemName;
     }
@@ -34,5 +34,14 @@ public class Item {
 
     public String getItemName() {
         return itemName;
+    }
+
+
+    public static void setPrice(double price) {
+        Item.price = price;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 }
