@@ -2,7 +2,6 @@ package g.sants.challenge_e_commerce.application.service;
 
 import g.sants.challenge_e_commerce.application.port.output.KartRepository;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
-import g.sants.challenge_e_commerce.domain.Item;
 import g.sants.challenge_e_commerce.domain.Kart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,7 @@ public class KartService {
     private KartRepository kartRepository;
     private UserRepository userRepository;
 
-    public List<Kart> getAllIKarts() {
+    public List<Kart> getAllKarts() {
         return kartRepository.findAll();
     }
 
