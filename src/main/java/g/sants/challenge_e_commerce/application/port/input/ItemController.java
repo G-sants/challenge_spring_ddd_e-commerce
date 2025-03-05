@@ -11,19 +11,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/orders/items")
+@RequestMapping("/users/{id}/orders/{id}/items")
 public class ItemController {
 
     @Autowired
     private ItemService itemService;
     private UserService userService;
 
-    @GetMapping("{id}")
+    @GetMapping
     public List<Item> getAllItems(){
         return itemService.getAllItems();
     }
 
-    @GetMapping("{id}/{item_id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Item> getItemById (@PathVariable Long id,@PathVariable Long item_id) {
         User user = userService.getUser(id);
         if (user == null) {
@@ -36,13 +36,19 @@ public class ItemController {
         return ResponseEntity.ok(item);
     }
 
-    @PostMapping("{id}/{item_id}")
+    @PostMapping("/{id}")
     public Item createItem(@RequestBody Item item){
         return itemService.createItem(item);
     }
 
-    @PutMapping("{id}/{item_id}")
-    public ResponseEntity<Item> updateItem(@PathVariable Long id, @PathVariable Long item_id, @RequestBody Item itemDetails){
+    @PutMapping("/{id}")
+    public ResponseEntity<Item> updateItem(@PathVariable Long id, @PathVariable Long item_id, @PathVariable Long kart_id,@RequestBody Item itemDetails){
         return null;
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteItem(@PathVariable Long id,@PathVariable Long kart_id,@PathVariable Long item_id){
+        itemService.deleteItem(id,kart_id,item_id);
+        return ResponseEntity.noContent().build();
     }
 }

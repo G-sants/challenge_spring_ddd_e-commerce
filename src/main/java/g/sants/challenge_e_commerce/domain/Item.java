@@ -19,8 +19,8 @@ public class Item {
         @JoinColumn(name = "user_id")
         private User user;
 
-    public Item(long item_id, double price, String itemName) {
-        this.id = item_id;
+    public Item(long id, double price, String itemName) {
+        this.id = id;
         this.price = price;
         this.itemName = itemName;
         this.quantity = quantity;

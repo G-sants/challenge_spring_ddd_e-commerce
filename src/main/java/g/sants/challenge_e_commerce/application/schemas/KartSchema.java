@@ -2,7 +2,31 @@ package g.sants.challenge_e_commerce.application.schemas;
 
 import g.sants.challenge_e_commerce.domain.Item;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+
 public class KartSchema {
+
+    public static String dateCreation(){
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        String formatedDate = now.format(formatter);
+        return "Created at "+formatedDate;
+    }
+    public static String status(){
+        return "PENDING";
+    }
+
+     public static double totalPrice(HashMap<Long, Item> userKart) {
+         double totalPrice = 0.0;
+         if (userKart != null) {
+             for (int i = 0; i < userKart.size(); i++) {
+                 totalPrice += userKart.get(i).getPrice() * userKart.get(i).getQuantity();
+             }
+         }
+         return totalPrice;
+     }
 
     public static double totalPriceDiscount(double totalPrice) {
         double totalPriceDiscount = 0.0;
