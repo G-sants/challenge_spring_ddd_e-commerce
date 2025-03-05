@@ -34,7 +34,7 @@ public class UserService {
             if (user != null) {
                 user.setName(userDetails.getName());
                 user.setLastName(userDetails.getLastName());
-                user.setEmail(userDetails.getEmail());
+                user.setCustomerID(userDetails.getCustomerID());
                 return userRepository.save(user);
             }
         }catch (Exception e){
