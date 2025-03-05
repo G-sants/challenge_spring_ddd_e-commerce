@@ -18,6 +18,9 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Kart kart;
 
+    @OneToMany(mappedBy = "user")
+    private Item item;
+
     public User() {}
 
     public User(long id, long customerID, String name, String lastName, String email) {

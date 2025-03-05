@@ -13,19 +13,17 @@ public class Item {
     private long id;
     private static double price;
     private String itemName;
+    private int quantity;
 
         @ManyToOne
-        @JoinColumn(name = "item_id")
-        private Item item;
+        @JoinColumn(name = "user_id")
+        private User user;
 
     public Item(long item_id, double price, String itemName) {
         this.id = item_id;
         this.price = price;
         this.itemName = itemName;
-    }
-
-    public long getId() {
-        return id;
+        this.quantity = quantity;
     }
 
     public static double getPrice() {
@@ -43,5 +41,13 @@ public class Item {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

@@ -41,6 +41,7 @@ public class ItemService {
                     if (item != null) {
                         item.setItemName(itemDetails.getItemName());
                         item.setPrice(itemDetails.getPrice());
+                        item.setQuantity(itemDetails.getQuantity());
                         return itemRepository.save(item);
                     }
                 } catch (Exception e) {
