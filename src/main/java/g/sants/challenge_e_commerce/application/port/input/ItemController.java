@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users/{id}/orders/{id}/items")
+@RequestMapping("/users/{id}/orders/{kart_id}/items")
 public class ItemController {
 
     @Autowired
@@ -26,7 +26,7 @@ public class ItemController {
         return itemService.getAllItems();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{item_id}")
     public ResponseEntity<Item> getItemById (@PathVariable Long id,@PathVariable Long kart_id,@PathVariable Long item_id) {
         User user = userService.getUser(id);
         if (user == null) {
@@ -43,17 +43,21 @@ public class ItemController {
         return ResponseEntity.ok(item);
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/{item_id}")
     public Item createItem(@RequestBody Item item){
         return itemService.createItem(item);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{item_id}")
     public ResponseEntity<Item> updateItem(@PathVariable Long id, @PathVariable Long item_id, @PathVariable Long kart_id,@RequestBody Item itemDetails){
-        return null;
+        Item updateItem =itemService.updateItem(id,kart_id,item_id,itemDetails);
+        if(updateItem ==null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updateItem);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{item_id}")
     public ResponseEntity<Void> deleteItem(@PathVariable Long id,@PathVariable Long kart_id,@PathVariable Long item_id){
         itemService.deleteItem(id,kart_id,item_id);
         return ResponseEntity.noContent().build();

@@ -8,8 +8,6 @@
     @Entity
     public class Kart {
 
-        private User user;
-
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private long id;
@@ -19,6 +17,12 @@
         private String status;
         public String date;
         private HashMap<Long,Item> userKart;
+
+        @ManyToOne
+        private User user;
+
+        @OneToMany(mappedBy = "kart")
+        private Item item;
 
         public Kart(){
             this.userKart = new HashMap<>();
@@ -31,15 +35,15 @@
         }
 
         public double getTotalPrice() {
-            return totalPrice;
+            return KartSchema.totalPrice(userKart);
         }
 
         public double getTotalPriceDiscount() {
-            return totalPriceDiscount;
+            return KartSchema.totalPriceDiscount(totalPrice);
         }
 
         public double getTotalDiscount() {
-            return totalDiscount;
+            return KartSchema.totalDiscount(totalPrice);
         }
 
         public HashMap getUserKart(long id){

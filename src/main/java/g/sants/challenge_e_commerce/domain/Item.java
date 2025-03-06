@@ -16,8 +16,8 @@ public class Item {
     private int quantity;
 
         @ManyToOne
-        @JoinColumn(name = "user_id")
-        private User user;
+        @JoinColumn(name = "kart_id")
+        private Kart kart;
 
     public Item(long id, double price, String itemName) {
         this.id = id;

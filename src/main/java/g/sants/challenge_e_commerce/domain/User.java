@@ -15,7 +15,7 @@ public class User {
     private String email;
     private Kart shoppingkart;
 
-    @OneToOne(mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     private Kart kart;
 
     @OneToMany(mappedBy = "user")
