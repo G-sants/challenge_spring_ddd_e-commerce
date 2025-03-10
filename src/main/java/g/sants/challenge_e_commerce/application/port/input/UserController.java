@@ -1,5 +1,7 @@
 package g.sants.challenge_e_commerce.application.port.input;
 
+import g.sants.challenge_e_commerce.application.dto.UserDtoRequest;
+import g.sants.challenge_e_commerce.application.dto.UserDtoResponse;
 import g.sants.challenge_e_commerce.application.service.UserService;
 import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +32,12 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public void createUser(@RequestBody UserDtoRequest user) {
+        userService.createUser(user);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails){
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserDtoResponse userDetails){
         User updateUser =userService.updateUser(id, userDetails);
         if(updateUser ==null){
             return ResponseEntity.notFound().build();

@@ -1,5 +1,6 @@
 package g.sants.challenge_e_commerce.domain;
 
+import g.sants.challenge_e_commerce.application.dto.UserDtoRequest;
 import jakarta.persistence.*;
 
 @Table(name = "user")
@@ -22,6 +23,13 @@ public class User {
     private Item item;
 
     public User() {}
+
+    public User(UserDtoRequest user){
+        this.customerID = user.customerId();
+        this.name = user.name();;
+        this.lastName = user.lastName();;
+        this.email = user.email();
+    }
 
     public User(long id, long customerID, String name, String lastName) {
         this.id = id;
@@ -63,4 +71,19 @@ public class User {
         this.lastName = lastName;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Kart getKart() {
+        return kart;
+    }
+
+    public void setKart(Kart kart) {
+        this.kart = kart;
+    }
 }
