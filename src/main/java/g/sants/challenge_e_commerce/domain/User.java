@@ -3,6 +3,9 @@ package g.sants.challenge_e_commerce.domain;
 import g.sants.challenge_e_commerce.application.dto.UserDtoRequest;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Table(name = "user")
 @Entity
 public class User {
@@ -14,13 +17,9 @@ public class User {
     private String name;
     private String lastName;
     private String email;
-    private Kart shoppingkart;
 
     @OneToMany(mappedBy = "user")
-    private Kart kart;
-
-    @OneToMany(mappedBy = "user")
-    private Item item;
+    private List<Kart> karts = new ArrayList<>();
 
     public User() {}
 
@@ -36,7 +35,6 @@ public class User {
         this.customerID = customerID;
         this.name = name;
         this.lastName = lastName;
-        this.shoppingkart = shoppingkart;
     }
 
     public long getId() {
@@ -79,11 +77,17 @@ public class User {
         this.email = email;
     }
 
-    public Kart getKart() {
-        return kart;
+    public List<Kart> getKart() {
+        return karts;
     }
 
-    public void setKart(Kart kart) {
-        this.kart = kart;
+    public void addKart(Kart kart) {
+        karts.add(kart);
+        kart.setUser (this);
+    }
+
+    public void removeKart(Kart kart) {
+        karts.remove(kart);
+        kart.setUser (null);
     }
 }

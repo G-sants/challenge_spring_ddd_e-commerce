@@ -8,13 +8,13 @@ import java.util.HashMap;
 
 public class KartSchema {
 
-    public static String dateCreation(){
+    public String dateCreation(){
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         String formatedDate = now.format(formatter);
         return "Created at "+formatedDate;
     }
-    public static String status(){
+    public String status(){
         return "PENDING";
     }
 
@@ -32,8 +32,8 @@ public class KartSchema {
         double totalPriceDiscount = 0.0;
         if (totalPrice >=500 & totalPrice <1000){
             totalPriceDiscount = totalPrice -(totalPrice *0.1);
-        }else if (totalPrice >=1000 & Item.getPrice() <5000) {
-            totalPriceDiscount = Item.getPrice() -(totalPrice*0.15);
+        }else if (totalPrice >=1000 & totalPrice <5000) {
+            totalPriceDiscount = totalPrice -(totalPrice*0.15);
         }else if (totalPrice >=5000){
             totalPriceDiscount = totalPrice - (totalPrice *0.2);
         } else {
@@ -46,7 +46,7 @@ public class KartSchema {
         double totalDiscount = 0.0;
         if (totalPrice >=500 & totalPrice <1000){
             totalDiscount = (totalPrice *0.1);
-        }else if (totalPrice >=1000 & Item.getPrice() <5000) {
+        }else if (totalPrice >=1000 & totalPrice <5000) {
             totalDiscount = (totalPrice*0.15);
         }else if (totalPrice >=5000){
             totalDiscount = (totalPrice *0.2);

@@ -18,13 +18,13 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers(){
+    public List<UserDtoResponse> getAllUsers(){
         return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUsersById(@PathVariable Long id){
-        User user = userService.getUser(id);
+    public ResponseEntity<UserDtoResponse> getUsersById(@PathVariable Long id){
+        UserDtoResponse user = userService.getUser(id);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserDtoResponse userDetails){
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserDtoRequest userDetails){
         User updateUser =userService.updateUser(id, userDetails);
         if(updateUser ==null){
             return ResponseEntity.notFound().build();

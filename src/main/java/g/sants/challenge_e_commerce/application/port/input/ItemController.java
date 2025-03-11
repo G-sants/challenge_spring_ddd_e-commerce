@@ -1,5 +1,6 @@
 package g.sants.challenge_e_commerce.application.port.input;
 
+import g.sants.challenge_e_commerce.application.dto.UserDtoResponse;
 import g.sants.challenge_e_commerce.application.service.ItemService;
 import g.sants.challenge_e_commerce.application.service.KartService;
 import g.sants.challenge_e_commerce.application.service.UserService;
@@ -28,7 +29,7 @@ public class ItemController {
 
     @GetMapping("/{item_id}")
     public ResponseEntity<Item> getItemById (@PathVariable Long id,@PathVariable Long kart_id,@PathVariable Long item_id) {
-        User user = userService.getUser(id);
+        UserDtoResponse user = userService.getUser(id);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }

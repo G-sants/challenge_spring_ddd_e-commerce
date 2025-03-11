@@ -62,8 +62,9 @@ public class KartService {
         try {
             Optional<User> user = Optional.ofNullable(userRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("User not Found with this id: " + id)));
-            Optional<Optional<Kart>> kart = Optional.ofNullable(Optional.ofNullable(kartRepository.findById(kart_id))
+                Optional<Optional<Kart>> kart = Optional.ofNullable(Optional.ofNullable(kartRepository.findById(kart_id))
                     .orElseThrow(() -> new RuntimeException("Order not found with id" + kart_id)));
+                kartRepository.deleteById(kart_id);
         }catch (Exception e) {
             throw new RuntimeException("Error deleting order" + e.getMessage());
         }

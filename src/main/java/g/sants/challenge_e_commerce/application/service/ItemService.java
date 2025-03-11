@@ -69,10 +69,10 @@ public class ItemService {
         try {
             Optional<User> user = Optional.ofNullable(userRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("User not Found with this id: " + id)));
-            Optional<Optional<Kart>> kart = Optional.ofNullable(Optional.ofNullable(kartRepository.findById(kart_id))
+                Optional<Optional<Kart>> kart = Optional.ofNullable(Optional.ofNullable(kartRepository.findById(kart_id))
                     .orElseThrow(() -> new RuntimeException("Order not found with id" + kart_id)));
-            Optional<Optional<Item>> item = Optional.ofNullable(itemRepository.findById(item_id));
-            itemRepository.deleteById(item_id);
+                         Optional<Optional<Item>> item = Optional.ofNullable(itemRepository.findById(item_id));
+                        itemRepository.deleteById(item_id);
         }catch (Exception e) {
             throw new RuntimeException("Error deleting item" + e.getMessage());
         }
