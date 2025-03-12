@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
-public class KartSchema {
+public class KartOperations {
 
     public String dateCreation(){
         LocalDateTime now = LocalDateTime.now();

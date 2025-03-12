@@ -42,7 +42,8 @@ public class UserService {
             if (user != null) {
                 user.setName(userDetails.name());
                 user.setLastName(userDetails.lastName());
-                user.setCustomerID(userDetails.customerId());
+                user.setCustomerID(userDetails.customerID());
+                user.setEmail(userDetails.email());
                 return userRepository.save(user);
             }
         }catch (Exception e){

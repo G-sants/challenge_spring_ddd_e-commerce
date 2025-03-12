@@ -1,6 +1,6 @@
     package g.sants.challenge_e_commerce.domain;
 
-    import g.sants.challenge_e_commerce.application.schemas.KartSchema;
+    import g.sants.challenge_e_commerce.application.schemas.KartOperations;
     import jakarta.persistence.*;
 
     import java.util.ArrayList;
@@ -37,16 +37,16 @@
         }
 
         public double getTotalPrice() {
-            return KartSchema.totalPrice(userKart);
+            return KartOperations.totalPrice(userKart);
         }
 
         public static double getTotalPriceDiscount() {
-            return KartSchema
-                    .totalPriceDiscount(KartSchema.totalPrice(userKart));
+            return KartOperations
+                    .totalPriceDiscount(KartOperations.totalPrice(userKart));
         }
 
         public double getTotalDiscount() {
-            return KartSchema.totalDiscount(totalPrice);
+            return KartOperations.totalDiscount(totalPrice);
         }
 
         public HashMap getUserKart(long id) {
@@ -54,15 +54,15 @@
         }
 
         public void setTotalPrice(double totalPrice) {
-            this.totalPrice = KartSchema.totalPrice(userKart);
+            this.totalPrice = KartOperations.totalPrice(userKart);
         }
 
         public void setTotalPriceDiscount(double totalPriceDiscount) {
-            this.totalPriceDiscount = KartSchema.totalPriceDiscount(getTotalPrice());
+            this.totalPriceDiscount = KartOperations.totalPriceDiscount(getTotalPrice());
         }
 
         public void setTotalDiscount(double totalDiscount) {
-            this.totalDiscount = KartSchema.totalDiscount(getTotalPrice());
+            this.totalDiscount = KartOperations.totalDiscount(getTotalPrice());
         }
 
         public String getStatus() {
