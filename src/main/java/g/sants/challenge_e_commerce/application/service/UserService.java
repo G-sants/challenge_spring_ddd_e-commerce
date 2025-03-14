@@ -30,11 +30,6 @@ public class UserService {
                 new RuntimeException("User not found with id"+ id));
     }
 
-    public User createUser(UserDtoRequest user){
-        User newuser = new User(user);
-        return userRepository.save(newuser);
-    }
-
     public User updateUser(Long id, UserDtoRequest userDetails) {
         try{
             User user = userRepository.findById(id)

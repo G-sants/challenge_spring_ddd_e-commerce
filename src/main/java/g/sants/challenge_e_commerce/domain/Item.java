@@ -11,8 +11,11 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(nullable = false)
     private double price;
+    @Column(nullable = false)
     private String itemName;
+    @Column(nullable = false)
     private int quantity;
 
     @ManyToOne

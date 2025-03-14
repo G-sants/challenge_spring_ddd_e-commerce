@@ -13,10 +13,15 @@
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private long id;
+        @Column(nullable = false)
         private double totalPrice;
+        @Column(nullable = false)
         private double totalPriceDiscount;
+        @Column(nullable = false)
         private double totalDiscount;
+        @Column(nullable = false)
         private String status;
+        @Column(nullable = false)
         public String date;
         private static HashMap<Long, Item> userKart;
 
