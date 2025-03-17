@@ -28,7 +28,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST,"/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST,"/item").hasRole("ADMIN")
-                        .anyRequest().authenticated())   
+                        .requestMatchers("/users").permitAll()
+                        .requestMatchers("/kart").permitAll()
+                        .anyRequest().authenticated())
                 .build();
     }
     @Bean
