@@ -24,25 +24,27 @@ public class KartController {
     }
 
     @GetMapping("/{kart_id}")
-    public ResponseEntity<Kart> getKartById(@PathVariable Long id, @PathVariable Long kart_id) {
+    public ResponseEntity<Kart> getKartById(@PathVariable Long id,
+                                            @PathVariable Long kart_id) {
         UserDtoResponse user = userService.getUser(id);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
         Kart kart = kartService.getKart(kart_id);
-        if (kart != null) {
+        if (kart == null) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(kart);
     }
 
-    @PostMapping("/{kart_id}")
+    @PostMapping
     public Kart createKart(@RequestBody Kart kart) {
         return kartService.createKart(kart);
     }
 
     @PutMapping("/{kart_id}")
-    public ResponseEntity<?> updateKart(@PathVariable Long id, @PathVariable Long kart_id, @RequestBody Kart kartDetails) {
+    public ResponseEntity<?> updateKart(@PathVariable Long id, @PathVariable Long kart_id,
+                                        @RequestBody Kart kartDetails) {
         Kart kart = kartService.getKart(kart_id);
         if (kart == null){
             return ResponseEntity.notFound().build();

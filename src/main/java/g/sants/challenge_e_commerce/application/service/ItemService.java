@@ -1,11 +1,10 @@
 package g.sants.challenge_e_commerce.application.service;
 
+import g.sants.challenge_e_commerce.application.dto.ItemDtoRequest;
 import g.sants.challenge_e_commerce.application.port.output.ItemRepository;
 import g.sants.challenge_e_commerce.application.port.output.KartRepository;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.domain.Item;
-import g.sants.challenge_e_commerce.domain.Kart;
-import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,50 +28,31 @@ public class ItemService {
                 .orElseThrow(() -> new RuntimeException("Item not Found"));
     }
 
-    public Item createItem(Item item) {
-        
+    public Item createItem(ItemDtoRequest data) {
+        Item item = new Item(data.price(),data.name(), data.quantity());
         return itemRepository.save(item);
     }
 
-    public Item updateItem(Long id, Long kart_id, Long item_id, Item itemDetails) {
+    public Item updateItem(Long item_id, ItemDtoRequest itemDetails) {
         try {
-            User user = userRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("User not find with id" + id));
-            if (user != null) {
-                try {
-                    Optional<Kart> kart = kartRepository.findById(kart_id);
-                    if(kart != null) {
-                        try {
-                            Item item = itemRepository.findById(item_id)
-                                    .orElseThrow(() -> new RuntimeException("Item not found with id" + item_id));
-                            if (item != null) {
-                                item.setItemName(itemDetails.getItemName());
-                                item.setPrice(itemDetails.getPrice());
-                                item.setQuantity(itemDetails.getQuantity());
-                                return itemRepository.save(item);
-                            }
-                        } catch (Exception e) {
-                            throw new RuntimeException("Error updating item" + e.getMessage());
-                        }
-                    }
-                } catch (Exception e) {
-                throw new RuntimeException("Error finding order" + e.getMessage());
-                }
+            Item item = itemRepository.findById(item_id)
+                    .orElseThrow(() -> new RuntimeException("Item not found with id" + item_id));
+            if (item != null) {
+                item.setItemName(itemDetails.name());
+                item.setPrice(itemDetails.price());
+                return itemRepository.save(item);
             }
-        }catch (Exception e){
-            throw new RuntimeException("Error finding user" + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating item" + e.getMessage());
         }
         return null;
     }
 
-    public void deleteItem(Long id,Long kart_id, Long item_id) {
+
+    public void deleteItem(Long item_id) {
         try {
-            Optional<User> user = Optional.ofNullable(userRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("User not Found with this id: " + id)));
-                Optional<Optional<Kart>> kart = Optional.ofNullable(Optional.ofNullable(kartRepository.findById(kart_id))
-                    .orElseThrow(() -> new RuntimeException("Order not found with id" + kart_id)));
-                         Optional<Optional<Item>> item = Optional.ofNullable(itemRepository.findById(item_id));
-                        itemRepository.deleteById(item_id);
+            Optional<Optional<Item>> item = Optional.ofNullable(itemRepository.findById(item_id));
+            itemRepository.deleteById(item_id);
         }catch (Exception e) {
             throw new RuntimeException("Error deleting item" + e.getMessage());
         }

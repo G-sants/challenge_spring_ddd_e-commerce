@@ -22,13 +22,11 @@ public class Item {
     @JoinColumn(name = "kart_id")
     private Kart kart;
 
-    // Constructor with parameters
     public Item(double price, String itemName, int quantity) {
         this.price = price;
         this.itemName = itemName;
         this.quantity = quantity;
     }
-
 
     public long getId() {
         return id;
