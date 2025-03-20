@@ -1,7 +1,7 @@
 package g.sants.challenge_e_commerce.application.service;
 
-import g.sants.challenge_e_commerce.application.dto.UserDtoRequest;
-import g.sants.challenge_e_commerce.application.dto.UserDtoResponse;
+import g.sants.challenge_e_commerce.application.dto.UserDTORequest;
+import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +17,20 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<UserDtoResponse> getAllUsers() {
-        List<UserDtoResponse> userList = userRepository.findAll().stream()
-                .map(UserDtoResponse::new)
+    public List<UserDTOResponse> getAllUsers() {
+        List<UserDTOResponse> userList = userRepository.findAll().stream()
+                .map(UserDTOResponse::new)
                 .collect(Collectors.toList());
         return userList;
     }
 
-    public UserDtoResponse getUser(Long id) {
+    public UserDTOResponse getUser(Long id) {
         Optional<User> user = userRepository.findById(id);
-        return user.map(UserDtoResponse::new).orElseThrow(()->
+        return user.map(UserDTOResponse::new).orElseThrow(()->
                 new RuntimeException("User not found with id"+ id));
     }
 
-    public User updateUser(Long id, UserDtoRequest userDetails) {
+    public User updateUser(Long id, UserDTORequest userDetails) {
         try{
             User user = userRepository.findById(id)
                     .orElseThrow(()-> new RuntimeException("User not find with id" + id));

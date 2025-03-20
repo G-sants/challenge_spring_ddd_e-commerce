@@ -1,6 +1,6 @@
 package g.sants.challenge_e_commerce.domain;
 
-import g.sants.challenge_e_commerce.application.dto.UserDtoRequest;
+import g.sants.challenge_e_commerce.application.dto.UserDTORequest;
 import g.sants.challenge_e_commerce.application.schemas.UserCategory;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -45,7 +45,7 @@ public class User implements UserDetails {
         this.category = category;
     }
 
-    public User(UserDtoRequest user){
+    public User(UserDTORequest user){
         this.customerID = user.customerID();
         this.name = user.name();;
         this.lastName = user.lastName();;

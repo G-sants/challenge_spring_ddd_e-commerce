@@ -1,8 +1,8 @@
 package g.sants.challenge_e_commerce.application.port.input;
 
-import g.sants.challenge_e_commerce.application.dto.AuthorizationDtoRequest;
-import g.sants.challenge_e_commerce.application.dto.LoginDtoResponse;
-import g.sants.challenge_e_commerce.application.dto.RegisterDtoRequest;
+import g.sants.challenge_e_commerce.application.dto.AuthorizationDTORequest;
+import g.sants.challenge_e_commerce.application.dto.LoginDTOResponse;
+import g.sants.challenge_e_commerce.application.dto.RegisterDTORequest;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.TokenService;
 import g.sants.challenge_e_commerce.domain.User;
@@ -31,7 +31,7 @@ public class AuthorizationController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Validated AuthorizationDtoRequest data) {
+    public ResponseEntity login(@RequestBody @Validated AuthorizationDTORequest data) {
        try {
            var usernamePassword = new UsernamePasswordAuthenticationToken
                    (data.email(), data.password());
@@ -39,7 +39,7 @@ public class AuthorizationController {
 
            var token = tokenService.generateToken((User)auth.getPrincipal());
 
-           return ResponseEntity.ok(new LoginDtoResponse(token));
+           return ResponseEntity.ok(new LoginDTOResponse(token));
        }catch (BadCredentialsException e) {
            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Login");
        }catch (Exception e) {
@@ -48,7 +48,7 @@ public class AuthorizationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Validated RegisterDtoRequest data){
+    public ResponseEntity register(@RequestBody @Validated RegisterDTORequest data){
         if(this.userRepository.findByEmail(data.email()) != null)
             return ResponseEntity.badRequest().body("User already registered");
 

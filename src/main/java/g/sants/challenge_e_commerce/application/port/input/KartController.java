@@ -1,6 +1,6 @@
 package g.sants.challenge_e_commerce.application.port.input;
 
-import g.sants.challenge_e_commerce.application.dto.UserDtoResponse;
+import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
 import g.sants.challenge_e_commerce.application.service.KartService;
 import g.sants.challenge_e_commerce.application.service.UserService;
 import g.sants.challenge_e_commerce.domain.Kart;
@@ -26,7 +26,7 @@ public class KartController {
     @GetMapping("/{kart_id}")
     public ResponseEntity<Kart> getKartById(@PathVariable Long id,
                                             @PathVariable Long kart_id) {
-        UserDtoResponse user = userService.getUser(id);
+        UserDTOResponse user = userService.getUser(id);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
