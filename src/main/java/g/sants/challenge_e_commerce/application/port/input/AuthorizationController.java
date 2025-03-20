@@ -1,8 +1,10 @@
 package g.sants.challenge_e_commerce.application.port.input;
 
 import g.sants.challenge_e_commerce.application.dto.AuthorizationDtoRequest;
+import g.sants.challenge_e_commerce.application.dto.LoginDtoResponse;
 import g.sants.challenge_e_commerce.application.dto.RegisterDtoRequest;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
+import g.sants.challenge_e_commerce.application.service.TokenService;
 import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,8 @@ public class AuthorizationController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Validated AuthorizationDtoRequest data) {
@@ -32,7 +36,10 @@ public class AuthorizationController {
            var usernamePassword = new UsernamePasswordAuthenticationToken
                    (data.email(), data.password());
            var auth = this.authenticationManager.authenticate(usernamePassword);
-           return ResponseEntity.ok().build();
+
+           var token = tokenService.generateToken((User)auth.getPrincipal());
+
+           return ResponseEntity.ok(new LoginDtoResponse(token));
        }catch (BadCredentialsException e) {
            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Login");
        }catch (Exception e) {
