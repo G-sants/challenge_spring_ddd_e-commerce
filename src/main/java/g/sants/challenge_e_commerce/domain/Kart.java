@@ -1,5 +1,6 @@
     package g.sants.challenge_e_commerce.domain;
 
+    import com.fasterxml.jackson.annotation.JsonBackReference;
     import g.sants.challenge_e_commerce.application.schemas.KartOperations;
     import jakarta.persistence.*;
 
@@ -27,12 +28,14 @@
 
         @ManyToOne
         @JoinColumn(name = "user_id")
+        @JsonBackReference
         private User user;
 
         @OneToMany(mappedBy = "kart")
         private List<Item> items = new ArrayList<>();
 
         public Kart() {
+            this.id = id;
             this.userKart = new HashMap<>();
             this.totalPrice = 0.0;
             this.totalPriceDiscount = 0.0;

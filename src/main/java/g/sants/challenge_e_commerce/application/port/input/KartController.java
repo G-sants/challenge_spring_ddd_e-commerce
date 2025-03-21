@@ -56,7 +56,7 @@ public class KartController {
         }
 
         Optional<User> user = userRepository.findById(user_id);
-        Kart createdKart = null;
+        Kart createdKart;
         if (user.isPresent()) {
             kart.setUser(user.get());
             createdKart = kartService.createKart(user_id, kart);
