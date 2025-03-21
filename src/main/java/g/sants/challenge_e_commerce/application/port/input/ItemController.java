@@ -18,7 +18,9 @@ public class ItemController {
 
     @Autowired
     private ItemService itemService;
+    @Autowired
     private KartService kartService;
+    @Autowired
     private UserService userService;
 
     @GetMapping

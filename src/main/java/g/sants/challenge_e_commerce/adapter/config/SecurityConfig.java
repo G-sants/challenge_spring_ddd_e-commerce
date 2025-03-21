@@ -36,7 +36,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/item").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,"/item").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/item").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/users/{id}").authenticated()
+                        .requestMatchers(HttpMethod.GET,"/users").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/users").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/users/{id}").hasRole("ADMIN")
                         .anyRequest().fullyAuthenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

@@ -37,8 +37,8 @@
             this.totalPrice = 0.0;
             this.totalPriceDiscount = 0.0;
             this.totalDiscount = 0.0;
-            this.status = "";
-            this.date = "";
+            this.status = KartOperations.status();
+            this.date = KartOperations.dateCreation();
         }
 
         public double getTotalPrice() {

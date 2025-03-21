@@ -1,5 +1,7 @@
 package g.sants.challenge_e_commerce.application.service;
 
+import g.sants.challenge_e_commerce.application.dto.KartDTORequest;
+import g.sants.challenge_e_commerce.application.dto.KartDTOResponse;
 import g.sants.challenge_e_commerce.application.port.output.KartRepository;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.domain.Kart;
@@ -15,22 +17,29 @@ public class KartService {
 
     @Autowired
     private KartRepository kartRepository;
+    @Autowired
     private UserRepository userRepository;
 
     public List<Kart> getAllKarts() {
         return kartRepository.findAll();
     }
 
-    public Kart getKart(Long id) {
-        return kartRepository.findById(id)
+    public KartDTOResponse getKart(Long id) {
+        Optional<Kart> kart = kartRepository.findById(id);
+        return kart.map(KartDTOResponse::new)
                 .orElseThrow(() -> new RuntimeException("Order not Found"));
     }
 
-    public Kart createKart(Kart kart) {
-        return kartRepository.save(kart);
+    public Kart createKart(Long id,Kart kart) {
+           Optional<User> user = userRepository.findById(id);
+           if(user.isPresent()){
+               kart.setUser(user.get());
+               return kartRepository.save(kart);
+           }
+        return null;
     }
 
-    public Kart updateKart(Long id, Long kart_id, Kart kartDetails) {
+    public Kart updateKart(Long id, Long kart_id, KartDTORequest kartDetails) {
         try {
             User user = userRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("User not find with id" + id));
@@ -39,11 +48,6 @@ public class KartService {
                     Optional<Kart> optionalKart = kartRepository.findById(kart_id);
                         if(optionalKart.isPresent()) {
                             Kart kart = optionalKart.get();
-                            kart.setTotalPrice(kartDetails.getTotalPrice());
-                            kart.setTotalDiscount(kartDetails.getTotalDiscount());
-                            kart.setTotalPriceDiscount(kartDetails.getTotalPriceDiscount());
-                            kart.setDate(kartDetails.getDate());
-                            kart.setStatus(kartDetails.getStatus());
                             return kartRepository.save(kart);
                         }else {
                             throw new RuntimeException("Order not Found within User" + id);

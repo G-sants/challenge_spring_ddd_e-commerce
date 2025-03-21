@@ -2,7 +2,6 @@ package g.sants.challenge_e_commerce.application.service;
 
 import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import g.sants.challenge_e_commerce.application.dto.ItemDTOResponse;
-import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
 import g.sants.challenge_e_commerce.application.port.output.ItemRepository;
 import g.sants.challenge_e_commerce.application.port.output.KartRepository;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
@@ -19,7 +18,9 @@ public class ItemService {
 
     @Autowired
     private ItemRepository itemRepository;
+    @Autowired
     private KartRepository kartRepository;
+    @Autowired
     private UserRepository userRepository;
 
     public List<ItemDTOResponse> getAllItems() {

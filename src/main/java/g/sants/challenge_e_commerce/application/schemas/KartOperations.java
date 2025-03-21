@@ -8,13 +8,13 @@ import java.util.HashMap;
 
 public class KartOperations {
 
-    public String dateCreation(){
+    public static String dateCreation(){
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         String formatedDate = now.format(formatter);
         return "Created at "+formatedDate;
     }
-    public String status(){
+    public static String status(){
         return "PENDING";
     }
 
