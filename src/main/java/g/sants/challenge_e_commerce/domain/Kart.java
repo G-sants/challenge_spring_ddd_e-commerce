@@ -1,6 +1,7 @@
     package g.sants.challenge_e_commerce.domain;
 
     import com.fasterxml.jackson.annotation.JsonBackReference;
+    import com.fasterxml.jackson.annotation.JsonIgnore;
     import g.sants.challenge_e_commerce.application.schemas.KartOperations;
     import jakarta.persistence.*;
 
@@ -31,6 +32,8 @@
         @JsonBackReference
         private User user;
 
+
+        @JsonIgnore
         @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
         private List<Item> items = new ArrayList<>();
 
