@@ -34,9 +34,9 @@ public class KartController {
     }
 
     @GetMapping("/{user_id}/{kart_id}")
-    public ResponseEntity<KartDTOResponse> getKartById(@PathVariable Long id,
+    public ResponseEntity<KartDTOResponse> getKartById(@PathVariable Long user_id,
                                                        @PathVariable Long kart_id) {
-        UserDTOResponse user = userService.getUser(id);
+        UserDTOResponse user = userService.getUser(user_id);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
@@ -66,9 +66,26 @@ public class KartController {
         }
     }
 
-    @PutMapping("/{user_id}/{kart_id}")
-    public ResponseEntity<Kart> updateKart(@PathVariable Long id, @PathVariable Long kart_id,
+    @PutMapping("/add/{user_id}/{kart_id}")
+    public ResponseEntity<Kart> updatedKart(@PathVariable Long user_id, @PathVariable Long kart_id,
                                         @RequestBody KartDTORequest kartDetails) {
+        KartDTOResponse kart = kartService.getKart(kart_id);
+        if (kart == null){
+            return ResponseEntity.notFound().build();
+        }
+        String kartValidate = kart.status();
+        if ("PENDING".equals(kartValidate)) {
+            Kart updateKart = kartService.updateKart(user_id, kart_id, kartDetails);
+            if (updateKart == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(updateKart);
+        }else return ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping("/remove/{user_id}/{kart_id}")
+    public ResponseEntity<Kart> deletedKart(@PathVariable Long id, @PathVariable Long kart_id,
+                                           @RequestBody KartDTORequest kartDetails) {
         KartDTOResponse kart = kartService.getKart(kart_id);
         if (kart == null){
             return ResponseEntity.notFound().build();
@@ -82,7 +99,6 @@ public class KartController {
             return ResponseEntity.ok(updateKart);
         }else return ResponseEntity.badRequest().build();
     }
-
 
     @DeleteMapping("/{user_id}/{kart_id}")
     public ResponseEntity<Void> deleteKart(@PathVariable Long id,@PathVariable Long kart_id){

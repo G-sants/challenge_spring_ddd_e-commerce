@@ -1,9 +1,11 @@
 package g.sants.challenge_e_commerce.application.service;
 
+import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTOResponse;
 import g.sants.challenge_e_commerce.application.port.output.KartRepository;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
+import g.sants.challenge_e_commerce.domain.Item;
 import g.sants.challenge_e_commerce.domain.Kart;
 import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,10 +50,49 @@ public class KartService {
                     Optional<Kart> optionalKart = kartRepository.findById(kart_id);
                         if(optionalKart.isPresent()) {
                             Kart kart = optionalKart.get();
+                            for (ItemDTORequest itemDTO : kartDetails.items()){
+                                Item item = new Item();
+                                item.setItemName(itemDTO.itemName());
+                                item.setPrice(itemDTO.price());
+                                item.setQuantity(itemDTO.quantity());
+                                kart.addItem(item);
+                            }
                             return kartRepository.save(kart);
                         }else {
                             throw new RuntimeException("Order not Found within User" + id);
                         }
+                } catch (Exception e) {
+                    throw new RuntimeException("Error finding order" + e.getMessage());
+                }
+            }
+        }catch (Exception e){
+            throw new RuntimeException("Error finding user" + e.getMessage());
+        }
+        return null;
+    }
+
+    public Kart deletedKart(Long id, Long kart_id, KartDTORequest kartDetails) {
+        try {
+            User user = userRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("User not find with id" + id));
+            if (user != null) {
+                try {
+                    Optional<Kart> optionalKart = kartRepository.findById(kart_id);
+                    if(optionalKart.isPresent()) {
+                        Kart kart = optionalKart.get();
+                        for (ItemDTORequest itemDTO : kartDetails.items()){
+                            Item itemRemove = kart.getItems().stream()
+                                            .filter(item -> item.getItemName().
+                                                    equalsIgnoreCase(itemDTO.itemName()))
+                                            .findFirst().orElse(null);
+                            if (itemRemove != null) {
+                                kart.removeItem(itemRemove);
+                            }
+                        }
+                        return kartRepository.save(kart);
+                    }else {
+                        throw new RuntimeException("Order not Found within User" + id);
+                    }
                 } catch (Exception e) {
                     throw new RuntimeException("Error finding order" + e.getMessage());
                 }

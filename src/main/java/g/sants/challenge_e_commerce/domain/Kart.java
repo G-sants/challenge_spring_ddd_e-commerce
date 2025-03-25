@@ -31,7 +31,7 @@
         @JsonBackReference
         private User user;
 
-        @OneToMany(mappedBy = "kart")
+        @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
         private List<Item> items = new ArrayList<>();
 
         public Kart() {

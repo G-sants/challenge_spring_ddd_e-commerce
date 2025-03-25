@@ -1,6 +1,7 @@
 package g.sants.challenge_e_commerce.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import g.sants.challenge_e_commerce.application.dto.UserDTORequest;
 import g.sants.challenge_e_commerce.application.schemas.UserCategory;
 import jakarta.persistence.*;
@@ -33,7 +34,7 @@ public class User implements UserDetails {
     private UserCategory category;
 
     @OneToMany(mappedBy = "user")
-    @JsonIgnore
+    @JsonManagedReference
     private List<Kart> karts = new ArrayList<>();
 
     public User() {}

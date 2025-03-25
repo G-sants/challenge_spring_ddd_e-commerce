@@ -4,5 +4,5 @@ import g.sants.challenge_e_commerce.domain.Item;
 
 import java.util.List;
 
-public record KartDTORequest(List<Item> items) {
+public record KartDTORequest(List<ItemDTORequest> items) {
 }

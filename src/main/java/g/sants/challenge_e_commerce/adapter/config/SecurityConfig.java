@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE,"/users").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,"/users/{id}").hasRole("ADMIN")
                         .anyRequest().fullyAuthenticated())
+
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
