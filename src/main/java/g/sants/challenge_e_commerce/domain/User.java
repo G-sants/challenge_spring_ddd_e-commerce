@@ -1,7 +1,9 @@
 package g.sants.challenge_e_commerce.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import g.sants.challenge_e_commerce.application.dto.UserDTORequest;
 import g.sants.challenge_e_commerce.application.schemas.UserCategory;
 import jakarta.persistence.*;
@@ -14,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Table(name = "user")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 public class User implements UserDetails {
 

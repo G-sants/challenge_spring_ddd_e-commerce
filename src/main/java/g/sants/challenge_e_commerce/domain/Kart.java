@@ -1,14 +1,16 @@
     package g.sants.challenge_e_commerce.domain;
 
     import com.fasterxml.jackson.annotation.JsonBackReference;
+    import com.fasterxml.jackson.annotation.JsonIdentityInfo;
     import com.fasterxml.jackson.annotation.JsonIgnore;
+    import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     import g.sants.challenge_e_commerce.application.schemas.KartOperations;
     import jakarta.persistence.*;
 
     import java.util.ArrayList;
     import java.util.HashMap;
     import java.util.List;
-
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @Entity
     public class Kart {
 
@@ -74,6 +76,10 @@
 
         public void setTotalDiscount() {
             this.totalDiscount = KartOperations.totalDiscount(getTotalPrice());
+        }
+
+        public long getId() {
+            return id;
         }
 
         public String getStatus() {

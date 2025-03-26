@@ -77,7 +77,7 @@ public class KartService {
         return null;
     }
 
-    public Kart deletedKart(Long id, Long kart_id, KartDTORequest kartDetails) {
+    public Kart deletedKart(Long id, Long kart_id, KartDTORequest kartDetails)  {
         try {
             User user = userRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("User not find with id" + id));
@@ -86,15 +86,21 @@ public class KartService {
                     Optional<Kart> optionalKart = kartRepository.findById(kart_id);
                     if(optionalKart.isPresent()) {
                         Kart kart = optionalKart.get();
-                        for (ItemDTORequest itemDTO : kartDetails.items()){
+                        for (ItemDTORequest itemDTO : kartDetails.items()) {
+                            System.out.println("Attempting to remove item: " + itemDTO.itemName());
                             Item itemRemove = kart.getItems().stream()
-                                            .filter(item -> item.getItemName().
-                                                    equalsIgnoreCase(itemDTO.itemName()))
-                                            .findFirst().orElse(null);
+                                    .filter(item -> item.getItemName().equalsIgnoreCase(itemDTO.itemName()))
+                                    .findFirst().orElse(null);
                             if (itemRemove != null) {
+                                System.out.println("Removing item: " + itemRemove.getItemName());
                                 kart.removeItem(itemRemove);
+                            } else {
+                                System.out.println("Item not found: " + itemDTO.itemName());
                             }
                         }
+                        kart.setTotalPrice();
+                        kart.setTotalPriceDiscount();
+                        kart.setTotalDiscount();
                         return kartRepository.save(kart);
                     }else {
                         throw new RuntimeException("Order not Found within User" + id);

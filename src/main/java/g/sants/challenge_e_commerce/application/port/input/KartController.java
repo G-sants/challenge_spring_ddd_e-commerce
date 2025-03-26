@@ -84,7 +84,7 @@ public class KartController {
     }
 
     @PutMapping("/remove/{user_id}/{kart_id}")
-    public ResponseEntity<Kart> deletedKart(@PathVariable Long id, @PathVariable Long kart_id,
+    public ResponseEntity<Kart> deletedKart(@PathVariable Long user_id, @PathVariable Long kart_id,
                                            @RequestBody KartDTORequest kartDetails) {
         KartDTOResponse kart = kartService.getKart(kart_id);
         if (kart == null){
@@ -92,11 +92,11 @@ public class KartController {
         }
         String kartValidate = kart.status();
         if ("PENDING".equals(kartValidate)) {
-            Kart updateKart = kartService.updateKart(id, kart_id, kartDetails);
-            if (updateKart == null) {
+            Kart updatedKart = kartService.deletedKart(user_id, kart_id, kartDetails);
+            if (updatedKart == null) {
                 return ResponseEntity.notFound().build();
             }
-            return ResponseEntity.ok(updateKart);
+            return ResponseEntity.ok(updatedKart);
         }else return ResponseEntity.badRequest().build();
     }
 
