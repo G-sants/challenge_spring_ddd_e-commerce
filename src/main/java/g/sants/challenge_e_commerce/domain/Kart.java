@@ -39,7 +39,6 @@
 
         public Kart() {
             this.id = id;
-            this.userKart = new HashMap<>();
             this.totalPrice = 0.0;
             this.totalPriceDiscount = 0.0;
             this.totalDiscount = 0.0;
@@ -48,31 +47,32 @@
         }
 
         public double getTotalPrice() {
-            return KartOperations.totalPrice(userKart);
+            return KartOperations.totalPrice(items);
         }
 
-        public static double getTotalPriceDiscount() {
+        public double getTotalPriceDiscount() {
             return KartOperations
-                    .totalPriceDiscount(KartOperations.totalPrice(userKart));
+                    .totalPriceDiscount(KartOperations.totalPrice(items));
         }
 
         public double getTotalDiscount() {
             return KartOperations.totalDiscount(totalPrice);
         }
 
-        public HashMap getUserKart(long id) {
-            return userKart;
+        public List<Item> getUserKart(long id) {
+            return items;
         }
 
-        public void setTotalPrice(double totalPrice) {
-            this.totalPrice = KartOperations.totalPrice(userKart);
+        public void setTotalPrice() {
+
+            this.totalPrice = KartOperations.totalPrice(items);
         }
 
-        public void setTotalPriceDiscount(double totalPriceDiscount) {
+        public void setTotalPriceDiscount() {
             this.totalPriceDiscount = KartOperations.totalPriceDiscount(getTotalPrice());
         }
 
-        public void setTotalDiscount(double totalDiscount) {
+        public void setTotalDiscount() {
             this.totalDiscount = KartOperations.totalDiscount(getTotalPrice());
         }
 

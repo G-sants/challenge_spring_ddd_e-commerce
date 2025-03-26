@@ -36,6 +36,9 @@ public class KartService {
            Optional<User> user = userRepository.findById(id);
            if(user.isPresent()){
                kart.setUser(user.get());
+               kart.setTotalPrice();
+               kart.setTotalPriceDiscount();
+               kart.setTotalDiscount();
                return kartRepository.save(kart);
            }
         return null;
@@ -57,6 +60,9 @@ public class KartService {
                                 item.setQuantity(itemDTO.quantity());
                                 kart.addItem(item);
                             }
+                            kart.setTotalPrice();
+                            kart.setTotalPriceDiscount();
+                            kart.setTotalDiscount();
                             return kartRepository.save(kart);
                         }else {
                             throw new RuntimeException("Order not Found within User" + id);

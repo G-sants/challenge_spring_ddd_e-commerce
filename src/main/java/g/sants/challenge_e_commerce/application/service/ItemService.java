@@ -37,7 +37,7 @@ public class ItemService {
     }
 
     public Item createItem(ItemDTORequest data) {
-        Item item = new Item(data.price(),data.name(), data.quantity());
+        Item item = new Item(data.price(),data.itemName(), data.quantity());
         return itemRepository.save(item);
     }
 
@@ -46,7 +46,7 @@ public class ItemService {
             Item item = itemRepository.findById(item_id)
                     .orElseThrow(() -> new RuntimeException("Item not found with id" + item_id));
             if (item != null) {
-                item.setItemName(itemDetails.name());
+                item.setItemName(itemDetails.itemName());
                 item.setPrice(itemDetails.price());
                 return itemRepository.save(item);
             }

@@ -5,6 +5,7 @@ import g.sants.challenge_e_commerce.domain.Item;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 
 public class KartOperations {
 
@@ -18,7 +19,7 @@ public class KartOperations {
         return "PENDING";
     }
 
-     public static double totalPrice(HashMap<Long, Item> userKart) {
+     public static double totalPrice(List<Item> userKart) {
          double totalPrice = 0.0;
          if (userKart != null) {
              for (int i = 0; i < userKart.size(); i++) {
