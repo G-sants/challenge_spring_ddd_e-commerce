@@ -3,6 +3,7 @@ package g.sants.challenge_e_commerce.application.service;
 import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTOResponse;
+import g.sants.challenge_e_commerce.application.port.output.ItemRepository;
 import g.sants.challenge_e_commerce.application.port.output.KartRepository;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.domain.Item;
@@ -11,6 +12,7 @@ import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +23,8 @@ public class KartService {
     private KartRepository kartRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ItemRepository itemRepository;
 
     public List<Kart> getAllKarts() {
         return kartRepository.findAll();
@@ -54,11 +58,26 @@ public class KartService {
                         if(optionalKart.isPresent()) {
                             Kart kart = optionalKart.get();
                             for (ItemDTORequest itemDTO : kartDetails.items()){
-                                Item item = new Item();
-                                item.setItemName(itemDTO.itemName());
-                                item.setPrice(itemDTO.price());
-                                item.setQuantity(itemDTO.quantity());
-                                kart.addItem(item);
+                                List<Item> items = kart.getItems();
+                                Iterator<Item> iterator = kart.getItems().iterator();
+                                while (iterator.hasNext()) {
+                                    Item item = iterator.next();
+
+                                    if (item.getItemName().equalsIgnoreCase(itemDTO.itemName())) {
+                                            item.setQuantity(item.getQuantity() + itemDTO.quantity());
+                                            kart.setTotalPrice();
+                                            kart.setTotalPriceDiscount();
+                                            kart.setTotalDiscount();
+                                            kartRepository.save(kart);
+                                    } else {
+                                            Item newItem = new Item();
+                                            newItem.setItemName(itemDTO.itemName());
+                                            newItem.setPrice(itemDTO.price());
+                                            newItem.setQuantity(itemDTO.quantity());
+                                            kart.addItem(newItem);
+                                    }
+                                }
+
                             }
                             kart.setTotalPrice();
                             kart.setTotalPriceDiscount();
@@ -87,15 +106,26 @@ public class KartService {
                     if(optionalKart.isPresent()) {
                         Kart kart = optionalKart.get();
                         for (ItemDTORequest itemDTO : kartDetails.items()) {
-                            System.out.println("Attempting to remove item: " + itemDTO.itemName());
                             Item itemRemove = kart.getItems().stream()
                                     .filter(item -> item.getItemName().equalsIgnoreCase(itemDTO.itemName()))
                                     .findFirst().orElse(null);
                             if (itemRemove != null) {
-                                System.out.println("Removing item: " + itemRemove.getItemName());
-                                kart.removeItem(itemRemove);
+                                List<Item> items = kart.getItems();
+                                Iterator<Item> iterator = kart.getItems().iterator();
+                                while (iterator.hasNext()) {
+                                    Item item = iterator.next();
+                                    if (item.getItemName().equalsIgnoreCase(itemRemove.getItemName())) {
+                                        if (item.getQuantity() > 1) {
+                                            item.setQuantity(item.getQuantity() - 1);
+                                            kartRepository.save(kart);
+                                        } else {
+                                            iterator.remove();
+                                            itemRepository.delete(item);
+                                        }
+                                    }
+                                }
                             } else {
-                                System.out.println("Item not found: " + itemDTO.itemName());
+                                throw new RuntimeException("Item not found: " + itemDTO.itemName());
                             }
                         }
                         kart.setTotalPrice();
