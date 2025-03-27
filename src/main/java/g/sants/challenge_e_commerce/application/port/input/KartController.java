@@ -100,9 +100,21 @@ public class KartController {
         }else return ResponseEntity.badRequest().build();
     }
 
-    @DeleteMapping("/{user_id}/{kart_id}")
-    public ResponseEntity<Void> deleteKart(@PathVariable Long id,@PathVariable Long kart_id){
-        kartService.deleteKart(id,kart_id);
-        return ResponseEntity.noContent().build();
+    @PutMapping("/delete/{user_id}/{kart_id}")
+    public ResponseEntity<Kart> newStatus(@PathVariable Long user_id, @PathVariable Long kart_id,
+                                            @RequestBody KartDTORequest kartDetails) {
+        KartDTOResponse kart = kartService.getKart(kart_id);
+        if (kart == null){
+            return ResponseEntity.notFound().build();
+        }
+        String kartValidate = kart.status();
+        if ("PENDING".equals(kartValidate)) {
+            Kart updatedKart = kartService.deleteKart(user_id, kart_id, kartDetails);
+            if (updatedKart == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(updatedKart);
+        }else return ResponseEntity.badRequest().build();
     }
+
 }

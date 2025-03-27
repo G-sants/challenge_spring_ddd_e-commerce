@@ -145,16 +145,31 @@ public class KartService {
         return null;
     }
 
-    public void deleteKart(Long id, Long kart_id) {
+    public Kart deleteKart(Long id, Long kart_id, KartDTORequest statusDetails) {
         try {
-            Optional<User> user = Optional.ofNullable(userRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("User not Found with this id: " + id)));
-                Optional<Optional<Kart>> kart = Optional.ofNullable(Optional.ofNullable(kartRepository.findById(kart_id))
-                    .orElseThrow(() -> new RuntimeException("Order not found with id" + kart_id)));
-                kartRepository.deleteById(kart_id);
-        }catch (Exception e) {
-            throw new RuntimeException("Error deleting order" + e.getMessage());
+            User user = userRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("User not find with id" + id));
+            if (user != null) {
+                try {
+                    Optional<Kart> optionalKart = kartRepository.findById(kart_id);
+                    if(optionalKart.isPresent()) {
+                        Kart kart = optionalKart.get();
+                        String checkStatus = statusDetails.status();
+                        if(checkStatus.equalsIgnoreCase("cancel")) {
+                           kart.setStatus("CANCELLED");
+                           return kartRepository.save(kart);
+                        }
+                    }else {
+                        throw new RuntimeException("Order not Found within User" + id);
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException("Error finding order" + e.getMessage());
+                }
+            }
+        }catch (Exception e){
+            throw new RuntimeException("Error finding user" + e.getMessage());
         }
+        return null;
     }
 
 }
