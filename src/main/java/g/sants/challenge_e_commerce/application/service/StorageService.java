@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class ItemService {
+public class StorageService {
 
     @Autowired
     private ItemRepository itemRepository;

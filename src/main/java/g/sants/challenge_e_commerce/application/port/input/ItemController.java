@@ -2,7 +2,7 @@ package g.sants.challenge_e_commerce.application.port.input;
 
 import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import g.sants.challenge_e_commerce.application.dto.ItemDTOResponse;
-import g.sants.challenge_e_commerce.application.service.ItemService;
+import g.sants.challenge_e_commerce.application.service.StorageService;
 import g.sants.challenge_e_commerce.application.service.KartService;
 import g.sants.challenge_e_commerce.application.service.UserService;
 import g.sants.challenge_e_commerce.domain.Item;
@@ -17,7 +17,7 @@ import java.util.List;
 public class ItemController {
 
     @Autowired
-    private ItemService itemService;
+    private StorageService itemService;
     @Autowired
     private KartService kartService;
     @Autowired

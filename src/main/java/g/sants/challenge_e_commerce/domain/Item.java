@@ -1,5 +1,6 @@
 package g.sants.challenge_e_commerce.domain;
 
+import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +18,10 @@ public class Item {
     private String itemName;
     @Column(nullable = false)
     private int quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "item_id")
+    private Storage storage;
 
     @ManyToOne
     @JoinColumn(name = "kart_id")
