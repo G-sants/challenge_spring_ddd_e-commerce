@@ -1,29 +1,57 @@
 package g.sants.challenge_e_commerce.domain;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-
-import java.util.List;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class Storage {
 
-    private List<Item> items;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    private String name;
+    private double price;
+    private int quantity;
 
-    @OneToMany(mappedBy = "storage")
-    private Item item;
-
-    public Storage(){}
-
-    public Storage(List<Item> items) {
-        this.items = items;
+    public Storage (){}
+    
+    public Storage(String name, double price, int quantity) {
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
     }
 
-    public List<Item> getItems() {
-        return items;
+    public long getId() {
+        return id;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

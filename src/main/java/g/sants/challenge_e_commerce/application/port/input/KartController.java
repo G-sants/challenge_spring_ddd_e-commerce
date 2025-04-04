@@ -62,15 +62,15 @@ public class KartController {
             createdKart = kartService.createKart(user_id, kart);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdKart);
         } else {
-         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     @PutMapping("/add/{user_id}/{kart_id}")
     public ResponseEntity<Kart> updatedKart(@PathVariable Long user_id, @PathVariable Long kart_id,
-                                        @RequestBody KartDTORequest kartDetails) {
+                                            @RequestBody KartDTORequest kartDetails) {
         KartDTOResponse kart = kartService.getKart(kart_id);
-        if (kart == null){
+        if (kart == null) {
             return ResponseEntity.notFound().build();
         }
         String kartValidate = kart.status();
@@ -80,14 +80,14 @@ public class KartController {
                 return ResponseEntity.notFound().build();
             }
             return ResponseEntity.ok(updateKart);
-        }else return ResponseEntity.badRequest().build();
+        } else return ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/remove/{user_id}/{kart_id}")
     public ResponseEntity<Kart> deletedKart(@PathVariable Long user_id, @PathVariable Long kart_id,
-                                           @RequestBody KartDTORequest kartDetails) {
+                                            @RequestBody KartDTORequest kartDetails) {
         KartDTOResponse kart = kartService.getKart(kart_id);
-        if (kart == null){
+        if (kart == null) {
             return ResponseEntity.notFound().build();
         }
         String kartValidate = kart.status();
@@ -97,14 +97,14 @@ public class KartController {
                 return ResponseEntity.notFound().build();
             }
             return ResponseEntity.ok(updatedKart);
-        }else return ResponseEntity.badRequest().build();
+        } else return ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/delete/{user_id}/{kart_id}")
     public ResponseEntity<Kart> newStatus(@PathVariable Long user_id, @PathVariable Long kart_id,
-                                            @RequestBody KartDTORequest kartDetails) {
+                                          @RequestBody KartDTORequest kartDetails) {
         KartDTOResponse kart = kartService.getKart(kart_id);
-        if (kart == null){
+        if (kart == null) {
             return ResponseEntity.notFound().build();
         }
         String kartValidate = kart.status();
@@ -114,7 +114,7 @@ public class KartController {
                 return ResponseEntity.notFound().build();
             }
             return ResponseEntity.ok(updatedKart);
-        }else return ResponseEntity.badRequest().build();
+        } else return ResponseEntity.badRequest().build();
     }
 
 }

@@ -6,6 +6,7 @@ import g.sants.challenge_e_commerce.application.service.StorageService;
 import g.sants.challenge_e_commerce.application.service.KartService;
 import g.sants.challenge_e_commerce.application.service.UserService;
 import g.sants.challenge_e_commerce.domain.Item;
+import g.sants.challenge_e_commerce.domain.Storage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +15,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/item")
-public class ItemController {
+public class StorageController {
 
     @Autowired
-    private StorageService itemService;
+    private StorageService storageService;
     @Autowired
     private KartService kartService;
     @Autowired
@@ -25,12 +26,12 @@ public class ItemController {
 
     @GetMapping
     public List<ItemDTOResponse> getAllItems(){
-        return itemService.getAllItems();
+        return storageService.getAllItems();
     }
 
     @GetMapping("/{item_id}")
     public ResponseEntity<ItemDTOResponse> getItemById (@PathVariable Long item_id) {
-        ItemDTOResponse item = itemService.getItem(item_id);
+        ItemDTOResponse item = storageService.getItem(item_id);
         if (item == null){
             return ResponseEntity.noContent().build();
         }
@@ -38,13 +39,13 @@ public class ItemController {
     }
 
     @PostMapping
-    public Item createItem(@RequestBody ItemDTORequest item){
-        return itemService.createItem(item);
+    public Storage createItem(@RequestBody ItemDTORequest item){
+        return storageService.createItem(item);
     }
 
     @PutMapping("/{item_id}")
-    public ResponseEntity<Item> updateItem( @PathVariable Long item_id,@RequestBody ItemDTORequest itemDetails){
-        Item updateItem =itemService.updateItem(item_id,itemDetails);
+    public ResponseEntity<Storage> updateItem( @PathVariable Long item_id,@RequestBody ItemDTORequest itemDetails){
+        Storage updateItem =storageService.updateItem(item_id,itemDetails);
         if(updateItem ==null){
             return ResponseEntity.notFound().build();
         }
@@ -53,7 +54,7 @@ public class ItemController {
 
     @DeleteMapping("/{item_id}")
     public ResponseEntity<Void> deleteItem(@PathVariable Long item_id){
-        itemService.deleteItem(item_id);
+        storageService.deleteItem(item_id);
         return ResponseEntity.noContent().build();
     }
 }

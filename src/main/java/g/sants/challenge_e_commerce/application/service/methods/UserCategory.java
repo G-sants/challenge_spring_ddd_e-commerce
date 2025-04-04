@@ -1,4 +1,4 @@
-package g.sants.challenge_e_commerce.application.schemas;
+package g.sants.challenge_e_commerce.application.service.methods;
 
 public enum UserCategory {
 

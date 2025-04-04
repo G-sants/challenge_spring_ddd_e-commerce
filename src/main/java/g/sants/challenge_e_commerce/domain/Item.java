@@ -20,10 +20,6 @@ public class Item {
     private int quantity;
 
     @ManyToOne
-    @JoinColumn(name = "item_id")
-    private Storage storage;
-
-    @ManyToOne
     @JoinColumn(name = "kart_id")
     private Kart kart;
 

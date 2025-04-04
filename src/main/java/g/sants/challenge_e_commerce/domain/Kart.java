@@ -4,7 +4,7 @@
     import com.fasterxml.jackson.annotation.JsonIdentityInfo;
     import com.fasterxml.jackson.annotation.JsonIgnore;
     import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-    import g.sants.challenge_e_commerce.application.schemas.KartOperations;
+    import g.sants.challenge_e_commerce.application.service.methods.KartOperations;
     import jakarta.persistence.*;
 
     import java.util.ArrayList;

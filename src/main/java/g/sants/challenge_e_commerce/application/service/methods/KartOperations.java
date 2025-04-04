@@ -1,10 +1,9 @@
-package g.sants.challenge_e_commerce.application.schemas;
+package g.sants.challenge_e_commerce.application.service.methods;
 
 import g.sants.challenge_e_commerce.domain.Item;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
 
 public class KartOperations {

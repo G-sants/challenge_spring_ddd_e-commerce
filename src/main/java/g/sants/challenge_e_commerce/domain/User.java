@@ -1,11 +1,10 @@
 package g.sants.challenge_e_commerce.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import g.sants.challenge_e_commerce.application.dto.UserDTORequest;
-import g.sants.challenge_e_commerce.application.schemas.UserCategory;
+import g.sants.challenge_e_commerce.application.service.methods.UserCategory;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
