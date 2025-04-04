@@ -16,7 +16,7 @@ public class Storage {
     private int quantity;
 
     public Storage (){}
-    
+
     public Storage(String name, double price, int quantity) {
         this.name = name;
         this.price = price;
