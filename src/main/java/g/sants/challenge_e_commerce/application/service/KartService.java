@@ -5,6 +5,7 @@ import g.sants.challenge_e_commerce.application.dto.KartDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTOResponse;
 import g.sants.challenge_e_commerce.application.port.output.ItemRepository;
 import g.sants.challenge_e_commerce.application.port.output.KartRepository;
+import g.sants.challenge_e_commerce.application.port.output.StorageRepository;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.domain.Item;
 import g.sants.challenge_e_commerce.domain.Kart;
@@ -12,6 +13,7 @@ import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.*;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +27,8 @@ public class KartService {
     private UserRepository userRepository;
     @Autowired
     private ItemRepository itemRepository;
+    @Autowired
+    private StorageRepository storageRepository;
 
     public List<Kart> getAllKarts() {
         return kartRepository.findAll();
@@ -39,6 +43,7 @@ public class KartService {
     public Kart createKart(Long id,Kart kart) {
            Optional<User> user = userRepository.findById(id);
            if(user.isPresent()){
+
                kart.setUser(user.get());
                kart.setTotalPrice();
                kart.setTotalPriceDiscount();

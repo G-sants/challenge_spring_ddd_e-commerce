@@ -3,6 +3,7 @@ package g.sants.challenge_e_commerce.application.port.input;
 import g.sants.challenge_e_commerce.application.dto.KartDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTOResponse;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
+import g.sants.challenge_e_commerce.application.port.output.StorageRepository;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.KartService;
 import g.sants.challenge_e_commerce.application.service.UserService;
@@ -27,6 +28,8 @@ public class KartController {
     private UserService userService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private StorageRepository storageRepository;
 
     @GetMapping("/{user_id}")
     public List<Kart> getAllKarts() {
@@ -48,7 +51,7 @@ public class KartController {
     }
 
     @PostMapping("/{user_id}")
-    public ResponseEntity<Kart> createKart(@PathVariable Long user_id, @RequestBody List<Item> items) {
+    public ResponseEntity<Object> createKart(@PathVariable Long user_id, @RequestBody List<Item> items) {
         Kart kart = new Kart();
 
         for (Item item : items) {
@@ -59,10 +62,32 @@ public class KartController {
         Kart createdKart;
         if (user.isPresent()) {
             kart.setUser(user.get());
-            createdKart = kartService.createKart(user_id, kart);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdKart);
+
+            for (int i =0;i<kart.getItems().size();i++) {
+                Item itemCheck = kart.getItems().get(i);
+                Item itemVer = storageRepository.findByName(itemCheck.getItemName());
+                if (itemVer != null & itemVer.getItemName().equalsIgnoreCase(itemCheck.getItemName())) {
+                    int storageCont = Integer.signum(itemVer.getQuantity() - itemCheck.getQuantity());
+                    switch (storageCont) {
+                        case 1:
+                            itemVer.setQuantity(-itemCheck.getQuantity());
+                            createdKart = kartService.createKart(user_id, kart);
+                            return ResponseEntity.status(HttpStatus.CREATED).body(createdKart);
+
+                        case 0:
+                            itemVer.setQuantity(-itemCheck.getQuantity());
+                            return ResponseEntity.status(HttpStatus.CREATED).body("Order was made, but stock is now empty");
+
+                        case -1:
+                            return ResponseEntity.badRequest().body("Error adding to kart, item"+ itemVer.getItemName()+
+                                    " is out of stock");
+                    }
+                }
+            }
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Items in stock");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
     }
 
