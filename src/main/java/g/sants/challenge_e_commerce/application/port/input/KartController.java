@@ -1,8 +1,10 @@
 package g.sants.challenge_e_commerce.application.port.input;
 
+import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTOResponse;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
+import g.sants.challenge_e_commerce.application.port.output.ItemRepository;
 import g.sants.challenge_e_commerce.application.port.output.StorageRepository;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.KartService;
@@ -30,6 +32,8 @@ public class KartController {
     private UserRepository userRepository;
     @Autowired
     private StorageRepository storageRepository;
+    @Autowired
+    ItemRepository itemRepository;
 
     @GetMapping("/{user_id}")
     public List<Kart> getAllKarts() {
@@ -92,7 +96,7 @@ public class KartController {
     }
 
     @PutMapping("/add/{user_id}/{kart_id}")
-    public ResponseEntity<Kart> updatedKart(@PathVariable Long user_id, @PathVariable Long kart_id,
+    public ResponseEntity<Object> updatedKart(@PathVariable Long user_id, @PathVariable Long kart_id,
                                             @RequestBody KartDTORequest kartDetails) {
         KartDTOResponse kart = kartService.getKart(kart_id);
         if (kart == null) {
@@ -104,12 +108,30 @@ public class KartController {
             if (updateKart == null) {
                 return ResponseEntity.notFound().build();
             }
-            return ResponseEntity.ok(updateKart);
-        } else return ResponseEntity.badRequest().build();
+            for(int i =0;i<kart.items().size();i++){
+                ItemDTORequest itemCheck = kart.items().get(i);
+                Item itemVer = storageRepository.findByName(itemCheck.itemName());
+                if (itemVer != null & itemVer.getItemName().equalsIgnoreCase(itemCheck.itemName())) {
+                    int storageCont = Integer.signum(itemVer.getQuantity() - itemCheck.quantity());
+                    switch (storageCont) {
+                        case 1:
+                            itemVer.setQuantity(-itemCheck.quantity());
+                            return ResponseEntity.ok(updateKart);
+                        case 0:
+                            itemVer.setQuantity(-itemCheck.quantity());
+                            ResponseEntity.status(HttpStatus.ACCEPTED).body("Order was made, but stock is now empty");
+                            return ResponseEntity.ok(updateKart);
+                        case -1:
+                            return ResponseEntity.badRequest().body("Error adding to kart, item"+ itemVer.getItemName()+
+                                    " is out of stock");
+                    }
+                }
+            }
+        } return ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/remove/{user_id}/{kart_id}")
-    public ResponseEntity<Kart> deletedKart(@PathVariable Long user_id, @PathVariable Long kart_id,
+    public ResponseEntity<Object> deletedKart(@PathVariable Long user_id, @PathVariable Long kart_id,
                                             @RequestBody KartDTORequest kartDetails) {
         KartDTOResponse kart = kartService.getKart(kart_id);
         if (kart == null) {
@@ -121,8 +143,15 @@ public class KartController {
             if (updatedKart == null) {
                 return ResponseEntity.notFound().build();
             }
-            return ResponseEntity.ok(updatedKart);
-        } else return ResponseEntity.badRequest().build();
+            for(int i =0;i<kart.items().size();i++){
+                ItemDTORequest itemCheck = kart.items().get(i);
+                Item itemVer = updatedKart.getItems().get(i);
+                if (itemVer != null & itemVer.getItemName().equalsIgnoreCase(itemCheck.itemName())) {
+                    itemVer.setQuantity(+1);
+                    return ResponseEntity.ok(updatedKart);
+                }
+            }
+        } return ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/delete/{user_id}/{kart_id}")
