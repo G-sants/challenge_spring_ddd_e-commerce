@@ -11,6 +11,7 @@ import g.sants.challenge_e_commerce.application.service.KartService;
 import g.sants.challenge_e_commerce.application.service.UserService;
 import g.sants.challenge_e_commerce.domain.Item;
 import g.sants.challenge_e_commerce.domain.Kart;
+import g.sants.challenge_e_commerce.domain.Storage;
 import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -69,21 +70,23 @@ public class KartController {
 
             for (int i =0;i<kart.getItems().size();i++) {
                 Item itemCheck = kart.getItems().get(i);
-                Item itemVer = storageRepository.findByName(itemCheck.getItemName());
-                if (itemVer != null & itemVer.getItemName().equalsIgnoreCase(itemCheck.getItemName())) {
+                Storage itemVer = storageRepository.findByName(itemCheck.getItemName());
+                if (itemVer != null & itemVer.getName().equalsIgnoreCase(itemCheck.getItemName())) {
                     int storageCont = Integer.signum(itemVer.getQuantity() - itemCheck.getQuantity());
                     switch (storageCont) {
                         case 1:
-                            itemVer.setQuantity(-itemCheck.getQuantity());
+                            itemVer.setQuantity(itemVer.getQuantity()-itemCheck.getQuantity());
+                            storageRepository.save(itemVer);
                             createdKart = kartService.createKart(user_id, kart);
                             return ResponseEntity.status(HttpStatus.CREATED).body(createdKart);
 
                         case 0:
                             itemVer.setQuantity(-itemCheck.getQuantity());
+                            storageRepository.save(itemVer);
                             return ResponseEntity.status(HttpStatus.CREATED).body("Order was made, but stock is now empty");
 
                         case -1:
-                            return ResponseEntity.badRequest().body("Error adding to kart, item"+ itemVer.getItemName()+
+                            return ResponseEntity.badRequest().body("Error adding to kart, item"+ itemVer.getName()+
                                     " is out of stock");
                     }
                 }
@@ -102,6 +105,11 @@ public class KartController {
         if (kart == null) {
             return ResponseEntity.notFound().build();
         }
+
+        /*if(kartDetails.items() = null){
+            kartDetails.s
+        }*/  //AJUSTAR PARA QUANDO A LISTA ESTIVER VAZIA ELE PREENCHER POR ENQUANTO N TA FAZENDO
+
         String kartValidate = kart.status();
         if ("PENDING".equals(kartValidate)) {
             Kart updateKart = kartService.updateKart(user_id, kart_id, kartDetails);
@@ -110,19 +118,21 @@ public class KartController {
             }
             for(int i =0;i<kart.items().size();i++){
                 ItemDTORequest itemCheck = kart.items().get(i);
-                Item itemVer = storageRepository.findByName(itemCheck.itemName());
-                if (itemVer != null & itemVer.getItemName().equalsIgnoreCase(itemCheck.itemName())) {
+                Storage itemVer = storageRepository.findByName(itemCheck.itemName());
+                if (itemVer != null & itemVer.getName().equalsIgnoreCase(itemCheck.itemName())) {
                     int storageCont = Integer.signum(itemVer.getQuantity() - itemCheck.quantity());
                     switch (storageCont) {
                         case 1:
                             itemVer.setQuantity(-itemCheck.quantity());
+                            storageRepository.save(itemVer);
                             return ResponseEntity.ok(updateKart);
                         case 0:
                             itemVer.setQuantity(-itemCheck.quantity());
+                            storageRepository.save(itemVer);
                             ResponseEntity.status(HttpStatus.ACCEPTED).body("Order was made, but stock is now empty");
                             return ResponseEntity.ok(updateKart);
                         case -1:
-                            return ResponseEntity.badRequest().body("Error adding to kart, item"+ itemVer.getItemName()+
+                            return ResponseEntity.badRequest().body("Error adding to kart, item"+ itemVer.getName()+
                                     " is out of stock");
                     }
                 }
@@ -148,6 +158,9 @@ public class KartController {
                 Item itemVer = updatedKart.getItems().get(i);
                 if (itemVer != null & itemVer.getItemName().equalsIgnoreCase(itemCheck.itemName())) {
                     itemVer.setQuantity(+1);
+                    Storage savedItem = storageRepository.findByName(itemVer.getItemName());
+                    savedItem.setQuantity(itemVer.getQuantity());
+                    storageRepository.save(savedItem);
                     return ResponseEntity.ok(updatedKart);
                 }
             }
