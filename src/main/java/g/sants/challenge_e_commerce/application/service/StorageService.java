@@ -67,4 +67,12 @@ public class StorageService {
             throw new RuntimeException("Error deleting item" + e.getMessage());
         }
     }
+
+    public Storage findItemByName(String name){
+       return storageRepository.findByName(name);
+    }
+
+    public Storage saveItemInStorage(Storage storage){
+        return storageRepository.save(storage);
+    }
 }

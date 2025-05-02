@@ -21,6 +21,8 @@ ___
 - [ ] Upload the application to a Container;
 - [ ] View and Control Application Statistics;
 - [ ] Monitor Application Health;
+- [ ] Better Error Handling;
+- [ ] 
 - [ ] ...
 ___
 
@@ -36,7 +38,31 @@ You should have previously installed MySQL and a preference API that lets you in
 
  - #### Pull Down The Code
  - #### Make sure to Config your Database
-    The application is set up to run in this database:
+  
+  #### The DATABASE used in this code is MySQL
+Make sure to create it using the following commands in MySQL Workbench.
+
+ - ### Creating the DataBase in MySQL
+On MySQL workbench, type the following command:
+````
+create database testing_ecommerce;
+````
+Then select the execute statement in the keyboard the Lightning with bar.
+![img_2.png](img_2.png)
+
+#### Now make sure to set up the application url in the application.properties file on your IDE.
+It's located in the folder:
+
+````plaintext
+ ---src.
+ |     |__ main
+ |           |__ resourcers
+ |               |__ application.properties
+ |
+ ---target
+````
+
+The application is set up to run in this database:
  ```shell
     spring.datasource.url=jdbc:mysql://localhost:3306/testing_ecommerce"
 ````
@@ -140,14 +166,14 @@ ADMIN have both USERs and ADMINs commands unlocked to use.
   ENDPOINT:
 ```shell 
     GET
-    items
+    item
 ```
 
 - ### Checking for specific Item in Stock
   ENDPOINT:
 ```shell 
     GET
-    items/{item_id}
+    item/{item_id}
 ````
 > Where the Item ID can be seen in the previous command and must be an integer.
 > 
@@ -233,7 +259,7 @@ ENDPOINT:
     PUT
     orders/cancel/user/{user_id}/kart/{kart_id}
 ````
-JSON Input Body for Removing Item:
+JSON Input Body for Removing Item from Kart:
 
 ````
 {
@@ -242,3 +268,49 @@ JSON Input Body for Removing Item:
 ````
 A cancelled order cannot be updated anymore. But it will still exist in the database for statistic purposes only.
 ___
+
+### Admin Command Guide
+
+- ### Adding new Items to Stock
+  ENDPOINT:
+```shell 
+    POST
+    item
+```
+
+JSON Input Body for Adding new Item to Stock:
+
+````
+{
+  "price": 0.99,
+  "itemName": "Potato",
+  "quantity": 50
+}
+````
+
+- ### Updating Items from Stock
+  ENDPOINT:
+```shell 
+    PUT
+    item/{item_id}
+```
+
+JSON Input Body for Updating Item from Stock:
+
+````
+{
+  "price": 2.99,
+  "itemName": "Potato",
+  "quantity": 100
+}
+````
+
+It's the same as putting a new item, but the values are changeable.
+
+- ### Removing Items from Stock
+  ENDPOINT:
+```shell 
+    DELETE
+    item/{item_id}
+```
+Removes the item with the specified id from the storage and from the database.

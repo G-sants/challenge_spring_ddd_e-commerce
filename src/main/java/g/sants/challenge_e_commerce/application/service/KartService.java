@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -62,32 +63,44 @@ public class KartService {
                     Optional<Kart> optionalKart = kartRepository.findById(kart_id);
                         if(optionalKart.isPresent()) {
                             Kart kart = optionalKart.get();
-                            for (ItemDTORequest itemDTO : kartDetails.items()){
-                                List<Item> items = kart.getItems();
-                                Iterator<Item> iterator = kart.getItems().iterator();
-                                while (iterator.hasNext()) {
-                                    Item item = iterator.next();
+                            if(!kart.getItems().isEmpty()) {
+                                for (ItemDTORequest itemDTO : kartDetails.items()) {
+                                    List<Item> items = kart.getItems();
+                                    Iterator<Item> iterator = kart.getItems().iterator();
+                                    while (iterator.hasNext()) {
+                                        Item item = iterator.next();
 
-                                    if (item.getItemName().equalsIgnoreCase(itemDTO.itemName())) {
+                                        if (item.getItemName().equalsIgnoreCase(itemDTO.itemName())) {
                                             item.setQuantity(item.getQuantity() + itemDTO.quantity());
                                             kart.setTotalPrice();
                                             kart.setTotalPriceDiscount();
                                             kart.setTotalDiscount();
                                             kartRepository.save(kart);
-                                    } else {
+                                        } else {
                                             Item newItem = new Item();
                                             newItem.setItemName(itemDTO.itemName());
                                             newItem.setPrice(itemDTO.price());
                                             newItem.setQuantity(itemDTO.quantity());
                                             kart.addItem(newItem);
+                                        }
                                     }
                                 }
-
+                                return kart;
+                            }else {
+                                List<Item> newItemList = new ArrayList<>();
+                                kart.setItems(newItemList);
+                                for (ItemDTORequest itemDTO : kartDetails.items()) {
+                                    Item newItem = new Item();
+                                    newItem.setItemName(itemDTO.itemName());
+                                    newItem.setPrice(itemDTO.price());
+                                    newItem.setQuantity(itemDTO.quantity());
+                                    kart.addItem(newItem);
+                                }
+                                kart.setTotalPrice();
+                                kart.setTotalPriceDiscount();
+                                kart.setTotalDiscount();
+                                return kartRepository.save(kart);
                             }
-                            kart.setTotalPrice();
-                            kart.setTotalPriceDiscount();
-                            kart.setTotalDiscount();
-                            return kartRepository.save(kart);
                         }else {
                             throw new RuntimeException("Order not Found within User" + id);
                         }

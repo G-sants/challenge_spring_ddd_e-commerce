@@ -5,9 +5,8 @@ import g.sants.challenge_e_commerce.application.dto.KartDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTOResponse;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
 import g.sants.challenge_e_commerce.application.port.output.ItemRepository;
-import g.sants.challenge_e_commerce.application.port.output.StorageRepository;
-import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.KartService;
+import g.sants.challenge_e_commerce.application.service.StorageService;
 import g.sants.challenge_e_commerce.application.service.UserService;
 import g.sants.challenge_e_commerce.domain.Item;
 import g.sants.challenge_e_commerce.domain.Kart;
@@ -18,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,11 +30,7 @@ public class KartController {
     @Autowired
     private UserService userService;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private StorageRepository storageRepository;
-    @Autowired
-    ItemRepository itemRepository;
+    StorageService storageService;
 
     @GetMapping("/user/{user_id}")
     public List<Kart> getAllKarts() {
@@ -63,26 +59,26 @@ public class KartController {
             kart.addItem(item);
         }
 
-        Optional<User> user = userRepository.findById(user_id);
+        Optional<User> user = userService.getUserForKart(user_id);
         Kart createdKart;
         if (user.isPresent()) {
             kart.setUser(user.get());
 
             for (int i =0;i<kart.getItems().size();i++) {
                 Item itemCheck = kart.getItems().get(i);
-                Storage itemVer = storageRepository.findByName(itemCheck.getItemName());
+                Storage itemVer = storageService.findItemByName(itemCheck.getItemName());
                 if (itemVer != null & itemVer.getName().equalsIgnoreCase(itemCheck.getItemName())) {
                     int storageCont = Integer.signum(itemVer.getQuantity() - itemCheck.getQuantity());
                     switch (storageCont) {
                         case 1:
                             itemVer.setQuantity(itemVer.getQuantity()-itemCheck.getQuantity());
-                            storageRepository.save(itemVer);
+                            storageService.saveItemInStorage(itemVer);
                             createdKart = kartService.createKart(user_id, kart);
                             return ResponseEntity.status(HttpStatus.CREATED).body(createdKart);
 
                         case 0:
                             itemVer.setQuantity(-itemCheck.getQuantity());
-                            storageRepository.save(itemVer);
+                            storageService.saveItemInStorage(itemVer);
                             return ResponseEntity.status(HttpStatus.CREATED).body("Order was made, but stock is now empty");
 
                         case -1:
@@ -106,29 +102,26 @@ public class KartController {
             return ResponseEntity.notFound().build();
         }
 
-        /*if(kartDetails.items() = null){
-            kartDetails.s
-        }*/  //AJUSTAR PARA QUANDO A LISTA ESTIVER VAZIA ELE PREENCHER POR ENQUANTO N TA FAZENDO
-
         String kartValidate = kart.status();
         if ("PENDING".equals(kartValidate)) {
             Kart updateKart = kartService.updateKart(user_id, kart_id, kartDetails);
-            if (updateKart == null) {
+             if (updateKart == null) {
                 return ResponseEntity.notFound().build();
             }
+
             for(int i =0;i<kart.items().size();i++){
                 ItemDTORequest itemCheck = kart.items().get(i);
-                Storage itemVer = storageRepository.findByName(itemCheck.itemName());
+                Storage itemVer = storageService.findItemByName(itemCheck.itemName());
                 if (itemVer != null & itemVer.getName().equalsIgnoreCase(itemCheck.itemName())) {
                     int storageCont = Integer.signum(itemVer.getQuantity() - itemCheck.quantity());
                     switch (storageCont) {
                         case 1:
-                            itemVer.setQuantity(-itemCheck.quantity());
-                            storageRepository.save(itemVer);
+                            itemVer.setQuantity(itemVer.getQuantity()-itemCheck.quantity());
+                            storageService.saveItemInStorage(itemVer);
                             return ResponseEntity.ok(updateKart);
                         case 0: 
-                            itemVer.setQuantity(-itemCheck.quantity());
-                            storageRepository.save(itemVer);
+                            itemVer.setQuantity(0);
+                            storageService.saveItemInStorage(itemVer);
                             ResponseEntity.status(HttpStatus.ACCEPTED).body("Order was made, but stock is now empty");
                             return ResponseEntity.ok(updateKart);
                         case -1:
@@ -158,9 +151,9 @@ public class KartController {
                 Item itemVer = updatedKart.getItems().get(i);
                 if (itemVer != null & itemVer.getItemName().equalsIgnoreCase(itemCheck.itemName())) {
                     itemVer.setQuantity(+1);
-                    Storage savedItem = storageRepository.findByName(itemVer.getItemName());
+                    Storage savedItem = storageService.findItemByName(itemVer.getItemName());
                     savedItem.setQuantity(itemVer.getQuantity());
-                    storageRepository.save(savedItem);
+                    storageService.saveItemInStorage(savedItem);
                     return ResponseEntity.ok(updatedKart);
                 }
             }

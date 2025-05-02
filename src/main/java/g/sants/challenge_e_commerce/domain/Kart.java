@@ -106,6 +106,10 @@
             this.user = user;
         }
 
+        public void setItems(List<Item> items) {
+            this.items = items;
+        }
+
         public List<Item> getItems() {
             return items;
         }

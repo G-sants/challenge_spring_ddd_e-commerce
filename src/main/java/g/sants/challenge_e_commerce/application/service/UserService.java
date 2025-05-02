@@ -57,4 +57,8 @@ public class UserService {
             throw new RuntimeException("Error deleting user" + e.getMessage());
         }
     }
+
+    public Optional<User> getUserForKart(Long id) {
+        return userRepository.findById(id);
+    }
 }
