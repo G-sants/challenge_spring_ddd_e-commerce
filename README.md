@@ -71,8 +71,15 @@ The application is set up to run in this database:
     spring.datasource.password= "YourPassword"
 ```  
 
-Once is all setup is ready to be launched, just open your favorite IDE and starts the API.
+Once is all setup is ready to be launched, just open your favorite IDE and starts the API. Note that the resources and application.properties does not exist in this project, you'll have to create it on your own, for that there is an example file to make things easier.
 
+````plaintext
+ ---src.
+ |     |__ applications.properties.example.txt
+ |
+ ---target
+````
+Use it to create your own file and update it with your login information.
 ___
 
 ## Usage

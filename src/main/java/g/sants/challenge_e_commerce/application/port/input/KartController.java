@@ -110,7 +110,7 @@ public class KartController {
             }
 
             for(int i =0;i<kart.items().size();i++){
-                ItemDTORequest itemCheck = kart.items().get(i);
+                ItemDTORequest itemCheck = kartDetails.items().get(i);
                 Storage itemVer = storageService.findItemByName(itemCheck.itemName());
                 if (itemVer != null & itemVer.getName().equalsIgnoreCase(itemCheck.itemName())) {
                     int storageCont = Integer.signum(itemVer.getQuantity() - itemCheck.quantity());
