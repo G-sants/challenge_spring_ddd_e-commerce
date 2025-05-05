@@ -47,7 +47,7 @@ On MySQL workbench, type the following command:
 create database testing_ecommerce;
 ````
 Then select the execute statement in the keyboard the Lightning with bar.
-![img_2.png](img_2.png)
+![img_2.png](src/img_2.png)
 
 #### Now make sure to set up the application url in the application.properties file on your IDE.
 It's located in the folder:
@@ -142,10 +142,10 @@ Send it and wait for the "Response 200 OK".
 
 After that you will receive your *ACESS TOKEN*, copy and paste it in the authorization tab of your app for continue interacting with the other commands
 >The token is a BEARER TOKEN, so make sure to select the right option in the menu.
-![img.png](img.png)
+![img.png](src/img.png)
 
 > Then paste it correctly in the token area.
-![img_1.png](img_1.png)
+![img_1.png](src/img_1.png)
 
 And now you are logged in as long as you keep the token while interacting with the app. It has an expiration time of 2 hours by default.
 ___
