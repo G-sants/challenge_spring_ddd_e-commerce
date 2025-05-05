@@ -22,7 +22,6 @@ ___
 - [ ] View and Control Application Statistics;
 - [ ] Monitor Application Health;
 - [ ] Better Error Handling;
-- [ ] 
 - [ ] ...
 ___
 
