@@ -9,7 +9,14 @@ public enum MessageCategory {
     ORDER_EVENT_PAYED(".order-payment-approved"),
 
     USER_QUEUE_NAME("users.v1"),
-    USER_EVENT_CREATED(".user-created");
+
+    USER_EVENT_CREATED(".user-created"),
+
+    ITEM_QUEUE_NAME("item.v1"),
+
+    ITEM_EVENT_CREATED(".item-created"),
+    ITEM_EVENT_DISCOUNT(".item-low-price"),
+    ITEM_EVENT_OUTOFSTOCK(".item-stockempty");
 
     private final String message;
 
