@@ -1,4 +1,4 @@
-package g.sants.challenge_e_commerce.adapter.config;
+package g.sants.challenge_e_commerce.adapter.security.config;
 
 import g.sants.challenge_e_commerce.application.port.filters.SecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;

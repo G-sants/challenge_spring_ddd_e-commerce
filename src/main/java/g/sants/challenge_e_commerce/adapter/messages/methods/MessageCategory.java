@@ -1,4 +1,4 @@
-package g.sants.challenge_e_commerce.application.service.methods;
+package g.sants.challenge_e_commerce.adapter.messages.methods;
 
 public enum MessageCategory {
 

@@ -4,20 +4,21 @@ import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTOResponse;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
-import g.sants.challenge_e_commerce.application.port.output.ItemRepository;
 import g.sants.challenge_e_commerce.application.service.KartService;
 import g.sants.challenge_e_commerce.application.service.StorageService;
 import g.sants.challenge_e_commerce.application.service.UserService;
+import g.sants.challenge_e_commerce.adapter.messages.methods.MessageOperations;
 import g.sants.challenge_e_commerce.domain.Item;
 import g.sants.challenge_e_commerce.domain.Kart;
 import g.sants.challenge_e_commerce.domain.Storage;
 import g.sants.challenge_e_commerce.domain.User;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,8 @@ public class KartController {
     private UserService userService;
     @Autowired
     StorageService storageService;
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
     @GetMapping("/user/{user_id}")
     public List<Kart> getAllKarts() {
@@ -74,6 +77,9 @@ public class KartController {
                             itemVer.setQuantity(itemVer.getQuantity()-itemCheck.getQuantity());
                             storageService.saveItemInStorage(itemVer);
                             createdKart = kartService.createKart(user_id, kart);
+                            Message message = new Message(kart.getUser().getName().getBytes());
+
+                            rabbitTemplate.send(MessageOperations.orderCreatedQueue(),message);
                             return ResponseEntity.status(HttpStatus.CREATED).body(createdKart);
 
                         case 0:

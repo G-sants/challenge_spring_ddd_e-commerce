@@ -1,6 +1,6 @@
-package g.sants.challenge_e_commerce.adapter.config;
+package g.sants.challenge_e_commerce.adapter.messages.config;
 
-import g.sants.challenge_e_commerce.application.service.methods.MessageCategory;
+import g.sants.challenge_e_commerce.adapter.messages.methods.MessageOperations;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -14,8 +14,8 @@ import org.springframework.context.annotation.Configuration;
 public class MessageConfig {
 
     @Bean
-    public Queue myQueue(){
-        return new Queue(MessageCategory.ORDER_QUEUE_NAME.getMessage() + MessageCategory.ORDER_EVENT_CREATED,true);
+    public Queue myQueue(){;
+        return new Queue(MessageOperations.orderCreatedQueue());
     }
 
     @Bean
@@ -23,6 +23,7 @@ public class MessageConfig {
         return new RabbitAdmin(connectionFactory);
     }
 
+    @Bean
     public ApplicationListener<ApplicationReadyEvent> applicationReadyEventApplicationListener
             (RabbitAdmin rabbitAdmin) {
         return event -> rabbitAdmin.initialize();
