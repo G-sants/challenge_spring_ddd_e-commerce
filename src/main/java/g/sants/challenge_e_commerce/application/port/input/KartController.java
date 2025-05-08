@@ -1,5 +1,6 @@
 package g.sants.challenge_e_commerce.application.port.input;
 
+import g.sants.challenge_e_commerce.adapter.messages.methods.MessageCategory;
 import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTOResponse;
@@ -7,7 +8,6 @@ import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
 import g.sants.challenge_e_commerce.application.service.KartService;
 import g.sants.challenge_e_commerce.application.service.StorageService;
 import g.sants.challenge_e_commerce.application.service.UserService;
-import g.sants.challenge_e_commerce.adapter.messages.methods.MessageOperations;
 import g.sants.challenge_e_commerce.domain.Item;
 import g.sants.challenge_e_commerce.domain.Kart;
 import g.sants.challenge_e_commerce.domain.Storage;
@@ -77,9 +77,8 @@ public class KartController {
                             itemVer.setQuantity(itemVer.getQuantity()-itemCheck.getQuantity());
                             storageService.saveItemInStorage(itemVer);
                             createdKart = kartService.createKart(user_id, kart);
-                            Message message = new Message(kart.getUser().getName().getBytes());
 
-                            rabbitTemplate.send(MessageOperations.orderCreatedQueue(),message);
+                            rabbitTemplate.convertAndSend(MessageCategory.ORDER_CREATED,kart.getUser().getName());
                             return ResponseEntity.status(HttpStatus.CREATED).body(createdKart);
 
                         case 0:

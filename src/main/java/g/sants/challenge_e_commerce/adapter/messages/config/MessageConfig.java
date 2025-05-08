@@ -1,6 +1,6 @@
 package g.sants.challenge_e_commerce.adapter.messages.config;
 
-import g.sants.challenge_e_commerce.adapter.messages.methods.MessageOperations;
+import g.sants.challenge_e_commerce.adapter.messages.methods.MessageCategory;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -15,7 +15,7 @@ public class MessageConfig {
 
     @Bean
     public Queue myQueue(){;
-        return new Queue(MessageOperations.orderCreatedQueue());
+        return new Queue(MessageCategory.ORDER_CREATED);
     }
 
     @Bean
