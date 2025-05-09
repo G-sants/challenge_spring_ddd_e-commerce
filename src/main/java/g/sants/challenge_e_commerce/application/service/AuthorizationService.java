@@ -1,5 +1,6 @@
 package g.sants.challenge_e_commerce.application.service;
 
+import g.sants.challenge_e_commerce.application.exceptions.errors.LoginException;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,9 +15,12 @@ public class AuthorizationService implements UserDetailsService {
     UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String email) throws LoginException {
+        UserDetails userDetails = userRepository.findByEmail(email);
+        if (userDetails == null) {
+            throw new LoginException();
+        }
+        return userDetails;
     }
-
 
 }

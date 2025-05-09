@@ -3,7 +3,7 @@ package g.sants.challenge_e_commerce.application.service;
 import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTOResponse;
-import g.sants.challenge_e_commerce.application.errors.GlobalExceptionHandler;
+import g.sants.challenge_e_commerce.application.exceptions.errors.UserNotFoundException;
 import g.sants.challenge_e_commerce.application.port.output.ItemRepository;
 import g.sants.challenge_e_commerce.application.port.output.KartRepository;
 import g.sants.challenge_e_commerce.application.port.output.StorageRepository;
@@ -14,7 +14,6 @@ import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,7 +41,7 @@ public class KartService {
                 .orElseThrow(() -> new RuntimeException("Order not Found"));
     }
 
-    public Kart createKart(Long id,Kart kart) {
+    public Kart createKart(Long id,Kart kart) throws Exception {
            Optional<User> user = userRepository.findById(id);
            if(user.isPresent()){
 
@@ -52,14 +51,13 @@ public class KartService {
                kart.setTotalDiscount();
                return kartRepository.save(kart);
            }
-        return null;
+        else throw new UserNotFoundException();
     }
      
     public Kart updateKart(Long id, Long kart_id, KartDTORequest kartDetails) {
-        try {
-            User user = userRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException(""));
-            if (user != null) {
+            Optional<User> user = userRepository.findById(id);
+
+            if (user.isPresent()) {
                 try {
                     Optional<Kart> optionalKart = kartRepository.findById(kart_id);
                         if(optionalKart.isPresent()) {
@@ -109,9 +107,6 @@ public class KartService {
                     throw new RuntimeException("Error finding order" + e.getMessage());
                 }
             }
-        }catch (Exception e){
-            throw new RuntimeException("Error finding user" + e.getMessage());
-        }
         return null;
     }
 

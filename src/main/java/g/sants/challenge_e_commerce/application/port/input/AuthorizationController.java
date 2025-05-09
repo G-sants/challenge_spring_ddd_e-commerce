@@ -3,14 +3,12 @@ package g.sants.challenge_e_commerce.application.port.input;
 import g.sants.challenge_e_commerce.application.dto.AuthorizationDTORequest;
 import g.sants.challenge_e_commerce.application.dto.LoginDTOResponse;
 import g.sants.challenge_e_commerce.application.dto.RegisterDTORequest;
-import g.sants.challenge_e_commerce.application.errors.GlobalExceptionHandler;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.TokenService;
 import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
@@ -32,19 +30,13 @@ public class AuthorizationController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Validated AuthorizationDTORequest data) {
-       try {
-           var usernamePassword = new UsernamePasswordAuthenticationToken
-                   (data.email(), data.password());
-           var auth = this.authenticationManager.authenticate(usernamePassword);
+        var usernamePassword = new UsernamePasswordAuthenticationToken
+                (data.email(), data.password());
+        var auth = this.authenticationManager.authenticate(usernamePassword);
 
-           var token = tokenService.generateToken((User)auth.getPrincipal());
+        var token = tokenService.generateToken((User) auth.getPrincipal());
 
-           return ResponseEntity.ok(new LoginDTOResponse(token));
-       }catch (BadCredentialsException e) {
-           return GlobalExceptionHandler.handleBadCredentialsException(e);
-       }catch (Exception e) {
-           return GlobalExceptionHandler.handleLoginException(e);
-       }
+        return ResponseEntity.ok(new LoginDTOResponse(token));
     }
 
     @PostMapping("/register")

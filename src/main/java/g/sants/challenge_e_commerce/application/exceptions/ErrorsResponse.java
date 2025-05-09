@@ -1,4 +1,4 @@
-package g.sants.challenge_e_commerce.application.errors;
+package g.sants.challenge_e_commerce.application.exceptions;
 
 import java.time.LocalDateTime;
 

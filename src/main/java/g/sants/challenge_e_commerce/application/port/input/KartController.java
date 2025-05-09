@@ -55,7 +55,7 @@ public class KartController {
     }
 
     @PostMapping("/user/{user_id}")
-    public ResponseEntity<Object> createKart(@PathVariable Long user_id, @RequestBody List<Item> items) {
+    public ResponseEntity<Object> createKart(@PathVariable Long user_id, @RequestBody List<Item> items) throws Exception {
         Kart kart = new Kart();
 
         for (Item item : items) {
