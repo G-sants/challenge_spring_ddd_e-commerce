@@ -3,6 +3,7 @@ package g.sants.challenge_e_commerce.application.port.input;
 import g.sants.challenge_e_commerce.application.dto.AuthorizationDTORequest;
 import g.sants.challenge_e_commerce.application.dto.LoginDTOResponse;
 import g.sants.challenge_e_commerce.application.dto.RegisterDTORequest;
+import g.sants.challenge_e_commerce.application.errors.GlobalExceptionHandler;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.TokenService;
 import g.sants.challenge_e_commerce.domain.User;
@@ -41,9 +42,9 @@ public class AuthorizationController {
 
            return ResponseEntity.ok(new LoginDTOResponse(token));
        }catch (BadCredentialsException e) {
-           return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Login");
+           return GlobalExceptionHandler.handleBadCredentialsException(e);
        }catch (Exception e) {
-           return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authentication Failed"+ e.getMessage());
+           return GlobalExceptionHandler.handleExceptionLogin(e);
        }
     }
 
