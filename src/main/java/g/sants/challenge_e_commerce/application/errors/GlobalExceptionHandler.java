@@ -20,10 +20,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public static ResponseEntity<ErrorsResponse> handleExceptionLogin
+    public static ResponseEntity<ErrorsResponse> handleLoginException
             (Exception e){
         ErrorsResponse errorsResponse = new ErrorsResponse(LocalDateTime.now(), HttpStatus.FORBIDDEN.value(),
                 "Authentication Failed", e.getMessage());
         return new ResponseEntity<>(errorsResponse,HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler
+    public static ResponseEntity<ErrorsResponse> userNofFoundException( RuntimeException re){
+        ErrorsResponse errorsResponse = new ErrorsResponse(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(),
+                "User not Found with ID", re.getMessage());
+        return new ResponseEntity<>(errorsResponse,HttpStatus.NOT_FOUND);
     }
 }

@@ -3,6 +3,7 @@ package g.sants.challenge_e_commerce.application.service;
 import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTOResponse;
+import g.sants.challenge_e_commerce.application.errors.GlobalExceptionHandler;
 import g.sants.challenge_e_commerce.application.port.output.ItemRepository;
 import g.sants.challenge_e_commerce.application.port.output.KartRepository;
 import g.sants.challenge_e_commerce.application.port.output.StorageRepository;
@@ -57,7 +58,7 @@ public class KartService {
     public Kart updateKart(Long id, Long kart_id, KartDTORequest kartDetails) {
         try {
             User user = userRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("User not find with id" + id));
+                    .orElseThrow(() -> new RuntimeException(""));
             if (user != null) {
                 try {
                     Optional<Kart> optionalKart = kartRepository.findById(kart_id);

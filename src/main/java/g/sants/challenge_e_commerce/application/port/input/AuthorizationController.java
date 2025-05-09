@@ -8,7 +8,6 @@ import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.TokenService;
 import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -44,7 +43,7 @@ public class AuthorizationController {
        }catch (BadCredentialsException e) {
            return GlobalExceptionHandler.handleBadCredentialsException(e);
        }catch (Exception e) {
-           return GlobalExceptionHandler.handleExceptionLogin(e);
+           return GlobalExceptionHandler.handleLoginException(e);
        }
     }
 
