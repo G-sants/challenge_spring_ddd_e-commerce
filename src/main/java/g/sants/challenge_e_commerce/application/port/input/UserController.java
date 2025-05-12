@@ -2,6 +2,8 @@ package g.sants.challenge_e_commerce.application.port.input;
 
 import g.sants.challenge_e_commerce.application.dto.UserDTORequest;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
+import g.sants.challenge_e_commerce.application.exceptions.errors.NoInfoReceivedException;
+import g.sants.challenge_e_commerce.application.exceptions.errors.UserNotFoundException;
 import g.sants.challenge_e_commerce.application.service.UserService;
 import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ public class UserController {
     public ResponseEntity<UserDTOResponse> getUsersById(@PathVariable Long id){
         UserDTOResponse user = userService.getUser(id);
         if (user == null) {
-            return ResponseEntity.notFound().build();
+            throw new NoInfoReceivedException();
         }
         return ResponseEntity.ok(user);
     }
@@ -35,7 +37,7 @@ public class UserController {
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserDTORequest userDetails){
         User updateUser =userService.updateUser(id, userDetails);
         if(updateUser ==null){
-            return ResponseEntity.notFound().build();
+            throw new NoInfoReceivedException();
         }
         return ResponseEntity.ok(updateUser);
     }

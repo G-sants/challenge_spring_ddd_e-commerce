@@ -17,11 +17,11 @@ ___
 
 ## Future Upgrades and Improvements
 
-- [ ] Integrate Messages and Notifications;
+- [ ] Integrate Messages and Notifications; (on the way)
 - [ ] Upload the application to a Container;
 - [ ] View and Control Application Statistics;
 - [ ] Monitor Application Health;
-- [ ] Better Error Handling;
+- [x] Add Custom Exception Handling;
 - [ ] ...
 ___
 

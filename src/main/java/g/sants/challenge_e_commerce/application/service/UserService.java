@@ -2,6 +2,7 @@ package g.sants.challenge_e_commerce.application.service;
 
 import g.sants.challenge_e_commerce.application.dto.UserDTORequest;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
+import g.sants.challenge_e_commerce.application.exceptions.errors.UserNotFoundException;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +27,13 @@ public class UserService {
 
     public UserDTOResponse getUser(Long id) {
         Optional<User> user = userRepository.findById(id);
-        return user.map(UserDTOResponse::new).orElseThrow(()->
-                new RuntimeException("User not found with id"+ id));
+        return user.map(UserDTOResponse::new).orElseThrow(UserNotFoundException::new);
     }
 
     public User updateUser(Long id, UserDTORequest userDetails) {
         try{
             User user = userRepository.findById(id)
-                    .orElseThrow(()-> new RuntimeException("User not find with id" + id));
+                    .orElseThrow(UserNotFoundException::new);
             if (user != null) {
                 user.setName(userDetails.name());
                 user.setLastName(userDetails.lastName());

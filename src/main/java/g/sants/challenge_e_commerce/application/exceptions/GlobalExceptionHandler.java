@@ -62,4 +62,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 "You probably mistyped an entry to a Item", exception.getMessage());
         return new ResponseEntity<>(errorsResponse,HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(NoInfoReceivedException.class)
+    public ResponseEntity<ErrorsResponse> noInfoReceivedException(NoInfoReceivedException exception){
+        ErrorsResponse errorsResponse = new ErrorsResponse(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(),
+                "The service returned a null response to the request", exception.getMessage());
+        return new ResponseEntity<>(errorsResponse,HttpStatus.NOT_FOUND);
+    }
 }
