@@ -56,4 +56,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorsResponse,HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(WrongItemEntryException.class)
+    public ResponseEntity<ErrorsResponse> wrongItemEntryException(WrongItemEntryException exception){
+        ErrorsResponse errorsResponse = new ErrorsResponse(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(),
+                "You probably mistyped an entry to a Item", exception.getMessage());
+        return new ResponseEntity<>(errorsResponse,HttpStatus.NOT_FOUND);
+    }
 }

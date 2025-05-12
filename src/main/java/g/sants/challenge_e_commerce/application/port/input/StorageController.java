@@ -19,10 +19,6 @@ public class StorageController {
 
     @Autowired
     private StorageService storageService;
-    @Autowired
-    private KartService kartService;
-    @Autowired
-    private UserService userService;
 
     @GetMapping
     public List<ItemDTOResponse> getAllItems(){
