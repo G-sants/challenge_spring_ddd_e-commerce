@@ -2,6 +2,7 @@ package g.sants.challenge_e_commerce.application.service;
 
 import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import g.sants.challenge_e_commerce.application.dto.ItemDTOResponse;
+import g.sants.challenge_e_commerce.application.exceptions.errors.ItemNotFoundException;
 import g.sants.challenge_e_commerce.application.port.output.KartRepository;
 import g.sants.challenge_e_commerce.application.port.output.StorageRepository;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
@@ -34,7 +35,7 @@ public class StorageService {
     public ItemDTOResponse getItem(Long id) {
         Optional<Storage> item = storageRepository.findById(id);
         return item.map(ItemDTOResponse::new)
-                .orElseThrow(() -> new RuntimeException("Item not Found"));
+                .orElseThrow(ItemNotFoundException::new);
     }
 
     public Storage createItem(ItemDTORequest data) {

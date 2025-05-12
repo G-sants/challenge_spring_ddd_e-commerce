@@ -5,6 +5,10 @@ import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTORequest;
 import g.sants.challenge_e_commerce.application.dto.KartDTOResponse;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
+import g.sants.challenge_e_commerce.application.exceptions.errors.ItemNotFoundException;
+import g.sants.challenge_e_commerce.application.exceptions.errors.OrderCancelledException;
+import g.sants.challenge_e_commerce.application.exceptions.errors.OrderNotFoundException;
+import g.sants.challenge_e_commerce.application.exceptions.errors.UserNotFoundException;
 import g.sants.challenge_e_commerce.application.service.KartService;
 import g.sants.challenge_e_commerce.application.service.StorageService;
 import g.sants.challenge_e_commerce.application.service.UserService;
@@ -37,6 +41,7 @@ public class KartController {
 
     @GetMapping("/user/{user_id}")
     public List<Kart> getAllKarts() {
+
         return kartService.getAllKarts();
     }
 
@@ -45,11 +50,11 @@ public class KartController {
                                                        @PathVariable Long kart_id) {
         UserDTOResponse user = userService.getUser(user_id);
         if (user == null) {
-            return ResponseEntity.notFound().build();
+            throw new UserNotFoundException();
         }
         KartDTOResponse kart = kartService.getKart(kart_id);
         if (kart == null) {
-            return ResponseEntity.noContent().build();
+            throw new OrderNotFoundException();
         }
         return ResponseEntity.ok(kart);
     }
@@ -93,18 +98,24 @@ public class KartController {
                 }
             }
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Items in stock");
+            throw new ItemNotFoundException();
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            throw new UserNotFoundException();
         }
     }
 
     @PutMapping("/add/user/{user_id}/kart/{kart_id}")
     public ResponseEntity<Object> updatedKart(@PathVariable Long user_id, @PathVariable Long kart_id,
                                             @RequestBody KartDTORequest kartDetails) {
+
+        UserDTOResponse user = userService.getUser(user_id);
+        if (user == null){
+            throw new UserNotFoundException();
+        }
+
         KartDTOResponse kart = kartService.getKart(kart_id);
         if (kart == null) {
-            return ResponseEntity.notFound().build();
+            throw new OrderNotFoundException();
         }
 
         String kartValidate = kart.status();
@@ -135,16 +146,23 @@ public class KartController {
                     }
                 }
             }
-        } return ResponseEntity.badRequest().build();
+        } throw new OrderCancelledException();
     }
 
     @PutMapping("/remove/user/{user_id}/kart/{kart_id}")
     public ResponseEntity<Object> deletedKart(@PathVariable Long user_id, @PathVariable Long kart_id,
                                             @RequestBody KartDTORequest kartDetails) {
+
+        UserDTOResponse user = userService.getUser(user_id);
+        if (user == null){
+            throw new UserNotFoundException();
+        }
+
         KartDTOResponse kart = kartService.getKart(kart_id);
         if (kart == null) {
-            return ResponseEntity.notFound().build();
+            throw new OrderNotFoundException();
         }
+
         String kartValidate = kart.status();
         if ("PENDING".equals(kartValidate)) {
             Kart updatedKart = kartService.deletedKart(user_id, kart_id, kartDetails);
@@ -162,16 +180,23 @@ public class KartController {
                     return ResponseEntity.ok(updatedKart);
                 }
             }
-        } return ResponseEntity.badRequest().build();
+        } throw new OrderCancelledException();
     }
 
     @PutMapping("/cancel/user/{user_id}/kart/{kart_id}")
     public ResponseEntity<Kart> newStatus(@PathVariable Long user_id, @PathVariable Long kart_id,
                                           @RequestBody KartDTORequest kartDetails) {
+
+        UserDTOResponse user = userService.getUser(user_id);
+        if (user == null){
+            throw new UserNotFoundException();
+        }
+
         KartDTOResponse kart = kartService.getKart(kart_id);
         if (kart == null) {
-            return ResponseEntity.notFound().build();
+            throw new OrderNotFoundException();
         }
+
         String kartValidate = kart.status();
         if ("PENDING".equals(kartValidate)) {
             Kart updatedKart = kartService.deleteKart(user_id, kart_id, kartDetails);
@@ -179,7 +204,7 @@ public class KartController {
                 return ResponseEntity.notFound().build();
             }
             return ResponseEntity.ok(updatedKart);
-        } else return ResponseEntity.badRequest().build();
+        } throw new OrderCancelledException();
     }
 
 }

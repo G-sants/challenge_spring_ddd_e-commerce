@@ -42,72 +42,54 @@ public class KartService {
     }
 
     public Kart createKart(Long id,Kart kart) throws Exception {
-           Optional<User> user = userRepository.findById(id);
-           if(user.isPresent()){
-
-               kart.setUser(user.get());
-               kart.setTotalPrice();
-               kart.setTotalPriceDiscount();
-               kart.setTotalDiscount();
-               return kartRepository.save(kart);
-           }
-        else throw new UserNotFoundException();
+        Optional<User> user = userRepository.findById(id);
+        kart.setUser(user.get());
+        kart.setTotalPrice();
+        kart.setTotalPriceDiscount();
+        kart.setTotalDiscount();
+        return kartRepository.save(kart);
     }
      
     public Kart updateKart(Long id, Long kart_id, KartDTORequest kartDetails) {
-            Optional<User> user = userRepository.findById(id);
-
-            if (user.isPresent()) {
-                try {
-                    Optional<Kart> optionalKart = kartRepository.findById(kart_id);
-                        if(optionalKart.isPresent()) {
-                            Kart kart = optionalKart.get();
-                            if(!kart.getItems().isEmpty()) {
-                                for (ItemDTORequest itemDTO : kartDetails.items()) {
-                                    List<Item> items = kart.getItems();
-                                    Iterator<Item> iterator = kart.getItems().iterator();
-                                    while (iterator.hasNext()) {
-                                        Item item = iterator.next();
-
-                                        if (item.getItemName().equalsIgnoreCase(itemDTO.itemName())) {
-                                            item.setQuantity(item.getQuantity() + itemDTO.quantity());
-                                            kart.setTotalPrice();
-                                            kart.setTotalPriceDiscount();
-                                            kart.setTotalDiscount();
-                                            kartRepository.save(kart);
-                                        } else {
-                                            Item newItem = new Item();
-                                            newItem.setItemName(itemDTO.itemName());
-                                            newItem.setPrice(itemDTO.price());
-                                            newItem.setQuantity(itemDTO.quantity());
-                                            kart.addItem(newItem);
-                                        }
-                                    }
-                                }
-                                return kart;
-                            }else {
-                                List<Item> newItemList = new ArrayList<>();
-                                kart.setItems(newItemList);
-                                for (ItemDTORequest itemDTO : kartDetails.items()) {
-                                    Item newItem = new Item();
-                                    newItem.setItemName(itemDTO.itemName());
-                                    newItem.setPrice(itemDTO.price());
-                                    newItem.setQuantity(itemDTO.quantity());
-                                    kart.addItem(newItem);
-                                }
-                                kart.setTotalPrice();
-                                kart.setTotalPriceDiscount();
-                                kart.setTotalDiscount();
-                                return kartRepository.save(kart);
-                            }
-                        }else {
-                            throw new RuntimeException("Order not Found within User" + id);
-                        }
-                } catch (Exception e) {
-                    throw new RuntimeException("Error finding order" + e.getMessage());
+        Optional<User> user = userRepository.findById(id);
+        Optional<Kart> optionalKart = kartRepository.findById(kart_id);
+        Kart kart = optionalKart.get();
+        if(kart.getItems().isEmpty()){
+            for (ItemDTORequest itemDTO : kartDetails.items()) {
+                List<Item> items = kart.getItems();
+                Iterator<Item> iterator = kart.getItems().iterator();
+                while (iterator.hasNext()) {
+                    Item item = iterator.next();
+                    if (item.getItemName().equalsIgnoreCase(itemDTO.itemName())) {
+                        item.setQuantity(item.getQuantity() + itemDTO.quantity());
+                        kart.setTotalPrice();
+                        kart.setTotalPriceDiscount();
+                        kart.setTotalDiscount();
+                        kartRepository.save(kart);
+                    } else {
+                        Item newItem = new Item();
+                        newItem.setItemName(itemDTO.itemName());
+                        newItem.setPrice(itemDTO.price());
+                        newItem.setQuantity(itemDTO.quantity());
+                        kart.addItem(newItem);
+                    }
                 }
+            }return kart;
+        }else {
+            List<Item> newItemList = new ArrayList<>();
+            kart.setItems(newItemList);
+            for (ItemDTORequest itemDTO : kartDetails.items()) {
+                Item newItem = new Item();
+                newItem.setItemName(itemDTO.itemName());
+                newItem.setPrice(itemDTO.price());
+                newItem.setQuantity(itemDTO.quantity());
+                kart.addItem(newItem);
             }
-        return null;
+            kart.setTotalPrice();
+            kart.setTotalPriceDiscount();
+            kart.setTotalDiscount();
+            return kartRepository.save(kart);
+        }
     }
 
     public Kart deletedKart(Long id, Long kart_id, KartDTORequest kartDetails)  {
