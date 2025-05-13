@@ -22,6 +22,8 @@ ___
 - [ ] View and Control Application Statistics;
 - [ ] Monitor Application Health;
 - [x] Add Custom Exception Handling;
+- [ ] Add Payment Checkout structure;
+- [ ] Testing
 - [ ] ...
 ___
 
