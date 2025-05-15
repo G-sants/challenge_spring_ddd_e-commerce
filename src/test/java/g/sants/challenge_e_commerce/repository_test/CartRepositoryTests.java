@@ -2,7 +2,7 @@ package g.sants.challenge_e_commerce.repository_test;
 
 import g.sants.challenge_e_commerce.application.port.output.CartRepository;
 import g.sants.challenge_e_commerce.domain.Cart;
-import g.sants.challenge_e_commerce.domain.Storage;
+import g.sants.challenge_e_commerce.domain.Item;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,24 +55,24 @@ public class CartRepositoryTests {
     @Test
     public void CartRepository_AddsItemToCart(){
         Cart cart = new Cart();
+        Item item1 = new Item(0.99,"Potato",10);
+
+        cart.addItem(item1);
         Cart savedCart = cartRepository.save(cart);
+        String itemName = savedCart.getItems().get(0).getItemName();
 
-        Storage nameItem = storageRepository.findByName("Potato");
-        nameItem.setPrice(2.99);
-        nameItem.setQuantity(50);
-        storageRepository.save(nameItem);
-
-        Assertions.assertEquals(2.99,nameItem.getPrice());
-        Assertions.assertEquals(50,nameItem.getQuantity());
+        Assertions.assertNotNull(savedCart.getItems());
+        Assertions.assertEquals("Potato",itemName);
+        Assertions.assertEquals(1,savedCart.getItems().size());
     }
 
     @Test
-    public void CartRepository_CancelCart(){
+    public void CartRepository_CancelledStatusOnCart(){
         Cart cart = new Cart();
-        Cart savedCart = cartRepository.save(cart);
 
-        Cart cartID = cartRepository.findById(savedCart.getId());
+        cart.setStatus("CANCELLED");
+        Cart cancelledCart = cartRepository.save(cart);
 
-        Assertions.assertNull(storageRepository.findByName("Potato"));
+        Assertions.assertEquals("CANCELLED",cancelledCart.getStatus());
     }
 }
