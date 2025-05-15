@@ -1,15 +1,14 @@
 package g.sants.challenge_e_commerce.application.service;
 
 import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
-import g.sants.challenge_e_commerce.application.dto.KartDTORequest;
-import g.sants.challenge_e_commerce.application.dto.KartDTOResponse;
-import g.sants.challenge_e_commerce.application.exceptions.errors.UserNotFoundException;
+import g.sants.challenge_e_commerce.application.dto.CartDTORequest;
+import g.sants.challenge_e_commerce.application.dto.CartDTOResponse;
 import g.sants.challenge_e_commerce.application.port.output.ItemRepository;
-import g.sants.challenge_e_commerce.application.port.output.KartRepository;
+import g.sants.challenge_e_commerce.application.port.output.CartRepository;
 import g.sants.challenge_e_commerce.application.port.output.StorageRepository;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.domain.Item;
-import g.sants.challenge_e_commerce.domain.Kart;
+import g.sants.challenge_e_commerce.domain.Cart;
 import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,10 +19,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class KartService {
+public class CartService {
 
     @Autowired
-    private KartRepository kartRepository;
+    private CartRepository kartRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -31,17 +30,17 @@ public class KartService {
     @Autowired
     private StorageRepository storageRepository;
 
-    public List<Kart> getAllKarts() {
+    public List<Cart> getAllKarts() {
         return kartRepository.findAll();
     }
 
-    public KartDTOResponse getKart(Long id) {
-        Optional<Kart> kart = kartRepository.findById(id);
-        return kart.map(KartDTOResponse::new)
+    public CartDTOResponse getKart(Long id) {
+        Optional<Cart> kart = kartRepository.findById(id);
+        return kart.map(CartDTOResponse::new)
                 .orElseThrow(() -> new RuntimeException("Order not Found"));
     }
 
-    public Kart createKart(Long id,Kart kart) throws Exception {
+    public Cart createKart(Long id, Cart kart) {
         Optional<User> user = userRepository.findById(id);
         kart.setUser(user.get());
         kart.setTotalPrice();
@@ -50,10 +49,10 @@ public class KartService {
         return kartRepository.save(kart);
     }
      
-    public Kart updateKart(Long id, Long kart_id, KartDTORequest kartDetails) {
+    public Cart updateKart(Long id, Long kart_id, CartDTORequest kartDetails) {
         Optional<User> user = userRepository.findById(id);
-        Optional<Kart> optionalKart = kartRepository.findById(kart_id);
-        Kart kart = optionalKart.get();
+        Optional<Cart> optionalKart = kartRepository.findById(kart_id);
+        Cart kart = optionalKart.get();
         if(kart.getItems().isEmpty()){
             for (ItemDTORequest itemDTO : kartDetails.items()) {
                 List<Item> items = kart.getItems();
@@ -92,21 +91,20 @@ public class KartService {
         }
     }
 
-    public Kart deletedKart(Long id, Long kart_id, KartDTORequest kartDetails)  {
+    public Cart deletedKart(Long id, Long kart_id, CartDTORequest kartDetails)  {
         try {
             User user = userRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("User not find with id" + id));
             if (user != null) {
                 try {
-                    Optional<Kart> optionalKart = kartRepository.findById(kart_id);
+                    Optional<Cart> optionalKart = kartRepository.findById(kart_id);
                     if(optionalKart.isPresent()) {
-                        Kart kart = optionalKart.get();
+                        Cart kart = optionalKart.get();
                         for (ItemDTORequest itemDTO : kartDetails.items()) {
                             Item itemRemove = kart.getItems().stream()
                                     .filter(item -> item.getItemName().equalsIgnoreCase(itemDTO.itemName()))
                                     .findFirst().orElse(null);
                             if (itemRemove != null) {
-                                List<Item> items = kart.getItems();
                                 Iterator<Item> iterator = kart.getItems().iterator();
                                 while (iterator.hasNext()) {
                                     Item item = iterator.next();
@@ -141,15 +139,15 @@ public class KartService {
         return null;
     }
 
-    public Kart deleteKart(Long id, Long kart_id, KartDTORequest statusDetails) {
+    public Cart deleteKart(Long id, Long kart_id, CartDTORequest statusDetails) {
         try {
             User user = userRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("User not find with id" + id));
             if (user != null) {
                 try {
-                    Optional<Kart> optionalKart = kartRepository.findById(kart_id);
+                    Optional<Cart> optionalKart = kartRepository.findById(kart_id);
                     if(optionalKart.isPresent()) {
-                        Kart kart = optionalKart.get();
+                        Cart kart = optionalKart.get();
                         String checkStatus = statusDetails.status();
                         if(checkStatus.equalsIgnoreCase("cancel")) {
                            kart.setStatus("CANCELLED");

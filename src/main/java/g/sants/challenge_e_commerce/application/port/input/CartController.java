@@ -2,21 +2,20 @@ package g.sants.challenge_e_commerce.application.port.input;
 
 import g.sants.challenge_e_commerce.adapter.messages.methods.MessageCategory;
 import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
-import g.sants.challenge_e_commerce.application.dto.KartDTORequest;
-import g.sants.challenge_e_commerce.application.dto.KartDTOResponse;
+import g.sants.challenge_e_commerce.application.dto.CartDTORequest;
+import g.sants.challenge_e_commerce.application.dto.CartDTOResponse;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
 import g.sants.challenge_e_commerce.application.exceptions.errors.ItemNotFoundException;
 import g.sants.challenge_e_commerce.application.exceptions.errors.OrderCancelledException;
 import g.sants.challenge_e_commerce.application.exceptions.errors.OrderNotFoundException;
 import g.sants.challenge_e_commerce.application.exceptions.errors.UserNotFoundException;
-import g.sants.challenge_e_commerce.application.service.KartService;
+import g.sants.challenge_e_commerce.application.service.CartService;
 import g.sants.challenge_e_commerce.application.service.StorageService;
 import g.sants.challenge_e_commerce.application.service.UserService;
 import g.sants.challenge_e_commerce.domain.Item;
-import g.sants.challenge_e_commerce.domain.Kart;
+import g.sants.challenge_e_commerce.domain.Cart;
 import g.sants.challenge_e_commerce.domain.Storage;
 import g.sants.challenge_e_commerce.domain.User;
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,10 +27,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/orders")
-public class KartController {
+public class CartController {
 
     @Autowired
-    private KartService kartService;
+    private CartService kartService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -40,19 +39,19 @@ public class KartController {
     RabbitTemplate rabbitTemplate;
 
     @GetMapping("/user/{user_id}")
-    public List<Kart> getAllKarts() {
+    public List<Cart> getAllKarts() {
 
         return kartService.getAllKarts();
     }
 
     @GetMapping("/user/{user_id}/kart/{kart_id}")
-    public ResponseEntity<KartDTOResponse> getKartById(@PathVariable Long user_id,
+    public ResponseEntity<CartDTOResponse> getKartById(@PathVariable Long user_id,
                                                        @PathVariable Long kart_id) {
         UserDTOResponse user = userService.getUser(user_id);
         if (user == null) {
             throw new UserNotFoundException();
         }
-        KartDTOResponse kart = kartService.getKart(kart_id);
+        CartDTOResponse kart = kartService.getKart(kart_id);
         if (kart == null) {
             throw new OrderNotFoundException();
         }
@@ -61,14 +60,14 @@ public class KartController {
 
     @PostMapping("/user/{user_id}")
     public ResponseEntity<Object> createKart(@PathVariable Long user_id, @RequestBody List<Item> items) throws Exception {
-        Kart kart = new Kart();
+        Cart kart = new Cart();
 
         for (Item item : items) {
             kart.addItem(item);
         }
 
         Optional<User> user = userService.getUserForKart(user_id);
-        Kart createdKart;
+        Cart createdKart;
         if (user.isPresent()) {
             kart.setUser(user.get());
 
@@ -106,21 +105,21 @@ public class KartController {
 
     @PutMapping("/add/user/{user_id}/kart/{kart_id}")
     public ResponseEntity<Object> updatedKart(@PathVariable Long user_id, @PathVariable Long kart_id,
-                                            @RequestBody KartDTORequest kartDetails) {
+                                            @RequestBody CartDTORequest kartDetails) {
 
         UserDTOResponse user = userService.getUser(user_id);
         if (user == null){
             throw new UserNotFoundException();
         }
 
-        KartDTOResponse kart = kartService.getKart(kart_id);
+        CartDTOResponse kart = kartService.getKart(kart_id);
         if (kart == null) {
             throw new OrderNotFoundException();
         }
 
         String kartValidate = kart.status();
         if ("PENDING".equals(kartValidate)) {
-            Kart updateKart = kartService.updateKart(user_id, kart_id, kartDetails);
+            Cart updateKart = kartService.updateKart(user_id, kart_id, kartDetails);
              if (updateKart == null) {
                 return ResponseEntity.notFound().build();
             }
@@ -151,21 +150,21 @@ public class KartController {
 
     @PutMapping("/remove/user/{user_id}/kart/{kart_id}")
     public ResponseEntity<Object> deletedKart(@PathVariable Long user_id, @PathVariable Long kart_id,
-                                            @RequestBody KartDTORequest kartDetails) {
+                                            @RequestBody CartDTORequest kartDetails) {
 
         UserDTOResponse user = userService.getUser(user_id);
         if (user == null){
             throw new UserNotFoundException();
         }
 
-        KartDTOResponse kart = kartService.getKart(kart_id);
+        CartDTOResponse kart = kartService.getKart(kart_id);
         if (kart == null) {
             throw new OrderNotFoundException();
         }
 
         String kartValidate = kart.status();
         if ("PENDING".equals(kartValidate)) {
-            Kart updatedKart = kartService.deletedKart(user_id, kart_id, kartDetails);
+            Cart updatedKart = kartService.deletedKart(user_id, kart_id, kartDetails);
             if (updatedKart == null) {
                 return ResponseEntity.notFound().build();
             }
@@ -184,22 +183,22 @@ public class KartController {
     }
 
     @PutMapping("/cancel/user/{user_id}/kart/{kart_id}")
-    public ResponseEntity<Kart> newStatus(@PathVariable Long user_id, @PathVariable Long kart_id,
-                                          @RequestBody KartDTORequest kartDetails) {
+    public ResponseEntity<Cart> newStatus(@PathVariable Long user_id, @PathVariable Long kart_id,
+                                          @RequestBody CartDTORequest kartDetails) {
 
         UserDTOResponse user = userService.getUser(user_id);
         if (user == null){
             throw new UserNotFoundException();
         }
 
-        KartDTOResponse kart = kartService.getKart(kart_id);
+        CartDTOResponse kart = kartService.getKart(kart_id);
         if (kart == null) {
             throw new OrderNotFoundException();
         }
 
         String kartValidate = kart.status();
         if ("PENDING".equals(kartValidate)) {
-            Kart updatedKart = kartService.deleteKart(user_id, kart_id, kartDetails);
+            Cart updatedKart = kartService.deleteKart(user_id, kart_id, kartDetails);
             if (updatedKart == null) {
                 return ResponseEntity.notFound().build();
             }

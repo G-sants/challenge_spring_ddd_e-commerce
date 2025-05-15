@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class KartOperations {
+public class CartOperations {
 
     public static String dateCreation(){
         LocalDateTime now = LocalDateTime.now();

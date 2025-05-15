@@ -4,7 +4,7 @@
     import com.fasterxml.jackson.annotation.JsonIdentityInfo;
     import com.fasterxml.jackson.annotation.JsonIgnore;
     import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-    import g.sants.challenge_e_commerce.application.service.methods.KartOperations;
+    import g.sants.challenge_e_commerce.application.service.methods.CartOperations;
     import jakarta.persistence.*;
 
     import java.util.ArrayList;
@@ -12,7 +12,7 @@
     import java.util.List;
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @Entity
-    public class Kart {
+    public class Cart {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,26 +39,26 @@
         @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
         private List<Item> items = new ArrayList<>();
 
-        public Kart() {
+        public Cart() {
             this.id = id;
             this.totalPrice = 0.0;
             this.totalPriceDiscount = 0.0;
             this.totalDiscount = 0.0;
-            this.status = KartOperations.status();
-            this.date = KartOperations.dateCreation();
+            this.status = CartOperations.status();
+            this.date = CartOperations.dateCreation();
         }
 
         public double getTotalPrice() {
-            return KartOperations.totalPrice(items);
+            return CartOperations.totalPrice(items);
         }
 
         public double getTotalPriceDiscount() {
-            return KartOperations
-                    .totalPriceDiscount(KartOperations.totalPrice(items));
+            return CartOperations
+                    .totalPriceDiscount(CartOperations.totalPrice(items));
         }
 
         public double getTotalDiscount() {
-            return KartOperations.totalDiscount(totalPrice);
+            return CartOperations.totalDiscount(totalPrice);
         }
 
         public List<Item> getUserKart(long id) {
@@ -67,15 +67,15 @@
 
         public void setTotalPrice() {
 
-            this.totalPrice = KartOperations.totalPrice(items);
+            this.totalPrice = CartOperations.totalPrice(items);
         }
 
         public void setTotalPriceDiscount() {
-            this.totalPriceDiscount = KartOperations.totalPriceDiscount(getTotalPrice());
+            this.totalPriceDiscount = CartOperations.totalPriceDiscount(getTotalPrice());
         }
 
         public void setTotalDiscount() {
-            this.totalDiscount = KartOperations.totalDiscount(getTotalPrice());
+            this.totalDiscount = CartOperations.totalDiscount(getTotalPrice());
         }
 
         public long getId() {

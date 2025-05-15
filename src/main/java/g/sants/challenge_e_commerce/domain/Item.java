@@ -1,6 +1,5 @@
 package g.sants.challenge_e_commerce.domain;
 
-import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import jakarta.persistence.*;
 
 @Entity
@@ -21,7 +20,7 @@ public class Item {
 
     @ManyToOne
     @JoinColumn(name = "kart_id")
-    private Kart kart;
+    private Cart kart;
 
     public Item(double price, String itemName, int quantity) {
         this.price = price;
@@ -61,11 +60,11 @@ public class Item {
         this.quantity = quantity;
     }
 
-    public Kart getKart() {
+    public Cart getKart() {
         return kart;
     }
 
-    public void setKart(Kart kart) {
+    public void setKart(Cart kart) {
         this.kart = kart;
     }
 }

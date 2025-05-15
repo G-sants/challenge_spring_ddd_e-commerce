@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Table(name = "user")
+@Table(name = "users")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 public class User implements UserDetails {
@@ -37,7 +37,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
-    private List<Kart> karts = new ArrayList<>();
+    private List<Cart> karts = new ArrayList<>();
 
     public User() {}
 
@@ -108,16 +108,16 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public List<Kart> getKart() {
+    public List<Cart> getKart() {
         return karts;
     }
 
-    public void addKart(Kart kart) {
+    public void addKart(Cart kart) {
         karts.add(kart);
         kart.setUser (this);
     }
 
-    public void removeKart(Kart kart) {
+    public void removeKart(Cart kart) {
         karts.remove(kart);
         kart.setUser (null);
     }

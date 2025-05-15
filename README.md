@@ -17,7 +17,7 @@ ___
 
 ## Future Upgrades and Improvements
 
-- [ ] Integrate Messages and Notifications; (on the way)
+- [x] Integrate Messages and Notifications; (on the way)
 - [ ] Upload the application to a Container;
 - [ ] View and Control Application Statistics;
 - [ ] Monitor Application Health;
