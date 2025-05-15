@@ -20,7 +20,8 @@ public class UserRepositoryTests {
 
     @Test
     public void UserRepository_SavesUser(){
-        User user = new User(1L,"Test","User","test@email.com","tpassword");
+        User user = new User(1L,"Test",
+                "User","test@email.com","tpassword");
         User savedUser = userRepository.save(user);
 
         Assertions.assertNotNull(savedUser);
