@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,10 +45,12 @@ public class UserServiceTests {
 
     @Test
     public void userService_FindByEmail_ReturnsUserByEmail(){
-        User user1 = new User(12312312312L,"Test1","User","test1@email.com","t2password");
-        UserDTOResponse userDetails = new UserDTOResponse(0L,12312312312L,"Test1","User","test1@email.com");
+        User user1 = new User(12312312312L,"Test1","User",
+                "test1@email.com","t2password");
+        UserDTOResponse userDetails = new UserDTOResponse(0L,12312312312L,
+                "Test1","User","test1@email.com");
 
-        when(userRepository.findById(any(Long.class))).thenReturn(userDetails);
+        when(userRepository.findById(anyLong())).thenReturn();
 
         UserDTOResponse user = userService.getUser(0L);
 
