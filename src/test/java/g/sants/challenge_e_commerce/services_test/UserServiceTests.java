@@ -1,19 +1,21 @@
 package g.sants.challenge_e_commerce.services_test;
 
-import g.sants.challenge_e_commerce.application.dto.UserDTORequest;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.UserService;
 import g.sants.challenge_e_commerce.domain.User;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,19 +27,32 @@ public class UserServiceTests {
     @InjectMocks
     private UserService userService;
 
-    @Test
-    public void UserService_CreateUser_ReturnUserDTO(){
-        User user = new User(1L,"Test",
-                "User","test@email.com","tpassword");
-        UserDTORequest userDTORequest = new UserDTORequest(123123123L,"User",
-                "Test","test@email.com","tpassword");
-
-        when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
-
-        UserDTORequest savedUser = userService.save(userDTORequest);
-
-        Assertions.assertThat(savedUser).isNotNull();
+    @BeforeEach
+    void setup(){
+        MockitoAnnotations.initMocks(this);
     }
 
+    @Test
+    public void userService_FindAll_ReturnsAllUsers(){
+        User user1 = new User(1L,"Test1","User","test1@email.com","t2password");
+        User savedUser1 = userRepository.save(user1);
 
+        User user2 = new User(2L,"Test2","User","test2@email.com","t1password");
+        User savedUser2 = userRepository.save(user2);
+
+        when(userRepository.findAll()).thenReturn(List<User>);
+    }
+
+    @Test
+    public void userService_FindByEmail_ReturnsUserByEmail(){
+        User user1 = new User(12312312312L,"Test1","User","test1@email.com","t2password");
+        UserDTOResponse userDetails = new UserDTOResponse(0L,12312312312L,"Test1","User","test1@email.com");
+
+        when(userRepository.findById(any(Long.class))).thenReturn(userDetails);
+
+        UserDTOResponse user = userService.getUser(0L);
+
+        Assertions.assertNotNull(user);
+        Assertions.assertEquals("Test1",user.getName());
+    }
 }

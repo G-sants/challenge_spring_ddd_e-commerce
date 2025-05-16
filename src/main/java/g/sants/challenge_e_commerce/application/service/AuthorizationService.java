@@ -1,11 +1,15 @@
 package g.sants.challenge_e_commerce.application.service;
 
+import g.sants.challenge_e_commerce.application.dto.RegisterDTORequest;
 import g.sants.challenge_e_commerce.application.exceptions.errors.LoginException;
+import g.sants.challenge_e_commerce.application.exceptions.errors.RegistrationAlreadyDoneException;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
+import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +25,18 @@ public class AuthorizationService implements UserDetailsService {
             throw new LoginException();
         }
         return userDetails;
+    }
+    
+    public ResponseEntity registerNewUser(RegisterDTORequest data){
+        if(this.userRepository.findByEmail(data.email()) != null)
+            throw new RegistrationAlreadyDoneException();
+
+        String encrytedPass = new BCryptPasswordEncoder().encode(data.password());
+        User newuser = new User(data.customerID(),data.name(),
+                data.lastName(),data.email(),encrytedPass,data.category());
+
+        this.userRepository.save(newuser);
+        return ResponseEntity.ok().build();
     }
 
 }

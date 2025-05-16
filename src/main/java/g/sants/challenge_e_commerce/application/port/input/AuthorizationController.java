@@ -4,6 +4,7 @@ import g.sants.challenge_e_commerce.application.dto.AuthorizationDTORequest;
 import g.sants.challenge_e_commerce.application.dto.LoginDTOResponse;
 import g.sants.challenge_e_commerce.application.dto.RegisterDTORequest;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
+import g.sants.challenge_e_commerce.application.service.AuthorizationService;
 import g.sants.challenge_e_commerce.application.service.TokenService;
 import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class AuthorizationController {
     private UserRepository userRepository;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    AuthorizationService authorizationService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Validated AuthorizationDTORequest data) {
@@ -41,16 +44,6 @@ public class AuthorizationController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Validated RegisterDTORequest data){
-        if(this.userRepository.findByEmail(data.email()) != null)
-            return ResponseEntity.badRequest().body("User already registered");
-
-
-        String encrytedPass = new BCryptPasswordEncoder().encode(data.password());
-        User newuser = new User(data.customerID(),data.name(),
-                data.lastName(),data.email(),encrytedPass,data.category());
-
-        this.userRepository.save(newuser);
-        return ResponseEntity.ok().build();
-
+        return authorizationService.registerNewUser(data);
     }
 }

@@ -11,4 +11,8 @@ public record UserDTOResponse(Long id, Long customerid, String name, String last
         this(user.getId(),user.getCustomerID(),user.getName(),
                 user.getLastName(),user.getEmail());
     }
+
+    public String getName() {
+        return name;
+    }
 }

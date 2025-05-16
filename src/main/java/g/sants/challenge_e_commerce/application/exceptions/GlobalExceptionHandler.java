@@ -69,4 +69,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 "The service returned a null response to the request", exception.getMessage());
         return new ResponseEntity<>(errorsResponse,HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(RegistrationAlreadyDoneException.class)
+    public ResponseEntity<ErrorsResponse> userAlreadyRegisteredException(RegistrationAlreadyDoneException exception){
+        ErrorsResponse errorsResponse = new ErrorsResponse(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(),
+                "This email has already been used to register an user", exception.getMessage());
+        return new ResponseEntity<>(errorsResponse,HttpStatus.NOT_FOUND);
+    }
 }
