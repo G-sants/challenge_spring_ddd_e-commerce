@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -50,7 +51,8 @@ public class UserServiceTests {
         UserDTOResponse userDetails = new UserDTOResponse(0L,12312312312L,
                 "Test1","User","test1@email.com");
 
-        when(userRepository.findById(anyLong())).thenReturn();
+        Optional<User> UserDTOResponse = null;
+        when(userRepository.findById(anyLong())).thenReturn(UserDTOResponse);
 
         UserDTOResponse user = userService.getUser(0L);
 
