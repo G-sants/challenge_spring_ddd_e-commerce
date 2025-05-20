@@ -3,6 +3,7 @@ package g.sants.challenge_e_commerce.application.port.input;
 import g.sants.challenge_e_commerce.application.dto.AuthorizationDTORequest;
 import g.sants.challenge_e_commerce.application.dto.LoginDTOResponse;
 import g.sants.challenge_e_commerce.application.dto.RegisterDTORequest;
+import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.AuthorizationService;
 import g.sants.challenge_e_commerce.application.service.TokenService;
@@ -43,7 +44,7 @@ public class AuthorizationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Validated RegisterDTORequest data){
+    public UserDTOResponse register(@RequestBody @Validated RegisterDTORequest data){
         return authorizationService.registerNewUser(data);
     }
 }

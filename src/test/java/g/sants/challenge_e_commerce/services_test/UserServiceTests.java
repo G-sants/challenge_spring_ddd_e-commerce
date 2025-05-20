@@ -2,7 +2,9 @@ package g.sants.challenge_e_commerce.services_test;
 
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
+import g.sants.challenge_e_commerce.application.service.AuthorizationService;
 import g.sants.challenge_e_commerce.application.service.UserService;
+import g.sants.challenge_e_commerce.application.service.methods.UserCategory;
 import g.sants.challenge_e_commerce.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,28 +37,61 @@ public class UserServiceTests {
 
     @Test
     public void userService_FindAll_ReturnsAllUsers(){
-        User user1 = new User(1L,"Test1","User","test1@email.com","t2password");
-        User savedUser1 = userRepository.save(user1);
+        User user1 = new User(12312312312L, "Test1", "User",
+                "test1@email.com", "t2Password", UserCategory.ADMIN);
 
-        User user2 = new User(2L,"Test2","User","test2@email.com","t1password");
-        User savedUser2 = userRepository.save(user2);
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
+            User savedUser  = invocation.getArgument(0);
+            savedUser .setId(1L);
+            return savedUser;
+        });
 
-        when(userRepository.findAll()).thenReturn(List<User>);
+        userRepository.save(user1);
+
+        User user2 = new User(12312312312L, "Test2", "User",
+                "test2@email.com", "t2Password", UserCategory.ADMIN);
+
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
+            User savedUser  = invocation.getArgument(0);
+            savedUser .setId(1L);
+            return savedUser;
+        });
+
+        userRepository.save(user2);
+
+        when(userRepository.findAll()).thenReturn(List.of(user1,user2));
+
+        List<UserDTOResponse> userList = userService.getAllUsers();
+
+        Assertions.assertNotNull(userList);
+        Assertions.assertEquals(2,userList.size());
     }
 
     @Test
     public void userService_FindByEmail_ReturnsUserByEmail(){
-        User user1 = new User(12312312312L,"Test1","User",
-                "test1@email.com","t2password");
-        UserDTOResponse userDetails = new UserDTOResponse(0L,12312312312L,
-                "Test1","User","test1@email.com");
+        User user = new User(12312312312L, "Test1", "User",
+                "test1@email.com", "t2Password", UserCategory.ADMIN);
 
-        Optional<User> UserDTOResponse = null;
-        when(userRepository.findById(anyLong())).thenReturn(UserDTOResponse);
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
+            User savedUser  = invocation.getArgument(0);
+            savedUser .setId(1L);
+            return savedUser;
+        });
 
-        UserDTOResponse user = userService.getUser(0L);
+        userRepository.save(user);
 
-        Assertions.assertNotNull(user);
-        Assertions.assertEquals("Test1",user.getName());
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        UserDTOResponse userResponse = userService.getUser(1L);
+
+        Assertions.assertNotNull(user );
+        Assertions.assertEquals("Test1",userResponse.getName());
+        Assertions.assertEquals("User", userResponse.getLastName());
+        Assertions.assertEquals("test1@email.com",userResponse.getEmail());
+    }
+
+    @Test
+    public void userService_UpdateUser_UpdatesUserInDataBase(){
+
     }
 }
