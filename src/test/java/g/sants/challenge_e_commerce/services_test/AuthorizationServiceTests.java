@@ -59,19 +59,16 @@ public class AuthorizationServiceTests {
                 "Test1", "User ", "test1@email.com",
                 "tpassword", UserCategory.ADMIN);
 
-        User mockUser = new User(123123123L,
+        User mockUser = new User(12312312312L,
                 userRegistration.name(), userRegistration.lastName(),
                 userRegistration.email(),userRegistration.password(), userRegistration.category());
         mockUser.setId(1L);
 
         when(userRepository.findByEmail(userRegistration.email())).thenReturn(mockUser);
-        UserDTOResponse responseUser  = authorizationService.registerNewUser (userRegistration);
 
-        UserDetails userDetails = authorizationService.loadUserByUsername(responseUser.getEmail());
+        UserDetails userDetails = authorizationService.loadUserByUsername(userRegistration.email());
 
         Assertions.assertNotNull(userDetails);
-        Assertions.assertEquals(userRegistration.email(), userDetails.getUsername());
+        Assertions.assertEquals(userRegistration.password(),userDetails.getPassword());
     }
-
-
 }
