@@ -38,8 +38,9 @@ public class AuthorizationServiceTests {
                 "tpassword", UserCategory.ADMIN);
 
         when(userRepository.findByEmail(userRegistration.email())).thenReturn(null);
-        when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
-            User user = invocation.getArgument(0);
+
+        when(userRepository.save(any(User.class))).thenAnswer(arg -> {
+            User user = arg.getArgument(0);
             user.setId(1L);
             return user;
         });
