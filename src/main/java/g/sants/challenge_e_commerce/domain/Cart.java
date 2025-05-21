@@ -27,7 +27,7 @@
         private String status;
         @Column(nullable = false)
         public String date;
-        private static HashMap<Long, Item> userKart;
+        private static HashMap<Long, Item> usercart;
 
         @ManyToOne
         @JoinColumn(name = "user_id")
@@ -36,7 +36,7 @@
 
 
         @JsonIgnore
-        @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
         private List<Item> items = new ArrayList<>();
 
         public Cart() {
@@ -46,6 +46,10 @@
             this.totalDiscount = 0.0;
             this.status = CartOperations.status();
             this.date = CartOperations.dateCreation();
+        }
+
+        public void setId(long id) {
+            this.id = id;
         }
 
         public double getTotalPrice() {
@@ -61,7 +65,7 @@
             return CartOperations.totalDiscount(totalPrice);
         }
 
-        public List<Item> getUserKart(long id) {
+        public List<Item> getUsercart(long id) {
             return items;
         }
 
@@ -121,6 +125,4 @@
         public void removeItem(Item item) {
             items.remove(item);
         }
-
-
     }

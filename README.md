@@ -222,7 +222,7 @@ And you should receive a message of Order Created.
 ENDPOINT:
 ```shell 
     GET
-    orders/user/{user_id}/kart/{kart_id}
+    orders/user/{user_id}/cart/{cart_id}
 ````
 
 - ### Updating Orders
@@ -230,7 +230,7 @@ ENDPOINT:
   ENDPOINT:
 ```shell 
     PUT
-    orders/add/user/{user_id}/kart/{kart_id}
+    orders/add/user/{user_id}/cart/{cart_id}
 ````
 JSON Input Body for Adding Items:
 
@@ -251,7 +251,7 @@ JSON Input Body for Adding Items:
 ENDPOINT:
 ```shell 
     PUT
-    orders/remove/user/{user_id}/kart/{kart_id}
+    orders/remove/user/{user_id}/cart/{cart_id}
 ````
 JSON Input Body for Removing Item:
 

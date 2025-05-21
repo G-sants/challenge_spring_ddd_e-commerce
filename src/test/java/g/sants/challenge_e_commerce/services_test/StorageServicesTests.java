@@ -40,9 +40,9 @@ public class StorageServicesTests {
     Storage item1 = new Storage("Potato",0.99,100);
 
     when(storageRepository.save(any(Storage.class))).thenAnswer(arg -> {
-        Storage savedUser  = arg.getArgument(0);
-        savedUser .setId(1L);
-        return savedUser;
+        Storage savedItem1 = arg.getArgument(0);
+        savedItem1.setId(1L);
+        return savedItem1;
     });
 
     storageRepository.save(item1);
@@ -50,19 +50,19 @@ public class StorageServicesTests {
     Storage item2 = new Storage("Apple",2.99,100);
 
     when(storageRepository.save(any(Storage.class))).thenAnswer(arg -> {
-        Storage savedUser  = arg.getArgument(0);
-        savedUser .setId(2L);
-        return savedUser;
+        Storage savedItem2 = arg.getArgument(0);
+        savedItem2.setId(2L);
+        return savedItem2;
         });
 
     storageRepository.save(item2);
 
     when(storageRepository.findAll()).thenReturn(List.of(item1, item2));
 
-    List<ItemDTOResponse> userList = storageService.getAllItems();
+    List<ItemDTOResponse> itemList = storageService.getAllItems();
 
-        Assertions.assertNotNull(userList);
-        Assertions.assertEquals(2,userList.size());
+        Assertions.assertNotNull(itemList);
+        Assertions.assertEquals(2, itemList.size());
     }
 
     @Test
@@ -70,9 +70,9 @@ public class StorageServicesTests {
         Storage item1 = new Storage("Potato",0.99,100);
 
         when(storageRepository.save(any(Storage.class))).thenAnswer(arg -> {
-            Storage savedUser  = arg.getArgument(0);
-            savedUser .setId(1L);
-            return savedUser;
+            Storage savedItem = arg.getArgument(0);
+            savedItem.setId(1L);
+            return savedItem;
         });
 
         storageRepository.save(item1);
@@ -92,9 +92,9 @@ public class StorageServicesTests {
         Storage item1 = new Storage("Potato",0.99,100);
 
         when(storageRepository.save(any(Storage.class))).thenAnswer(arg -> {
-            Storage savedUser  = arg.getArgument(0);
-            savedUser .setId(1L);
-            return savedUser;
+            Storage savedItem = arg.getArgument(0);
+            savedItem.setId(1L);
+            return savedItem;
         });
 
         storageRepository.save(item1);

@@ -39,8 +39,7 @@ public class CartController {
     RabbitTemplate rabbitTemplate;
 
     @GetMapping("/user/{user_id}")
-    public List<Cart> getAllKarts() {
-
+    public List<CartDTOResponse> getAllKarts() {
         return kartService.getAllKarts();
     }
 
@@ -67,7 +66,7 @@ public class CartController {
         }
 
         Optional<User> user = userService.getUserForKart(user_id);
-        Cart createdKart;
+        CartDTOResponse createdKart;
         if (user.isPresent()) {
             kart.setUser(user.get());
 

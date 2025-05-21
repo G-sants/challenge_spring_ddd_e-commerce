@@ -19,8 +19,8 @@ public class Item {
     private int quantity;
 
     @ManyToOne
-    @JoinColumn(name = "kart_id")
-    private Cart kart;
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
     public Item(double price, String itemName, int quantity) {
         this.price = price;
@@ -60,11 +60,11 @@ public class Item {
         this.quantity = quantity;
     }
 
-    public Cart getKart() {
-        return kart;
+    public Cart getcart() {
+        return cart;
     }
 
-    public void setKart(Cart kart) {
-        this.kart = kart;
+    public void setcart(Cart cart) {
+        this.cart = cart;
     }
 }

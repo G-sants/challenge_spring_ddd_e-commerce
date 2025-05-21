@@ -19,10 +19,9 @@ public class UserService {
     private UserRepository userRepository;
 
     public List<UserDTOResponse> getAllUsers() {
-        List<UserDTOResponse> userList = userRepository.findAll ().stream()
+        return userRepository.findAll ().stream()
                 .map(UserDTOResponse::new)
                 .collect(Collectors.toList());
-        return userList;
     }
 
     public UserDTOResponse getUser(Long id) {

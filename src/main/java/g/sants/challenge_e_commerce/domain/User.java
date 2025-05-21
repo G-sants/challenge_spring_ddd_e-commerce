@@ -37,7 +37,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
-    private List<Cart> karts = new ArrayList<>();
+    private List<Cart> carts = new ArrayList<>();
 
     public User() {}
 
@@ -108,18 +108,18 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public List<Cart> getKart() {
-        return karts;
+    public List<Cart> getcart() {
+        return carts;
     }
 
-    public void addKart(Cart kart) {
-        karts.add(kart);
-        kart.setUser (this);
+    public void addcart(Cart cart) {
+        carts.add(cart);
+        cart.setUser (this);
     }
 
-    public void removeKart(Cart kart) {
-        karts.remove(kart);
-        kart.setUser (null);
+    public void removecart(Cart cart) {
+        carts.remove(cart);
+        cart.setUser (null);
     }
 
     @Override

@@ -42,9 +42,9 @@ public class UserServiceTests {
                 "test1@email.com", "t2Password", UserCategory.ADMIN);
 
         when(userRepository.save(any(User.class))).thenAnswer(arg -> {
-            User savedUser  = arg.getArgument(0);
-            savedUser .setId(1L);
-            return savedUser;
+            User savedUser1 = arg.getArgument(0);
+            savedUser1.setId(1L);
+            return savedUser1;
         });
 
         userRepository.save(user1);
@@ -53,9 +53,9 @@ public class UserServiceTests {
                 "test2@email.com", "t2Password", UserCategory.ADMIN);
 
         when(userRepository.save(any(User.class))).thenAnswer(arg -> {
-            User savedUser  = arg.getArgument(0);
-            savedUser .setId(1L);
-            return savedUser;
+            User savedUser2 = arg.getArgument(0);
+            savedUser2.setId(1L);
+            return savedUser2;
         });
 
         userRepository.save(user2);
