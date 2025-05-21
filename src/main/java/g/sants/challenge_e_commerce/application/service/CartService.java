@@ -58,7 +58,7 @@ public class CartService {
         Optional<User> user = userRepository.findById(id);
         Optional<Cart> optionalKart = cartRepository.findById(kart_id);
         Cart kart = optionalKart.get();
-        if(kart.getItems().isEmpty()){
+        if(!kart.getItems().isEmpty()){
             for (ItemDTORequest itemDTO : kartDetails.items()) {
                 List<Item> items = kart.getItems();
                 Iterator<Item> iterator = kart.getItems().iterator();

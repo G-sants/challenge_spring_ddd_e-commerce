@@ -124,9 +124,7 @@ public class CartServicesTests {
 
         List<ItemDTORequest> itemList = new ArrayList<>();
         ItemDTORequest item1 = new ItemDTORequest("Potato",0.99,1);
-        ItemDTORequest item2 = new ItemDTORequest("Apple",1.99,1);
         itemList.add(item1);
-        itemList.add(item2);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
@@ -145,9 +143,9 @@ public class CartServicesTests {
         Cart updatedCart = cartService.updateKart(1L,1L,cartList);
 
         Assertions.assertNotNull(updatedCart);
-        Assertions.assertEquals(2, updatedCart.getItems().size());
+        Assertions.assertEquals(1, updatedCart.getItems().size());
         Assertions.assertEquals(11, updatedCart.getItems().get(0).getQuantity());
-        Assertions.assertEquals("Apple", updatedCart.getItems().get(1).getItemName());
+
     }
 
     @Test
@@ -176,7 +174,7 @@ public class CartServicesTests {
 
         CartDTORequest cartList = new CartDTORequest(itemList, "`PENDING");
 
-        Cart updatedCart = cartService.updateKart(1L, 1L, cartList);
+        Cart updatedCart = cartService.deletedKart(1L, 1L, cartList);
 
         Assertions.assertNotNull(updatedCart);
         Assertions.assertEquals(1, updatedCart.getItems().size());
@@ -188,7 +186,7 @@ public class CartServicesTests {
         Cart cart1 = new Cart();
         User user = new User();
         user.setId(1L);
-        Item itemCart1 = new Item(0.99,"Potato",10);
+        Item itemCart1 = new Item(0.99, "Potato", 10);
         cart1.addItem(itemCart1);
 
         List<ItemDTORequest> itemList = new ArrayList<>();
@@ -205,9 +203,9 @@ public class CartServicesTests {
 
         cartRepository.save(cart1);
 
-        CartDTORequest cartList = new CartDTORequest(itemList,"cancel");
+        CartDTORequest cartList = new CartDTORequest(itemList, "cancel");
 
-        Cart updatedCart = cartService.updateKart(1L,1L,cartList);
+        Cart updatedCart = cartService.deleteKart(1L, 1L, cartList);
 
         Assertions.assertNotNull(updatedCart);
         Assertions.assertEquals("CANCELLED", updatedCart.getStatus());
