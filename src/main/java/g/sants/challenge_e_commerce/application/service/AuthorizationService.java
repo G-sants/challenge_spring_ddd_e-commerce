@@ -32,11 +32,11 @@ public class AuthorizationService implements UserDetailsService {
             throw new RegistrationAlreadyDoneException();
 
         String encrytedPass = new BCryptPasswordEncoder().encode(data.password());
-        User newuser = new User(data.customerID(),data.name(),
+        User newUser = new User(data.customerID(),data.name(),
                 data.lastName(),data.email(),encrytedPass,data.category());
 
-        this.userRepository.save(newuser);
-        return new UserDTOResponse(newuser);
+        this.userRepository.save(newUser);
+        return new UserDTOResponse(newUser);
     }
 
 }

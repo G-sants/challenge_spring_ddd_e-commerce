@@ -1,8 +1,10 @@
 package g.sants.challenge_e_commerce.controllers_test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import g.sants.challenge_e_commerce.application.dto.RegisterDTORequest;
+import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
+import g.sants.challenge_e_commerce.application.port.input.AuthorizationController;
+import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.AuthorizationService;
 
 import g.sants.challenge_e_commerce.application.service.TokenService;
@@ -16,7 +18,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -24,42 +28,50 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-@WebMvcTest(controllers = AuthorizationControllerTest.class)
+
+@WebMvcTest(controllers = AuthorizationController.class)
 @AutoConfigureMockMvc(addFilters = false)
-@ExtendWith(MockitoExtension.class)
 public class AuthorizationControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
+    @MockBean
     private AuthorizationService authorizationService;
 
-    @Autowired
+    @MockBean
     private TokenService tokenService;
+
+    @MockBean
+    private UserRepository userRepository;
+
+    @MockBean
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
     RegisterDTORequest registerDTORequest;
 
     @BeforeEach
     public void initUsers(){
-        RegisterDTORequest registerDTORequest = new RegisterDTORequest(123123123L,
+         registerDTORequest = new RegisterDTORequest(123123123L,
                 "Test1","User","test1@email.com","tpassword",
                 UserCategory.ADMIN);
     }
+
     @Test
     public void AuthorizationController_RegisterUser() throws Exception {
+        UserDTOResponse mockUser = new UserDTOResponse(1L,123123123L,
+                "Test1","User","test1@email.com");
         given(authorizationService.registerNewUser(ArgumentMatchers.any()))
-                .willAnswer(InvocationOnMock::getArguments);
+                .willReturn(mockUser);
 
-        ResultActions response = mockMvc.perform(post("http://localhost:8080/auth/register")
+        ResultActions response = mockMvc.perform(post("/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(registerDTORequest)));
 
-        response.andExpect(MockMvcResultMatchers.status().isCreated());
+        response.andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
