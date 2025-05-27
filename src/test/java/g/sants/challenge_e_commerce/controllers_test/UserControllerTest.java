@@ -2,18 +2,32 @@ package g.sants.challenge_e_commerce.controllers_test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
+import g.sants.challenge_e_commerce.application.port.input.UserController;
+import g.sants.challenge_e_commerce.application.port.output.UserRepository;
+import g.sants.challenge_e_commerce.application.service.TokenService;
 import g.sants.challenge_e_commerce.application.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
+import org.mockito.ArgumentMatchers;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@WebMvcTest(controllers = UserControllerTest.class)
+import java.util.*;
+
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
+@WebMvcTest(controllers = UserController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
@@ -21,27 +35,70 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
+    @MockitoBean
+    private TokenService tokenService;
+
+    @MockitoBean
+    private UserRepository userRepository;
+
+    @MockitoBean
     private UserService userService;
 
     @Autowired
     private ObjectMapper objectMapper;
 
+    List<UserDTOResponse> userList;
     UserDTOResponse userDTOResponse;
 
     @BeforeEach
     public void initUsers() {
 
-        MockitoAnnotations.openMocks(this);
-
         userDTOResponse = new UserDTOResponse(1L,12312312312L,"Teste1",
                 "User","test1@email.com");
+
+        UserDTOResponse userDTOResponse1 = new UserDTOResponse(1L,12312312312L,
+                "Test1", "User1","test1@email.com");
+        UserDTOResponse userDTOResponse2 = new UserDTOResponse(2L,12312312312L,
+                "Test2", "User2","test2@email.com");
+
+        userList = new ArrayList<>();
+        userList.add(userDTOResponse1);
+        userList.add(userDTOResponse2);
     }
 
     @Test
-    public void UserController_GetsUserById(){
+    public void UserController_GetsUserById() throws Exception {
+        given(userService.getUser(ArgumentMatchers.any())).willReturn(userDTOResponse);
 
+        ResultActions response = mockMvc.perform(get("/users/{id}",1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userDTOResponse)));
 
+        response.andExpect(MockMvcResultMatchers.status().isOk());
+    }
 
+    @Test
+    public void UserController_GetAllUsers() throws Exception {
+        given(userService.getAllUsers()).willReturn(userList);
+
+        ResultActions response = mockMvc.perform(get("/users")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void UserController_UpdatesUsers() throws Exception {
+
+    }
+
+    @Test
+    public void UserController_DeletesUser() throws Exception {
+        doNothing().when(userService).deleteUser(ArgumentMatchers.anyLong());
+
+        ResultActions response = mockMvc.perform(delete("/users/{id}",1L)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        response.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 }

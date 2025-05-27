@@ -2,7 +2,6 @@ package g.sants.challenge_e_commerce.controllers_test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import g.sants.challenge_e_commerce.application.dto.AuthorizationDTORequest;
-import g.sants.challenge_e_commerce.application.dto.LoginDTOResponse;
 import g.sants.challenge_e_commerce.application.dto.RegisterDTORequest;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
 import g.sants.challenge_e_commerce.application.port.input.AuthorizationController;
@@ -23,15 +22,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.util.Collection;
-import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
