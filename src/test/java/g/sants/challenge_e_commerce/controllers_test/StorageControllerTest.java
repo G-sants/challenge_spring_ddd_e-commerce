@@ -77,6 +77,17 @@ public class StorageControllerTest {
     }
 
     @Test
+    public void StorageController_CreatesItem() throws Exception {
+        given(storageService.createItem(itemDTORequest)).willReturn(storage);
+
+        ResultActions response = mockMvc.perform(post("/item")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(storage)));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
     public void StorageController_GetsItemById() throws Exception {
         given(storageService.getItem(ArgumentMatchers.any())).willReturn(itemDTOResponse);
 

@@ -32,8 +32,9 @@ public class StorageController {
     }
 
     @PostMapping
-    public Storage createItem(@RequestBody ItemDTORequest item){
-        return storageService.createItem(item);
+    public ResponseEntity<Storage> createItem(@RequestBody ItemDTORequest item) {
+        storageService.createItem(item);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{item_id}")
