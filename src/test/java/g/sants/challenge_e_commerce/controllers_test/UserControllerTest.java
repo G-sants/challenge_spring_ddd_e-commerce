@@ -1,11 +1,14 @@
 package g.sants.challenge_e_commerce.controllers_test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import g.sants.challenge_e_commerce.application.dto.UserDTORequest;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
 import g.sants.challenge_e_commerce.application.port.input.UserController;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.TokenService;
 import g.sants.challenge_e_commerce.application.service.UserService;
+import g.sants.challenge_e_commerce.application.service.methods.UserCategory;
+import g.sants.challenge_e_commerce.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,10 +25,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.*;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @WebMvcTest(controllers = UserController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -49,9 +52,17 @@ public class UserControllerTest {
 
     List<UserDTOResponse> userList;
     UserDTOResponse userDTOResponse;
+    UserDTORequest userDTORequest;
+    User user;
 
     @BeforeEach
     public void initUsers() {
+        user = new User(12312312312L,"TesteUp", "UserUp",
+                "test1@email.com","apassword", UserCategory.ADMIN);
+        user.setId(1L);
+
+        userDTORequest = new UserDTORequest(12312312312L,"TesteUp", "UserUp",
+                "test1@email.com","apassword");
 
         userDTOResponse = new UserDTOResponse(1L,12312312312L,"Teste1",
                 "User","test1@email.com");
@@ -90,6 +101,13 @@ public class UserControllerTest {
     @Test
     public void UserController_UpdatesUsers() throws Exception {
 
+        given(userService.updateUser(1L,userDTORequest)).willReturn(user);
+
+        ResultActions response = mockMvc.perform(put("/users/{id}",1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user)));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
