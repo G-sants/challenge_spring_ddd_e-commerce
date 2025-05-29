@@ -1,7 +1,9 @@
 package g.sants.challenge_e_commerce.controllers_test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import g.sants.challenge_e_commerce.application.dto.CartDTORequest;
 import g.sants.challenge_e_commerce.application.dto.CartDTOResponse;
+import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
 import g.sants.challenge_e_commerce.application.port.input.CartController;
 import g.sants.challenge_e_commerce.application.port.output.CartRepository;
@@ -66,19 +68,31 @@ public class CartControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    List<Item> itemCartList;
+    List<ItemDTORequest> itemList;
     List<CartDTOResponse> orderList;
     CartDTOResponse cart1;
     CartDTOResponse cart2;
+    CartDTORequest cartRequest;
     UserDTOResponse userDTOResponse;
     Object object;
     User user;
     Cart cart;
     Cart dtoCart;
     Item item;
+    ItemDTORequest itemDTO;
 
     @BeforeEach
     public void initCarts(){
+        itemDTO = new ItemDTORequest("Potato",0.99,12);
+        itemList = new ArrayList<>();
+        itemList.add(itemDTO);
+        cartRequest = new CartDTORequest(itemList,"PENDING");
+
         item = new Item(0.99,"Potato",12);
+        itemCartList = new ArrayList<>();
+        itemCartList.add(item);
+
 
         user = new User();
         user.setId(1L);
@@ -88,6 +102,7 @@ public class CartControllerTest {
 
         dtoCart = new Cart();
         dtoCart.setId(1L);
+        dtoCart.setItems(itemCartList);
 
         cart1 = new CartDTOResponse(dtoCart);
         cart2 = new CartDTOResponse(dtoCart);
@@ -139,13 +154,13 @@ public class CartControllerTest {
 
     @Test
     public void CartController_UpdatesItemInOrders() throws Exception{
-        given(userService.getUser(ArgumentMatchers.any())).willReturn(userDTOResponse);
-        given(cartService.getKart(ArgumentMatchers.any())).willReturn(cart1);
+        given(userService.getUser(1L)).willReturn(userDTOResponse);
+        given(cartService.getKart(1L)).willReturn(cart1);
 
         ResultActions response = mockMvc.perform(put("/orders/add/user/{user_id}/kart/{kart_id}",
                 1L,1L)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(dtoCart)));
+                .content(objectMapper.writeValueAsString(cartRequest)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk());
     }
