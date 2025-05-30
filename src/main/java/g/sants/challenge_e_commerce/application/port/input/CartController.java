@@ -90,7 +90,7 @@ public class CartController {
                             return ResponseEntity.status(HttpStatus.CREATED).body("Order was made, but stock is now empty");
 
                         case -1:
-                            return ResponseEntity.badRequest().body("Error adding to kart, item"+ itemVer.getName()+
+                            return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).body("Error adding to kart, item"+ itemVer.getName()+
                                     " is out of stock");
                     }
                 }
@@ -136,10 +136,9 @@ public class CartController {
                         case 0: 
                             itemVer.setQuantity(0);
                             storageService.saveItemInStorage(itemVer);
-                            ResponseEntity.status(HttpStatus.ACCEPTED).body("Order was made, but stock is now empty");
-                            return ResponseEntity.ok(updateKart);
+                            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Order was made, but stock is now empty");
                         case -1:
-                            return ResponseEntity.badRequest().body("Error adding to kart, item"+ itemVer.getName()+
+                            return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).body("Error adding to kart, item"+ itemVer.getName()+
                                     " is out of stock");
                     }
                 }

@@ -14,17 +14,19 @@ import g.sants.challenge_e_commerce.application.service.TokenService;
 import g.sants.challenge_e_commerce.application.service.UserService;
 import g.sants.challenge_e_commerce.domain.Cart;
 import g.sants.challenge_e_commerce.domain.Item;
+import g.sants.challenge_e_commerce.domain.Storage;
 import g.sants.challenge_e_commerce.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -32,7 +34,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -73,23 +78,25 @@ public class CartControllerTest {
     List<CartDTOResponse> orderList;
     CartDTOResponse cart1;
     CartDTOResponse cart2;
-    CartDTORequest cartRequest;
+    CartDTORequest cartRequest1;
+    CartDTORequest cartRequest2;
     UserDTOResponse userDTOResponse;
-    Object object;
     User user;
     Cart cart;
     Cart dtoCart;
     Item item;
     ItemDTORequest itemDTO;
+    Storage storageItem;
 
     @BeforeEach
     public void initCarts(){
-        itemDTO = new ItemDTORequest("Potato",0.99,12);
+        itemDTO = new ItemDTORequest("Potato",0.99,1);
         itemList = new ArrayList<>();
         itemList.add(itemDTO);
-        cartRequest = new CartDTORequest(itemList,"PENDING");
+        cartRequest1 = new CartDTORequest(itemList,"PENDING");
+        cartRequest2 = new CartDTORequest(itemList,"cancel");
 
-        item = new Item(0.99,"Potato",12);
+        item = new Item(0.99,"Potato",10);
         itemCartList = new ArrayList<>();
         itemCartList.add(item);
 
@@ -113,26 +120,34 @@ public class CartControllerTest {
         orderList.add(cart2);
 
         cart = new Cart();
+        cart.setItems(itemCartList);
+
+        storageItem = new Storage();
+        storageItem.setName("Potato");
+        storageItem.setQuantity(100);
     }
 
     @Test
     public void CartController_CreatesOrder() throws Exception {
-        given(userService.getUser(ArgumentMatchers.any())).willReturn(userDTOResponse);
-        given(cartService.createKart(ArgumentMatchers.anyLong(),
-                ArgumentMatchers.any())).willReturn((CartDTOResponse) object);
+        given(userService.getUserForKart(1L)).willReturn(Optional.of(user));
+        given(storageService.findItemByName("Potato")).willReturn(storageItem);
+        given(cartService.createKart(anyLong(),any(Cart.class))).willReturn(cart1);
+
+        Cart newCart = new Cart();
+        newCart.addItem(new Item(0.99,"Potato",1));
 
         ResultActions response = mockMvc.perform(post("/orders/user/{user_id}",1L)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(cart)));
+                .content(objectMapper.writeValueAsString(newCart.getItems())));
 
-        response.andExpect(MockMvcResultMatchers.status().isOk());
+        response.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     public void CartController_GetsOrderById() throws Exception {
 
-        given(userService.getUser(ArgumentMatchers.any())).willReturn(userDTOResponse);
-        given(cartService.getKart(ArgumentMatchers.any())).willReturn(cart1);
+        given(userService.getUser(any())).willReturn(userDTOResponse);
+        given(cartService.getKart(any())).willReturn(cart1);
 
         ResultActions response = mockMvc.perform(get("/orders/user/{user_id}/kart/{kart_id}",
                 1L,1L)
@@ -157,18 +172,24 @@ public class CartControllerTest {
         given(userService.getUser(1L)).willReturn(userDTOResponse);
         given(cartService.getKart(1L)).willReturn(cart1);
 
+        given(cartService.updateKart(anyLong(), anyLong(), any(CartDTORequest.class))).willReturn(cart);
+        given(storageService.findItemByName("Potato")).willReturn(storageItem);
+
         ResultActions response = mockMvc.perform(put("/orders/add/user/{user_id}/kart/{kart_id}",
                 1L,1L)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(cartRequest)));
+                .content(objectMapper.writeValueAsString(cartRequest1)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     public void CartController_RemovesItemInOrders() throws Exception{
-        given(userService.getUser(ArgumentMatchers.any())).willReturn(userDTOResponse);
-        given(cartService.getKart(ArgumentMatchers.any())).willReturn(cart1);
+        given(userService.getUser(1L)).willReturn(userDTOResponse);
+        given(cartService.getKart(1L)).willReturn(cart1);
+
+        given(cartService.deletedKart(anyLong(), anyLong(), any(CartDTORequest.class))).willReturn(cart);
+        given(storageService.findItemByName("Potato")).willReturn(storageItem);
 
         ResultActions response = mockMvc.perform(put("/orders/remove/user/{user_id}/kart/{kart_id}",
                 1L,1L)
@@ -180,13 +201,16 @@ public class CartControllerTest {
 
     @Test
     public void CartController_CancelOrders() throws Exception{
-        given(userService.getUser(ArgumentMatchers.any())).willReturn(userDTOResponse);
-        given(cartService.getKart(ArgumentMatchers.any())).willReturn(cart1);
+        given(userService.getUser(any())).willReturn(userDTOResponse);
+        given(cartService.getKart(any())).willReturn(cart1);
+
+        given(cartService.deleteKart(anyLong(), anyLong(), any(CartDTORequest.class)))
+                .willReturn(cart);
 
         ResultActions response = mockMvc.perform(put("/orders/cancel/user/{user_id}/kart/{kart_id}",
                 1L,1L)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(dtoCart)));
+                .content(objectMapper.writeValueAsString(cartRequest2)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk());
     }

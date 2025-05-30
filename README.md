@@ -23,7 +23,7 @@ ___
 - [ ] Monitor Application Health;
 - [x] Add Custom Exception Handling;
 - [ ] Add Payment Checkout structure;
-- [ ] Unit Testing Structures;
+- [x] Unit Testing Structures;
 - [ ] Connection to another API (microservices training);
 - [ ] ...
 ___
