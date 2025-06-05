@@ -1,0 +1,6 @@
+projectKey=ecommerce
+serverUrl=http://localhost:9000
+serverVersion=25.5.0.107428
+dashboardUrl=http://localhost:9000/dashboard?id=ecommerce
+ceTaskId=0ec5263c-4156-4280-b899-54f77ec2e2f6
+ceTaskUrl=http://localhost:9000/api/ce/task?id=0ec5263c-4156-4280-b899-54f77ec2e2f6

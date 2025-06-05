@@ -80,7 +80,7 @@ public class StorageControllerTest {
     public void StorageController_CreatesItem() throws Exception {
         given(storageService.createItem(itemDTORequest)).willReturn(storage);
 
-        ResultActions response = mockMvc.perform(post("/itemDTO")
+        ResultActions response = mockMvc.perform(post("/item")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(storage)));
 
@@ -91,7 +91,7 @@ public class StorageControllerTest {
     public void StorageController_GetsItemById() throws Exception {
         given(storageService.getItem(ArgumentMatchers.any())).willReturn(itemDTOResponse);
 
-        ResultActions response = mockMvc.perform(get("/itemDTO/{item_id}",1L)
+        ResultActions response = mockMvc.perform(get("/item/{item_id}",1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(itemDTOResponse)));
 
@@ -102,7 +102,7 @@ public class StorageControllerTest {
     public void StorageController_GetAllItems() throws Exception {
         given(storageService.getAllItems()).willReturn(itemList);
 
-        ResultActions response = mockMvc.perform(get("/itemDTO")
+        ResultActions response = mockMvc.perform(get("/item")
                 .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(MockMvcResultMatchers.status().isOk());
@@ -112,7 +112,7 @@ public class StorageControllerTest {
     public void StorageController_UpdatesItems() throws Exception {
         given(storageService.updateItem(1L,itemDTORequest)).willReturn(storage);
 
-        ResultActions response = mockMvc.perform(put("/itemDTO/{item_id}",1L)
+        ResultActions response = mockMvc.perform(put("/item/{item_id}",1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(itemDTORequest)));
 
@@ -123,7 +123,7 @@ public class StorageControllerTest {
     public void StorageController_DeletesItem() throws Exception {
         doNothing().when(storageService).deleteItem(ArgumentMatchers.anyLong());
 
-        ResultActions response = mockMvc.perform(delete("/itemDTO/{item_id}",1L)
+        ResultActions response = mockMvc.perform(delete("/item/{item_id}",1L)
                 .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(MockMvcResultMatchers.status().isNoContent());

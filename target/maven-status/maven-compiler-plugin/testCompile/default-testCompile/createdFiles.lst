@@ -1,0 +1,12 @@
+g\sants\challenge_e_commerce\controllers_test\CartControllerTest.class
+g\sants\challenge_e_commerce\controllers_test\UserControllerTest.class
+g\sants\challenge_e_commerce\services_test\StorageServicesTests.class
+g\sants\challenge_e_commerce\repository_test\CartRepositoryTests.class
+g\sants\challenge_e_commerce\repository_test\StorageRepositoryTests.class
+g\sants\challenge_e_commerce\ChallengeECommerceApplicationTests.class
+g\sants\challenge_e_commerce\controllers_test\AuthorizationControllerTest.class
+g\sants\challenge_e_commerce\repository_test\UserRepositoryTests.class
+g\sants\challenge_e_commerce\controllers_test\StorageControllerTest.class
+g\sants\challenge_e_commerce\services_test\AuthorizationServiceTests.class
+g\sants\challenge_e_commerce\services_test\UserServiceTests.class
+g\sants\challenge_e_commerce\services_test\CartServicesTests.class
