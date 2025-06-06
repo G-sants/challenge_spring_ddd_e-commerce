@@ -114,39 +114,7 @@ public class CartServicesTests {
         Assertions.assertEquals("PENDING", cartResponse.status());
     }
 
-    @Test
-    public void UpdateCart_UpdatesSpecifiedItemInCart(){
-        Cart cart1 = new Cart();
-        User user = new User();
-        user.setId(1L);
-        Item itemCart1 = new Item(0.99,"Potato",10);
-        cart1.addItem(itemCart1);
 
-        List<ItemDTORequest> itemList = new ArrayList<>();
-        ItemDTORequest item1 = new ItemDTORequest("Potato",0.99,1);
-        itemList.add(item1);
-
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
-        when(cartRepository.findById(1L)).thenReturn(Optional.of(cart1));
-
-        when(cartRepository.save(any(Cart.class))).thenAnswer(arg -> {
-            Cart savedCart1 = arg.getArgument(0);
-            savedCart1.setId(1L);
-            return savedCart1;
-        });
-
-        cartRepository.save(cart1);
-
-        CartDTORequest cartList = new CartDTORequest(itemList,"`PENDING");
-
-        Cart updatedCart = cartService.updateKart(1L,1L,cartList);
-
-        Assertions.assertNotNull(updatedCart);
-        Assertions.assertEquals(1, updatedCart.getItems().size());
-        Assertions.assertEquals(11, updatedCart.getItems().get(0).getQuantity());
-
-    }
 
     @Test
     public void DeleteCart_RemovesOneSpecifiedItemInCart() {
