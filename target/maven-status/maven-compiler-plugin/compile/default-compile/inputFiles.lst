@@ -2,6 +2,7 @@ C:\Users\g.alves.dos.santos\Documents\GitHub\challenge_spring_ddd_e-commerce\src
 C:\Users\g.alves.dos.santos\Documents\GitHub\challenge_spring_ddd_e-commerce\src\main\java\g\sants\challenge_e_commerce\adapter\messages\listener\OrderCreatedListener.java
 C:\Users\g.alves.dos.santos\Documents\GitHub\challenge_spring_ddd_e-commerce\src\main\java\g\sants\challenge_e_commerce\adapter\messages\methods\MessageCategory.java
 C:\Users\g.alves.dos.santos\Documents\GitHub\challenge_spring_ddd_e-commerce\src\main\java\g\sants\challenge_e_commerce\adapter\security\config\SecurityConfig.java
+C:\Users\g.alves.dos.santos\Documents\GitHub\challenge_spring_ddd_e-commerce\src\main\java\g\sants\challenge_e_commerce\adapter\security\methods\SecurityCategory.java
 C:\Users\g.alves.dos.santos\Documents\GitHub\challenge_spring_ddd_e-commerce\src\main\java\g\sants\challenge_e_commerce\application\dto\AuthorizationDTORequest.java
 C:\Users\g.alves.dos.santos\Documents\GitHub\challenge_spring_ddd_e-commerce\src\main\java\g\sants\challenge_e_commerce\application\dto\CartDTORequest.java
 C:\Users\g.alves.dos.santos\Documents\GitHub\challenge_spring_ddd_e-commerce\src\main\java\g\sants\challenge_e_commerce\application\dto\CartDTOResponse.java

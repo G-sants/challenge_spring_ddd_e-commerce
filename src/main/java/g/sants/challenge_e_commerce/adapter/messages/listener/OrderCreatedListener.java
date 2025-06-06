@@ -4,11 +4,18 @@ import g.sants.challenge_e_commerce.adapter.messages.methods.MessageCategory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 @Component
 public class OrderCreatedListener {
 
+    Logger logger = Logger.getLogger(getClass().getName());
+
     @RabbitListener(queues = MessageCategory.ORDER_CREATED)
     public void onOrderCreated(String message){
-        System.out.println("Id received, " + message + " made an order.");
+        if (logger.isLoggable(Level.INFO)) {
+            logger.info(() -> MessageCategory.concatMessage(MessageCategory.CREATED_RECEIVED_ORDER, message));
+        }
     }
 }

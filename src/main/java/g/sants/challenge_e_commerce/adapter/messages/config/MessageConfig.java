@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class MessageConfig {
 
     @Bean
-    public Queue myQueue(){;
+    public Queue myQueue(){
         return new Queue(MessageCategory.ORDER_CREATED);
     }
 

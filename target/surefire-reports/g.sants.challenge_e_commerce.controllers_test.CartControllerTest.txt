@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: g.sants.challenge_e_commerce.controllers_test.CartControllerTest
 -------------------------------------------------------------------------------
-Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.092 s -- in g.sants.challenge_e_commerce.controllers_test.CartControllerTest
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.259 s -- in g.sants.challenge_e_commerce.controllers_test.CartControllerTest

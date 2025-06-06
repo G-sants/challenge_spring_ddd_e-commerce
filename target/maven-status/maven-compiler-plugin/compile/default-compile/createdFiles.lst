@@ -28,6 +28,7 @@ g\sants\challenge_e_commerce\adapter\security\config\SecurityConfig.class
 g\sants\challenge_e_commerce\application\service\CartService.class
 g\sants\challenge_e_commerce\application\dto\UserDTOResponse.class
 g\sants\challenge_e_commerce\application\port\output\CartRepository.class
+g\sants\challenge_e_commerce\adapter\security\methods\SecurityCategory.class
 g\sants\challenge_e_commerce\application\dto\RegisterDTORequest.class
 g\sants\challenge_e_commerce\application\service\methods\UserCategory.class
 g\sants\challenge_e_commerce\application\port\output\ItemRepository.class

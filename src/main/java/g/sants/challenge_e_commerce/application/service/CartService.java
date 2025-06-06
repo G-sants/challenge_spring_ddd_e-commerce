@@ -4,6 +4,8 @@ import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import g.sants.challenge_e_commerce.application.dto.CartDTORequest;
 import g.sants.challenge_e_commerce.application.dto.CartDTOResponse;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
+import g.sants.challenge_e_commerce.application.exceptions.errors.OrderNotFoundException;
+import g.sants.challenge_e_commerce.application.exceptions.errors.UserNotFoundException;
 import g.sants.challenge_e_commerce.application.port.output.ItemRepository;
 import g.sants.challenge_e_commerce.application.port.output.CartRepository;
 import g.sants.challenge_e_commerce.application.port.output.StorageRepository;
@@ -46,54 +48,61 @@ public class CartService {
 
     public CartDTOResponse createKart(Long id, Cart kart) {
         Optional<User> user = userRepository.findById(id);
-        kart.setUser(user.get());
-        kart.setTotalPrice();
-        kart.setTotalPriceDiscount();
-        kart.setTotalDiscount();
-        cartRepository.save(kart);
-        return new CartDTOResponse(kart);
+        if(user.isPresent()) {
+            kart.setUser(user.get());
+            kart.setTotalPrice();
+            kart.setTotalPriceDiscount();
+            kart.setTotalDiscount();
+            cartRepository.save(kart);
+            return new CartDTOResponse(kart);
+        }
+        throw new UserNotFoundException();
     }
      
     public Cart updateKart(Long id, Long kart_id, CartDTORequest kartDetails) {
         Optional<User> user = userRepository.findById(id);
         Optional<Cart> optionalKart = cartRepository.findById(kart_id);
-        Cart kart = optionalKart.get();
-        if(!kart.getItems().isEmpty()){
-            for (ItemDTORequest itemDTO : kartDetails.items()) {
-                List<Item> items = kart.getItems();
-                Iterator<Item> iterator = kart.getItems().iterator();
-                while (iterator.hasNext()) {
-                    Item item = iterator.next();
-                    if (item.getItemName().equalsIgnoreCase(itemDTO.itemName())) {
-                        item.setQuantity(item.getQuantity() + itemDTO.quantity());
-                        kart.setTotalPrice();
-                        kart.setTotalPriceDiscount();
-                        kart.setTotalDiscount();
-                        cartRepository.save(kart);
-                    } else {
-                        Item newItem = new Item();
-                        newItem.setItemName(itemDTO.itemName());
-                        newItem.setPrice(itemDTO.price());
-                        newItem.setQuantity(itemDTO.quantity());
-                        kart.addItem(newItem);
+        if (optionalKart.isPresent()) {
+            Cart kart = optionalKart.get();
+            if (!kart.getItems().isEmpty()) {
+                for (ItemDTORequest itemDTO : kartDetails.items()) {
+                    List<Item> items = kart.getItems();
+                    Iterator<Item> iterator = kart.getItems().iterator();
+                    while (iterator.hasNext()) {
+                        Item item = iterator.next();
+                        if (item.getItemName().equalsIgnoreCase(itemDTO.itemName())) {
+                            item.setQuantity(item.getQuantity() + itemDTO.quantity());
+                            kart.setTotalPrice();
+                            kart.setTotalPriceDiscount();
+                            kart.setTotalDiscount();
+                            cartRepository.save(kart);
+                        } else {
+                            Item newItem = new Item();
+                            newItem.setItemName(itemDTO.itemName());
+                            newItem.setPrice(itemDTO.price());
+                            newItem.setQuantity(itemDTO.quantity());
+                            kart.addItem(newItem);
+                        }
                     }
                 }
-            }return kart;
-        }else {
-            List<Item> newItemList = new ArrayList<>();
-            kart.setItems(newItemList);
-            for (ItemDTORequest itemDTO : kartDetails.items()) {
-                Item newItem = new Item();
-                newItem.setItemName(itemDTO.itemName());
-                newItem.setPrice(itemDTO.price());
-                newItem.setQuantity(itemDTO.quantity());
-                kart.addItem(newItem);
+                return kart;
+            } else {
+                List<Item> newItemList = new ArrayList<>();
+                kart.setItems(newItemList);
+                for (ItemDTORequest itemDTO : kartDetails.items()) {
+                    Item newItem = new Item();
+                    newItem.setItemName(itemDTO.itemName());
+                    newItem.setPrice(itemDTO.price());
+                    newItem.setQuantity(itemDTO.quantity());
+                    kart.addItem(newItem);
+                }
+                kart.setTotalPrice();
+                kart.setTotalPriceDiscount();
+                kart.setTotalDiscount();
+                return cartRepository.save(kart);
             }
-            kart.setTotalPrice();
-            kart.setTotalPriceDiscount();
-            kart.setTotalDiscount();
-            return cartRepository.save(kart);
         }
+        throw new OrderNotFoundException();
     }
 
     public Cart deletedKart(Long id, Long kart_id, CartDTORequest kartDetails)  {

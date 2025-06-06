@@ -40,7 +40,6 @@
         private List<Item> items = new ArrayList<>();
 
         public Cart() {
-            this.id = id;
             this.totalPrice = 0.0;
             this.totalPriceDiscount = 0.0;
             this.totalDiscount = 0.0;

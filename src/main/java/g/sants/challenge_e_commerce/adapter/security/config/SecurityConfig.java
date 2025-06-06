@@ -1,7 +1,7 @@
 package g.sants.challenge_e_commerce.adapter.security.config;
 
+import g.sants.challenge_e_commerce.adapter.security.methods.SecurityCategory;
 import g.sants.challenge_e_commerce.application.port.filters.SecurityFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,8 +20,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    SecurityFilter securityFilter;
+    private final SecurityFilter securityFilter;
+
+    public SecurityConfig(SecurityFilter securityFilter){
+        this.securityFilter = securityFilter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain
@@ -33,12 +36,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST,"/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/item").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/item").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/item").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/users").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/users").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/users/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, SecurityCategory.ITEM_P1).hasRole(SecurityCategory.ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.PUT,SecurityCategory.ITEM_P1).hasRole(SecurityCategory.ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.DELETE,SecurityCategory.ITEM_P1).hasRole(SecurityCategory.ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.GET,"/users").hasRole(SecurityCategory.ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.DELETE,"/users").hasRole(SecurityCategory.ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.PUT,"/users/{id}").hasRole(SecurityCategory.ADMIN_ROLE)
                         .anyRequest().fullyAuthenticated())
 
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
