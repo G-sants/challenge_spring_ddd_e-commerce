@@ -159,7 +159,7 @@ public class CartControllerTest {
 
     @Test
     public void CartController_GetAllOrders() throws Exception {
-        given(cartService.getAllKarts()).willReturn(orderList);
+        given(cartService.getAllKarts(1L)).willReturn(orderList);
 
         ResultActions response = mockMvc.perform(get("/orders/user/{user_id}",1L)
                 .contentType(MediaType.APPLICATION_JSON));

@@ -55,9 +55,7 @@ public class StorageService {
 
     public void deleteItem(Long item_id) {
         Optional<Optional<Storage>> item = Optional.of(storageRepository.findById(item_id));
-        if (item != null){
-            storageRepository.deleteById(item_id);
-        }
+        storageRepository.deleteById(item_id);
         throw new ItemNotFoundException();
     }
 

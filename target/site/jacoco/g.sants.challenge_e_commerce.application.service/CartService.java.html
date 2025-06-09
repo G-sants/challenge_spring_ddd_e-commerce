@@ -33,75 +33,78 @@ public class CartService {
 <span class="fc" id="L33">        this.userService = userService;</span>
 <span class="fc" id="L34">    }</span>
 
-
-    public List&lt;CartDTOResponse&gt; getAllKarts() {
-<span class="nc" id="L38">        return cartRepository.findAll ().stream()</span>
-<span class="nc" id="L39">                .map(CartDTOResponse::new)</span>
-<span class="nc" id="L40">                .collect(Collectors.toList());</span>
+    public List&lt;CartDTOResponse&gt; getAllKarts(Long user_id) {
+<span class="nc" id="L37">        Optional&lt;User&gt; user = userRepository.findById(user_id);</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        if(user.isPresent()) {</span>
+<span class="nc" id="L39">            return cartRepository.findAll ().stream()</span>
+<span class="nc" id="L40">                .map(CartDTOResponse::new)</span>
+<span class="nc" id="L41">                .collect(Collectors.toList());</span>
+        }
+<span class="nc" id="L43">        throw new UserNotFoundException();</span>
     }
 
     public CartDTOResponse getKart(Long id) {
-<span class="nc" id="L44">        Optional&lt;Cart&gt; kart = cartRepository.findById(id);</span>
-<span class="nc" id="L45">        return kart.map(CartDTOResponse::new)</span>
-<span class="nc" id="L46">                .orElseThrow(() -&gt; new RuntimeException(&quot;Order not Found&quot;));</span>
+<span class="nc" id="L47">        Optional&lt;Cart&gt; kart = cartRepository.findById(id);</span>
+<span class="nc" id="L48">        return kart.map(CartDTOResponse::new)</span>
+<span class="nc" id="L49">                .orElseThrow(() -&gt; new RuntimeException(&quot;Order not Found&quot;));</span>
     }
 
     public CartDTOResponse createKart(Long id, Cart kart) {
-<span class="nc" id="L50">        Optional&lt;User&gt; user = userRepository.findById(id);</span>
-<span class="nc bnc" id="L51" title="All 2 branches missed.">        if(user.isPresent()) {</span>
-<span class="nc" id="L52">            kart.setUser(user.get());</span>
-<span class="nc" id="L53">            kart.setTotalPrice();</span>
-<span class="nc" id="L54">            kart.setTotalPriceDiscount();</span>
-<span class="nc" id="L55">            kart.setTotalDiscount();</span>
-<span class="nc" id="L56">            cartRepository.save(kart);</span>
-<span class="nc" id="L57">            return new CartDTOResponse(kart);</span>
+<span class="nc" id="L53">        Optional&lt;User&gt; user = userRepository.findById(id);</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        if(user.isPresent()) {</span>
+<span class="nc" id="L55">            kart.setUser(user.get());</span>
+<span class="nc" id="L56">            kart.setTotalPrice();</span>
+<span class="nc" id="L57">            kart.setTotalPriceDiscount();</span>
+<span class="nc" id="L58">            kart.setTotalDiscount();</span>
+<span class="nc" id="L59">            cartRepository.save(kart);</span>
+<span class="nc" id="L60">            return new CartDTOResponse(kart);</span>
         }
-<span class="nc" id="L59">        throw new UserNotFoundException();</span>
+<span class="nc" id="L62">        throw new UserNotFoundException();</span>
     }
 
     public Cart updateKart(Long id, Long kart_id, CartDTORequest kartDetails) {
-<span class="nc" id="L63">        Optional&lt;User&gt; optionalUser = userRepository.findById(id);</span>
-<span class="nc bnc" id="L64" title="All 2 branches missed.">        if(optionalUser.isPresent()) {</span>
-<span class="nc" id="L65">            Optional&lt;Cart&gt; optionalKart = cartRepository.findById(kart_id);</span>
-<span class="nc bnc" id="L66" title="All 2 branches missed.">            if (optionalKart.isPresent()) {</span>
-<span class="nc" id="L67">                Cart kart = optionalKart.get();</span>
-<span class="nc" id="L68">                Cart.updateCartItems(kart, kartDetails);</span>
-<span class="nc" id="L69">                return cartRepository.save(kart);</span>
+<span class="nc" id="L66">        Optional&lt;User&gt; optionalUser = userRepository.findById(id);</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if(optionalUser.isPresent()) {</span>
+<span class="nc" id="L68">            Optional&lt;Cart&gt; optionalKart = cartRepository.findById(kart_id);</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">            if (optionalKart.isPresent()) {</span>
+<span class="nc" id="L70">                Cart kart = optionalKart.get();</span>
+<span class="nc" id="L71">                Cart.updateCartItems(kart, kartDetails);</span>
+<span class="nc" id="L72">                return cartRepository.save(kart);</span>
             }
-<span class="nc" id="L71">            throw new OrderNotFoundException();</span>
+<span class="nc" id="L74">            throw new OrderNotFoundException();</span>
         }
-<span class="nc" id="L73">        throw new UserNotFoundException();</span>
+<span class="nc" id="L76">        throw new UserNotFoundException();</span>
     }
 
     public Cart deletedKart(Long userId, Long cartId, CartDTORequest cartDetails) {
-<span class="nc" id="L77">        User user = userService.findUserById(userId);</span>
-<span class="nc bnc" id="L78" title="All 2 branches missed.">        if(user!= null) {</span>
-<span class="nc" id="L79">            Cart cart = findCartById(cartId);</span>
-<span class="nc" id="L80">            Cart.processItemsInCart(cart, cartDetails);</span>
-<span class="nc" id="L81">            updateCartTotals(cart);</span>
-<span class="nc" id="L82">            return cartRepository.save(cart);</span>
+<span class="nc" id="L80">        User user = userService.findUserById(userId);</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        if(user!= null) {</span>
+<span class="nc" id="L82">            Cart cart = findCartById(cartId);</span>
+<span class="nc" id="L83">            Cart.processItemsInCart(cart, cartDetails);</span>
+<span class="nc" id="L84">            updateCartTotals(cart);</span>
+<span class="nc" id="L85">            return cartRepository.save(cart);</span>
         }
-<span class="nc" id="L84">        throw  new UserNotFoundException();</span>
+<span class="nc" id="L87">        throw  new UserNotFoundException();</span>
     }
 
     public Cart deleteKart(Long userId, Long cartId, CartDTORequest statusDetails) {
-<span class="nc" id="L88">        User user = userService.findUserById(userId);</span>
-<span class="nc bnc" id="L89" title="All 2 branches missed.">        if(user!= null) {</span>
-<span class="nc" id="L90">            Cart cart = findCartById(cartId);</span>
-<span class="nc" id="L91">            String checkStatus = statusDetails.status();</span>
-<span class="nc bnc" id="L92" title="All 2 branches missed.">            if (checkStatus.equalsIgnoreCase(&quot;cancel&quot;)) {</span>
-<span class="nc" id="L93">                cart.setStatus(&quot;CANCELLED&quot;);</span>
-<span class="nc" id="L94">                return cartRepository.save(cart);</span>
+<span class="nc" id="L91">        User user = userService.findUserById(userId);</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        if(user!= null) {</span>
+<span class="nc" id="L93">            Cart cart = findCartById(cartId);</span>
+<span class="nc" id="L94">            String checkStatus = statusDetails.status();</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">            if (checkStatus.equalsIgnoreCase(&quot;cancel&quot;)) {</span>
+<span class="nc" id="L96">                cart.setStatus(&quot;CANCELLED&quot;);</span>
+<span class="nc" id="L97">                return cartRepository.save(cart);</span>
             } else {
-<span class="nc" id="L96">                throw new OrderCancelledException();</span>
+<span class="nc" id="L99">                throw new OrderCancelledException();</span>
             }
         }
-<span class="nc" id="L99">        throw new UserNotFoundException();</span>
+<span class="nc" id="L102">        throw new UserNotFoundException();</span>
     }
 
     private Cart findCartById(Long cartId) {
-<span class="nc" id="L103">        return cartRepository.findById(cartId)</span>
-<span class="nc" id="L104">                .orElseThrow(() -&gt; new OrderNotFoundException(&quot;Order not found with id: &quot; + cartId));</span>
+<span class="nc" id="L106">        return cartRepository.findById(cartId)</span>
+<span class="nc" id="L107">                .orElseThrow(() -&gt; new OrderNotFoundException(&quot;Order not found with id: &quot; + cartId));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

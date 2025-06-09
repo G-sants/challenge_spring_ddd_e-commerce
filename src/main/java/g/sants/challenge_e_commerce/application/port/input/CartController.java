@@ -46,8 +46,8 @@ public class CartController {
     }
 
     @GetMapping("/user/{user_id}")
-    public List<CartDTOResponse> getAllKarts() {
-        return kartService.getAllKarts();
+    public List<CartDTOResponse> getAllKarts(@PathVariable Long user_id) {
+        return kartService.getAllKarts(user_id);
     }
 
     @GetMapping("/user/{user_id}/kart/{kart_id}")

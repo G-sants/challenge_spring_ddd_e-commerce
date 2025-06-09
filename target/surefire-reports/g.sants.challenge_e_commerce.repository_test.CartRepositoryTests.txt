@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: g.sants.challenge_e_commerce.repository_test.CartRepositoryTests
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.455 s -- in g.sants.challenge_e_commerce.repository_test.CartRepositoryTests
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.784 s -- in g.sants.challenge_e_commerce.repository_test.CartRepositoryTests

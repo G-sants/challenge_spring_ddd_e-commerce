@@ -33,11 +33,14 @@ public class CartService {
         this.userService = userService;
     }
 
-
-    public List<CartDTOResponse> getAllKarts() {
-        return cartRepository.findAll ().stream()
+    public List<CartDTOResponse> getAllKarts(Long user_id) {
+        Optional<User> user = userRepository.findById(user_id);
+        if(user.isPresent()) {
+            return cartRepository.findAll ().stream()
                 .map(CartDTOResponse::new)
                 .collect(Collectors.toList());
+        }
+        throw new UserNotFoundException();
     }
 
     public CartDTOResponse getKart(Long id) {
