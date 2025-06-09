@@ -54,17 +54,16 @@ public class StorageService {
 
 
     public void deleteItem(Long item_id) {
-<span class="nc" id="L57">        Optional&lt;Optional&lt;Storage&gt;&gt; item = Optional.of(storageRepository.findById(item_id));</span>
-<span class="nc" id="L58">        storageRepository.deleteById(item_id);</span>
-<span class="nc" id="L59">        throw new ItemNotFoundException();</span>
+<span class="nc" id="L57">        storageRepository.deleteById(item_id);</span>
+<span class="nc" id="L58">        throw new ItemNotFoundException();</span>
     }
 
     public Storage findItemByName(String name){
-<span class="nc" id="L63">        return storageRepository.findByName(name);</span>
+<span class="nc" id="L62">        return storageRepository.findByName(name);</span>
     }
 
     public void saveItemInStorage(Storage storage){
-<span class="nc" id="L67">        storageRepository.save(storage);</span>
-<span class="nc" id="L68">    }</span>
+<span class="nc" id="L66">        storageRepository.save(storage);</span>
+<span class="nc" id="L67">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

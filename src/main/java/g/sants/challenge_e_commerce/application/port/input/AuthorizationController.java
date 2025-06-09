@@ -4,7 +4,6 @@ import g.sants.challenge_e_commerce.application.dto.AuthorizationDTORequest;
 import g.sants.challenge_e_commerce.application.dto.LoginDTOResponse;
 import g.sants.challenge_e_commerce.application.dto.RegisterDTORequest;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
-import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.AuthorizationService;
 import g.sants.challenge_e_commerce.application.service.TokenService;
 import g.sants.challenge_e_commerce.domain.User;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,18 +22,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthorizationController {
 
     private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
     private final TokenService tokenService;
     private final AuthorizationService authorizationService;
 
     @Autowired
     public AuthorizationController(
             AuthenticationManager authenticationManager,
-            UserRepository userRepository,
             TokenService tokenService,
             AuthorizationService authorizationService) {
         this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
         this.tokenService = tokenService;
         this.authorizationService = authorizationService;
     }

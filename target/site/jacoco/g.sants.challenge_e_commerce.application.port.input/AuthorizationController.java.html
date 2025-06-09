@@ -4,7 +4,6 @@ import g.sants.challenge_e_commerce.application.dto.AuthorizationDTORequest;
 import g.sants.challenge_e_commerce.application.dto.LoginDTOResponse;
 import g.sants.challenge_e_commerce.application.dto.RegisterDTORequest;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
-import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.AuthorizationService;
 import g.sants.challenge_e_commerce.application.service.TokenService;
 import g.sants.challenge_e_commerce.domain.User;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,36 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthorizationController {
 
     private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
     private final TokenService tokenService;
     private final AuthorizationService authorizationService;
 
     @Autowired
     public AuthorizationController(
             AuthenticationManager authenticationManager,
-            UserRepository userRepository,
             TokenService tokenService,
-<span class="fc" id="L36">            AuthorizationService authorizationService) {</span>
-<span class="fc" id="L37">        this.authenticationManager = authenticationManager;</span>
-<span class="fc" id="L38">        this.userRepository = userRepository;</span>
-<span class="fc" id="L39">        this.tokenService = tokenService;</span>
-<span class="fc" id="L40">        this.authorizationService = authorizationService;</span>
-<span class="fc" id="L41">    }</span>
+<span class="fc" id="L32">            AuthorizationService authorizationService) {</span>
+<span class="fc" id="L33">        this.authenticationManager = authenticationManager;</span>
+<span class="fc" id="L34">        this.tokenService = tokenService;</span>
+<span class="fc" id="L35">        this.authorizationService = authorizationService;</span>
+<span class="fc" id="L36">    }</span>
 
     @PostMapping(&quot;/login&quot;)
     public ResponseEntity login(@RequestBody @Validated AuthorizationDTORequest data) {
-<span class="fc" id="L45">        var usernamePassword = new UsernamePasswordAuthenticationToken</span>
-<span class="fc" id="L46">                (data.email(), data.password());</span>
-<span class="fc" id="L47">        var auth = this.authenticationManager.authenticate(usernamePassword);</span>
+<span class="fc" id="L40">        var usernamePassword = new UsernamePasswordAuthenticationToken</span>
+<span class="fc" id="L41">                (data.email(), data.password());</span>
+<span class="fc" id="L42">        var auth = this.authenticationManager.authenticate(usernamePassword);</span>
 
-<span class="fc" id="L49">        var token = tokenService.generateToken((User) auth.getPrincipal());</span>
+<span class="fc" id="L44">        var token = tokenService.generateToken((User) auth.getPrincipal());</span>
 
-<span class="fc" id="L51">        return ResponseEntity.ok(new LoginDTOResponse(token));</span>
+<span class="fc" id="L46">        return ResponseEntity.ok(new LoginDTOResponse(token));</span>
     }
 
     @PostMapping(&quot;/register&quot;)
     public UserDTOResponse register(@RequestBody @Validated RegisterDTORequest data){
-<span class="fc" id="L56">        return authorizationService.registerNewUser(data);</span>
+<span class="fc" id="L51">        return authorizationService.registerNewUser(data);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

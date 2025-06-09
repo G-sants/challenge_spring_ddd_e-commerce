@@ -33,8 +33,8 @@ public class CartService {
         this.userService = userService;
     }
 
-    public List<CartDTOResponse> getAllKarts(Long user_id) {
-        Optional<User> user = userRepository.findById(user_id);
+    public List<CartDTOResponse> getAllKarts(Long id) {
+        Optional<User> user = userRepository.findById(id);
         if(user.isPresent()) {
             return cartRepository.findAll ().stream()
                 .map(CartDTOResponse::new)
