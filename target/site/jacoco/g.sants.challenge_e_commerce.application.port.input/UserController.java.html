@@ -14,38 +14,42 @@ import java.util.List;
 
 @RestController
 @RequestMapping(&quot;/users&quot;)
-<span class="fc" id="L17">public class UserController {</span>
+public class UserController {
+
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
+<span class="fc" id="L22">    public UserController(UserService userService){</span>
+<span class="fc" id="L23">        this.userService = userService;</span>
+<span class="fc" id="L24">    }</span>
 
     @GetMapping
     public List&lt;UserDTOResponse&gt; getAllUsers(){
-<span class="fc" id="L24">        return userService.getAllUsers();</span>
+<span class="fc" id="L28">        return userService.getAllUsers();</span>
     }
 
     @GetMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;UserDTOResponse&gt; getUsersById(@PathVariable Long id){
-<span class="fc" id="L29">        UserDTOResponse user = userService.getUser(id);</span>
-<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if (user == null) {</span>
-<span class="nc" id="L31">            throw new NoInfoReceivedException();</span>
+<span class="fc" id="L33">        UserDTOResponse user = userService.getUser(id);</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L35">            throw new NoInfoReceivedException();</span>
         }
-<span class="fc" id="L33">        return ResponseEntity.ok(user);</span>
+<span class="fc" id="L37">        return ResponseEntity.ok(user);</span>
     }
 
     @PutMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;User&gt; updateUser(@PathVariable Long id, @RequestBody UserDTORequest userDetails){
-<span class="fc" id="L38">        User updateUser =userService.updateUser(id, userDetails);</span>
-<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        if(updateUser ==null){</span>
-<span class="nc" id="L40">            throw new NoInfoReceivedException();</span>
+<span class="fc" id="L42">        User updateUser =userService.updateUser(id, userDetails);</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if(updateUser ==null){</span>
+<span class="nc" id="L44">            throw new NoInfoReceivedException();</span>
         }
-<span class="fc" id="L42">        return ResponseEntity.ok(updateUser);</span>
+<span class="fc" id="L46">        return ResponseEntity.ok(updateUser);</span>
     }
 
     @DeleteMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;Void&gt; deleteUser(@PathVariable Long id){
-<span class="fc" id="L47">        userService.deleteUser(id);</span>
-<span class="fc" id="L48">        return ResponseEntity.noContent().build();</span>
+<span class="fc" id="L51">        userService.deleteUser(id);</span>
+<span class="fc" id="L52">        return ResponseEntity.noContent().build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

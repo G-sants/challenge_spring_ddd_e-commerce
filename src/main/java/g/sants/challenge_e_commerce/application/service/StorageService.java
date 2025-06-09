@@ -16,8 +16,12 @@ import java.util.stream.Collectors;
 @Service
 public class StorageService {
 
+    private final StorageRepository storageRepository;
+
     @Autowired
-    private StorageRepository storageRepository;
+    public StorageService(StorageRepository storageRepository){
+        this.storageRepository = storageRepository;
+    }
 
     public List<ItemDTOResponse> getAllItems() {
         return storageRepository.findAll().stream()

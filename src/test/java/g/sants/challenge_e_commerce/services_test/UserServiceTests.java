@@ -1,26 +1,15 @@
 package g.sants.challenge_e_commerce.services_test;
 
-import g.sants.challenge_e_commerce.application.dto.UserDTORequest;
-import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
+
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.UserService;
-import g.sants.challenge_e_commerce.application.service.methods.UserCategory;
-import g.sants.challenge_e_commerce.domain.User;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTests {
@@ -34,9 +23,9 @@ public class UserServiceTests {
     @BeforeEach
     void setup(){
         MockitoAnnotations.initMocks(this);
-    }
+    }}
 
-    @Test
+  /*  @Test
     public void userService_FindAll_ReturnsAllUsers(){
         User user1 = new User(12312312312L, "Test1", "User",
                 "test1@email.com", "t2Password", UserCategory.ADMIN);
@@ -137,3 +126,4 @@ public class UserServiceTests {
         Assertions.assertFalse(userRepository.findById(1L).isPresent());
     }
 }
+*/

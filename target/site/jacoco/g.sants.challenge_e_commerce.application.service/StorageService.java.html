@@ -14,55 +14,59 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-<span class="fc" id="L17">public class StorageService {</span>
+public class StorageService {
+
+    private final StorageRepository storageRepository;
 
     @Autowired
-    private StorageRepository storageRepository;
+<span class="fc" id="L22">    public StorageService(StorageRepository storageRepository){</span>
+<span class="fc" id="L23">        this.storageRepository = storageRepository;</span>
+<span class="fc" id="L24">    }</span>
 
     public List&lt;ItemDTOResponse&gt; getAllItems() {
-<span class="fc" id="L23">        return storageRepository.findAll().stream()</span>
-<span class="fc" id="L24">                .map(ItemDTOResponse::new)</span>
-<span class="fc" id="L25">                .collect(Collectors.toList());</span>
+<span class="nc" id="L27">        return storageRepository.findAll().stream()</span>
+<span class="nc" id="L28">                .map(ItemDTOResponse::new)</span>
+<span class="nc" id="L29">                .collect(Collectors.toList());</span>
     }
 
     public ItemDTOResponse getItem(Long id) {
-<span class="fc" id="L29">        Optional&lt;Storage&gt; item = storageRepository.findById(id);</span>
-<span class="fc" id="L30">        return item.map(ItemDTOResponse::new)</span>
-<span class="fc" id="L31">                .orElseThrow(ItemNotFoundException::new);</span>
+<span class="nc" id="L33">        Optional&lt;Storage&gt; item = storageRepository.findById(id);</span>
+<span class="nc" id="L34">        return item.map(ItemDTOResponse::new)</span>
+<span class="nc" id="L35">                .orElseThrow(ItemNotFoundException::new);</span>
     }
 
     public Storage createItem(ItemDTORequest data) {
-<span class="nc" id="L35">        Storage item = new Storage(data.itemName(),data.price(), data.quantity());</span>
-<span class="nc" id="L36">        return storageRepository.save(item);</span>
+<span class="nc" id="L39">        Storage item = new Storage(data.itemName(),data.price(), data.quantity());</span>
+<span class="nc" id="L40">        return storageRepository.save(item);</span>
     }
 
     public Storage updateItem(Long item_id, ItemDTORequest itemDetails) {
-<span class="fc" id="L40">        Storage item = storageRepository.findById(item_id)</span>
-<span class="fc" id="L41">                    .orElseThrow(ItemNotFoundException::new);</span>
-<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        if (item != null) {</span>
-<span class="fc" id="L43">            item.setName(itemDetails.itemName());</span>
-<span class="fc" id="L44">            item.setPrice(itemDetails.price());</span>
-<span class="fc" id="L45">            item.setQuantity(itemDetails.quantity());</span>
-<span class="fc" id="L46">            return storageRepository.save(item);</span>
+<span class="nc" id="L44">        Storage item = storageRepository.findById(item_id)</span>
+<span class="nc" id="L45">                    .orElseThrow(ItemNotFoundException::new);</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">        if (item != null) {</span>
+<span class="nc" id="L47">            item.setName(itemDetails.itemName());</span>
+<span class="nc" id="L48">            item.setPrice(itemDetails.price());</span>
+<span class="nc" id="L49">            item.setQuantity(itemDetails.quantity());</span>
+<span class="nc" id="L50">            return storageRepository.save(item);</span>
         }
-<span class="nc" id="L48">        throw new WrongItemEntryException();</span>
+<span class="nc" id="L52">        throw new WrongItemEntryException();</span>
     }
 
 
     public void deleteItem(Long item_id) {
-<span class="nc" id="L53">        Optional&lt;Optional&lt;Storage&gt;&gt; item = Optional.of(storageRepository.findById(item_id));</span>
-<span class="nc bnc" id="L54" title="All 2 branches missed.">        if (item != null){</span>
-<span class="nc" id="L55">            storageRepository.deleteById(item_id);</span>
+<span class="nc" id="L57">        Optional&lt;Optional&lt;Storage&gt;&gt; item = Optional.of(storageRepository.findById(item_id));</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        if (item != null){</span>
+<span class="nc" id="L59">            storageRepository.deleteById(item_id);</span>
         }
-<span class="nc" id="L57">        throw new ItemNotFoundException();</span>
+<span class="nc" id="L61">        throw new ItemNotFoundException();</span>
     }
 
     public Storage findItemByName(String name){
-<span class="nc" id="L61">        return storageRepository.findByName(name);</span>
+<span class="nc" id="L65">        return storageRepository.findByName(name);</span>
     }
 
     public void saveItemInStorage(Storage storage){
-<span class="nc" id="L65">        storageRepository.save(storage);</span>
-<span class="nc" id="L66">    }</span>
+<span class="nc" id="L69">        storageRepository.save(storage);</span>
+<span class="nc" id="L70">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

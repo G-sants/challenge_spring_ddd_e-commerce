@@ -14,8 +14,12 @@ import java.util.List;
 @RequestMapping("/item")
 public class StorageController {
 
+    private final StorageService storageService;
+
     @Autowired
-    private StorageService storageService;
+    public StorageController(StorageService storageService){
+        this.storageService = storageService;
+    }
 
     @GetMapping
     public List<ItemDTOResponse> getAllItems(){

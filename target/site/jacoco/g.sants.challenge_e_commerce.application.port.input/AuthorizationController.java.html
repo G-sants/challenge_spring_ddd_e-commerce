@@ -21,31 +21,39 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(&quot;auth&quot;)
-<span class="fc" id="L24">public class AuthorizationController {</span>
+public class AuthorizationController {
+
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final TokenService tokenService;
+    private final AuthorizationService authorizationService;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private TokenService tokenService;
-    @Autowired
-    AuthorizationService authorizationService;
+    public AuthorizationController(
+            AuthenticationManager authenticationManager,
+            UserRepository userRepository,
+            TokenService tokenService,
+<span class="fc" id="L36">            AuthorizationService authorizationService) {</span>
+<span class="fc" id="L37">        this.authenticationManager = authenticationManager;</span>
+<span class="fc" id="L38">        this.userRepository = userRepository;</span>
+<span class="fc" id="L39">        this.tokenService = tokenService;</span>
+<span class="fc" id="L40">        this.authorizationService = authorizationService;</span>
+<span class="fc" id="L41">    }</span>
 
     @PostMapping(&quot;/login&quot;)
     public ResponseEntity login(@RequestBody @Validated AuthorizationDTORequest data) {
-<span class="fc" id="L37">        var usernamePassword = new UsernamePasswordAuthenticationToken</span>
-<span class="fc" id="L38">                (data.email(), data.password());</span>
-<span class="fc" id="L39">        var auth = this.authenticationManager.authenticate(usernamePassword);</span>
+<span class="fc" id="L45">        var usernamePassword = new UsernamePasswordAuthenticationToken</span>
+<span class="fc" id="L46">                (data.email(), data.password());</span>
+<span class="fc" id="L47">        var auth = this.authenticationManager.authenticate(usernamePassword);</span>
 
-<span class="fc" id="L41">        var token = tokenService.generateToken((User) auth.getPrincipal());</span>
+<span class="fc" id="L49">        var token = tokenService.generateToken((User) auth.getPrincipal());</span>
 
-<span class="fc" id="L43">        return ResponseEntity.ok(new LoginDTOResponse(token));</span>
+<span class="fc" id="L51">        return ResponseEntity.ok(new LoginDTOResponse(token));</span>
     }
 
     @PostMapping(&quot;/register&quot;)
     public UserDTOResponse register(@RequestBody @Validated RegisterDTORequest data){
-<span class="fc" id="L48">        return authorizationService.registerNewUser(data);</span>
+<span class="fc" id="L56">        return authorizationService.registerNewUser(data);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

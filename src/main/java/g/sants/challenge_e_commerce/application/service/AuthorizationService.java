@@ -15,8 +15,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorizationService implements UserDetailsService {
 
+    private final UserRepository userRepository;
+
     @Autowired
-    UserRepository userRepository;
+    public AuthorizationService(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws LoginException {

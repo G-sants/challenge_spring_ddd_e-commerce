@@ -29,14 +29,21 @@ import java.util.Optional;
 @RequestMapping("/orders")
 public class CartController {
 
+    private final CartService kartService;
+    private final UserService userService;
+    private final StorageService storageService;
+    private final RabbitTemplate rabbitTemplate;
     @Autowired
-    private CartService kartService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    StorageService storageService;
-    @Autowired
-    RabbitTemplate rabbitTemplate;
+    public CartController(
+            CartService kartService,
+            UserService userService,
+            StorageService storageService,
+            RabbitTemplate rabbitTemplate) {
+        this.kartService = kartService;
+        this.userService = userService;
+        this.storageService = storageService;
+        this.rabbitTemplate = rabbitTemplate;
+    }
 
     @GetMapping("/user/{user_id}")
     public List<CartDTOResponse> getAllKarts() {

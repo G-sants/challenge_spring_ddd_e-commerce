@@ -12,44 +12,48 @@ import java.util.List;
 
 @RestController
 @RequestMapping(&quot;/item&quot;)
-<span class="fc" id="L15">public class StorageController {</span>
+public class StorageController {
+
+    private final StorageService storageService;
 
     @Autowired
-    private StorageService storageService;
+<span class="fc" id="L20">    public StorageController(StorageService storageService){</span>
+<span class="fc" id="L21">        this.storageService = storageService;</span>
+<span class="fc" id="L22">    }</span>
 
     @GetMapping
     public List&lt;ItemDTOResponse&gt; getAllItems(){
-<span class="fc" id="L22">        return storageService.getAllItems();</span>
+<span class="fc" id="L26">        return storageService.getAllItems();</span>
     }
 
     @GetMapping(&quot;/{item_id}&quot;)
     public ResponseEntity&lt;ItemDTOResponse&gt; getItemById (@PathVariable Long item_id) {
-<span class="fc" id="L27">        ItemDTOResponse item = storageService.getItem(item_id);</span>
-<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        if (item == null){</span>
-<span class="nc" id="L29">            return ResponseEntity.noContent().build();</span>
+<span class="fc" id="L31">        ItemDTOResponse item = storageService.getItem(item_id);</span>
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        if (item == null){</span>
+<span class="nc" id="L33">            return ResponseEntity.noContent().build();</span>
         }
-<span class="fc" id="L31">        return ResponseEntity.ok(item);</span>
+<span class="fc" id="L35">        return ResponseEntity.ok(item);</span>
     }
 
     @PostMapping
     public ResponseEntity&lt;Storage&gt; createItem(@RequestBody ItemDTORequest item) {
-<span class="fc" id="L36">        storageService.createItem(item);</span>
-<span class="fc" id="L37">        return ResponseEntity.ok().build();</span>
+<span class="fc" id="L40">        storageService.createItem(item);</span>
+<span class="fc" id="L41">        return ResponseEntity.ok().build();</span>
     }
 
     @PutMapping(&quot;/{item_id}&quot;)
     public ResponseEntity&lt;Storage&gt; updateItem( @PathVariable Long item_id,@RequestBody ItemDTORequest itemDetails){
-<span class="fc" id="L42">        Storage updateItem =storageService.updateItem(item_id,itemDetails);</span>
-<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if(updateItem ==null){</span>
-<span class="nc" id="L44">            return ResponseEntity.notFound().build();</span>
+<span class="fc" id="L46">        Storage updateItem =storageService.updateItem(item_id,itemDetails);</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">        if(updateItem ==null){</span>
+<span class="nc" id="L48">            return ResponseEntity.notFound().build();</span>
         }
-<span class="fc" id="L46">        return ResponseEntity.ok(updateItem);</span>
+<span class="fc" id="L50">        return ResponseEntity.ok(updateItem);</span>
     }
 
     @DeleteMapping(&quot;/{item_id}&quot;)
     public ResponseEntity&lt;Void&gt; deleteItem(@PathVariable Long item_id){
-<span class="fc" id="L51">        storageService.deleteItem(item_id);</span>
-<span class="fc" id="L52">        return ResponseEntity.noContent().build();</span>
+<span class="fc" id="L55">        storageService.deleteItem(item_id);</span>
+<span class="fc" id="L56">        return ResponseEntity.noContent().build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

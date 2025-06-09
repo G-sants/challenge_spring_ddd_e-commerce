@@ -23,14 +23,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("auth")
 public class AuthorizationController {
 
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final TokenService tokenService;
+    private final AuthorizationService authorizationService;
+
     @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private TokenService tokenService;
-    @Autowired
-    AuthorizationService authorizationService;
+    public AuthorizationController(
+            AuthenticationManager authenticationManager,
+            UserRepository userRepository,
+            TokenService tokenService,
+            AuthorizationService authorizationService) {
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.tokenService = tokenService;
+        this.authorizationService = authorizationService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Validated AuthorizationDTORequest data) {

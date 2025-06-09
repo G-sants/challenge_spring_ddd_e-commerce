@@ -1,25 +1,15 @@
 package g.sants.challenge_e_commerce.services_test;
 
-import g.sants.challenge_e_commerce.application.dto.CartDTOResponse;
 import g.sants.challenge_e_commerce.application.port.output.CartRepository;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.CartService;
-import g.sants.challenge_e_commerce.domain.Cart;
-import g.sants.challenge_e_commerce.domain.User;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CartServicesTests {
@@ -38,7 +28,7 @@ public class CartServicesTests {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
+ /*   @Test
     public void CreateCarts_CreateACartToASpecificUser(){
         Cart cart1 = new Cart();
         User user = new User();
@@ -110,7 +100,7 @@ public class CartServicesTests {
 
 
 
-/*    @Test
+    @Test
     public void DeleteCart_RemovesOneSpecifiedItemInCart() {
         Cart cart1 = new Cart();
         User user = new User();

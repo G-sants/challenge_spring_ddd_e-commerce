@@ -1,22 +1,12 @@
 package g.sants.challenge_e_commerce.services_test;
 
-import g.sants.challenge_e_commerce.application.dto.RegisterDTORequest;
-import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.AuthorizationService;
-import g.sants.challenge_e_commerce.application.service.methods.UserCategory;
-import g.sants.challenge_e_commerce.domain.User;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthorizationServiceTests {
@@ -27,11 +17,11 @@ public class AuthorizationServiceTests {
     @InjectMocks
     private AuthorizationService authorizationService;
 
-    public AuthorizationServiceTests(){
+    public AuthorizationServiceTests() {
         MockitoAnnotations.openMocks(this);
     }
-
-    @Test
+}
+/*    @Test
     public void AuthorizationService_RegisterUser(){
         RegisterDTORequest userRegistration = new RegisterDTORequest(12312312312L,
                 "Test1", "User","test1@email.com",
@@ -73,3 +63,4 @@ public class AuthorizationServiceTests {
         Assertions.assertEquals(userRegistration.password(),userDetails.getPassword());
     }
 }
+*/

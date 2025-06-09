@@ -21,10 +21,17 @@ import static g.sants.challenge_e_commerce.domain.Cart.updateCartTotals;
 @Service
 public class CartService {
 
+    private final CartRepository cartRepository;
+    private final UserRepository userRepository;
+    private final UserService userService;
+
     @Autowired
-    private CartRepository cartRepository;
-    private UserRepository userRepository;
-    private UserService userService;
+    public CartService(CartRepository cartRepository,UserRepository userRepository,
+                       UserService userService){
+        this.cartRepository = cartRepository;
+        this.userRepository = userRepository;
+        this.userService = userService;
+    }
 
 
     public List<CartDTOResponse> getAllKarts() {
