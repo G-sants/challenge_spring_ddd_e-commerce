@@ -60,4 +60,10 @@ public class UserService {
     public Optional<User> getUserForKart(Long id) {
         return userRepository.findById(id);
     }
+
+
+    User findUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User  not found with id: " + userId));
+    }
 }

@@ -4,11 +4,15 @@
     import com.fasterxml.jackson.annotation.JsonIdentityInfo;
     import com.fasterxml.jackson.annotation.JsonIgnore;
     import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+    import g.sants.challenge_e_commerce.application.dto.CartDTORequest;
+    import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
+    import g.sants.challenge_e_commerce.application.exceptions.errors.ItemNotFoundException;
     import g.sants.challenge_e_commerce.application.service.methods.CartOperations;
     import jakarta.persistence.*;
 
     import java.util.ArrayList;
     import java.util.HashMap;
+    import java.util.Iterator;
     import java.util.List;
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @Entity
@@ -123,5 +127,85 @@
 
         public void removeItem(Item item) {
             items.remove(item);
+        }
+
+        public static void updateCartItems(Cart kart, CartDTORequest kartDetails) {
+            if (!kart.getItems().isEmpty()) {
+                for (ItemDTORequest itemDTO : kartDetails.items()) {
+                    updateExistingItem(kart, itemDTO);
+                }
+            } else {
+                initializeCartItems(kart, kartDetails);
+            }
+        }
+
+        private static void updateExistingItem(Cart kart, ItemDTORequest itemDTO) {
+            for (Item item : kart.getItems()) {
+                if (item.getItemName().equalsIgnoreCase(itemDTO.itemName())) {
+                    item.setQuantity(item.getQuantity() + itemDTO.quantity());
+                    updateCartTotals(kart);
+                    return;
+                }
+            }
+            addNewItem(kart, itemDTO);
+        }
+
+        private static void addNewItem(Cart kart, ItemDTORequest itemDTO) {
+            Item newItem = new Item();
+            newItem.setItemName(itemDTO.itemName());
+            newItem.setPrice(itemDTO.price());
+            newItem.setQuantity(itemDTO.quantity());
+            kart.addItem(newItem);
+        }
+
+        private static void initializeCartItems(Cart kart, CartDTORequest kartDetails) {
+            List<Item> newItemList = new ArrayList<>();
+            kart.setItems(newItemList);
+            for (ItemDTORequest itemDTO : kartDetails.items()) {
+                addNewItem(kart, itemDTO);
+            }
+            updateCartTotals(kart);
+        }
+
+        public static void updateCartTotals(Cart kart) {
+            kart.setTotalPrice();
+            kart.setTotalPriceDiscount();
+            kart.setTotalDiscount();
+        }
+
+        public static void processItemsInCart(Cart cart, CartDTORequest cartDetails) {
+            for (ItemDTORequest itemDTO : cartDetails.items()) {
+                removeItemFromCart(cart, itemDTO);
+            }
+        }
+        private static void removeItemFromCart(Cart cart, ItemDTORequest itemDTO) {
+            Item itemToRemove = findItemInCart(cart, itemDTO);
+            if (itemToRemove != null) {
+                updateItemQuantity(cart, itemToRemove);
+            } else {
+                throw new ItemNotFoundException("Item not found: " + itemDTO.itemName());
+            }
+        }
+
+        private static Item findItemInCart(Cart cart, ItemDTORequest itemDTO) {
+            return cart.getItems().stream()
+                    .filter(item -> item.getItemName().equalsIgnoreCase(itemDTO.itemName()))
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        private static void updateItemQuantity(Cart cart, Item itemToRemove) {
+            Iterator<Item> iterator = cart.getItems().iterator();
+            while (iterator.hasNext()) {
+                Item item = iterator.next();
+                if (item.getItemName().equalsIgnoreCase(itemToRemove.getItemName())) {
+                    if (item.getQuantity() > 1) {
+                        item.setQuantity(item.getQuantity() - 1);
+                    } else {
+                        iterator.remove();
+                    }
+                    break;
+                }
+            }
         }
     }

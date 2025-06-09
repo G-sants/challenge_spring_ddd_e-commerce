@@ -112,15 +112,10 @@ public class User implements UserDetails {
         return carts;
     }
 
-    public void addcart(Cart cart) {
-        carts.add(cart);
-        cart.setUser (this);
+    public UserCategory getCategory() {
+        return category;
     }
 
-    public void removecart(Cart cart) {
-        carts.remove(cart);
-        cart.setUser (null);
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
