@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CartOperations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">challenge_e-commerce</a> &gt; <a href="index.source.html" class="el_package">g.sants.challenge_e_commerce.application.service.methods</a> &gt; <span class="el_source">CartOperations.java</span></div><h1>CartOperations.java</h1><pre class="source lang-java linenums">package g.sants.challenge_e_commerce.application.service.methods;
+
+import g.sants.challenge_e_commerce.domain.Item;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+<span class="nc" id="L9">public class CartOperations {</span>
+
+    public static String dateCreation(){
+<span class="fc" id="L12">        LocalDateTime now = LocalDateTime.now();</span>
+<span class="fc" id="L13">        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;dd-MM-yyyy HH:mm&quot;);</span>
+<span class="fc" id="L14">        String formatedDate = now.format(formatter);</span>
+<span class="fc" id="L15">        return &quot;Created at &quot;+formatedDate;</span>
+    }
+    public static String status(){
+<span class="fc" id="L18">        return &quot;PENDING&quot;;</span>
+    }
+
+     public static double totalPrice(List&lt;Item&gt; userKart) {
+<span class="fc" id="L22">         double totalPrice = 0.0;</span>
+<span class="pc bpc" id="L23" title="1 of 2 branches missed.">         if (userKart != null) {</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">             for (int i = 0; i &lt; userKart.size(); i++) {</span>
+<span class="fc" id="L25">                 totalPrice += userKart.get(i).getPrice() * userKart.get(i).getQuantity();</span>
+             }
+         }
+<span class="fc" id="L28">         return totalPrice;</span>
+     }
+
+    public static double totalPriceDiscount(double totalPrice) {
+<span class="fc" id="L32">        double totalPriceDiscount = 0.0;</span>
+<span class="pc bpc" id="L33" title="3 of 6 branches missed.">        if (totalPrice &gt;=500 &amp; totalPrice &lt;1000){</span>
+<span class="nc" id="L34">            totalPriceDiscount = totalPrice -(totalPrice *0.1);</span>
+<span class="pc bpc" id="L35" title="3 of 6 branches missed.">        }else if (totalPrice &gt;=1000 &amp; totalPrice &lt;5000) {</span>
+<span class="nc" id="L36">            totalPriceDiscount = totalPrice -(totalPrice*0.15);</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        }else if (totalPrice &gt;=5000){</span>
+<span class="nc" id="L38">            totalPriceDiscount = totalPrice - (totalPrice *0.2);</span>
+        } else {
+<span class="fc" id="L40">            totalPriceDiscount = totalPrice;</span>
+        }
+<span class="fc" id="L42">        return totalPriceDiscount;</span>
+    }
+
+    public static double totalDiscount(double totalPrice){
+<span class="fc" id="L46">        double totalDiscount = 0.0;</span>
+<span class="pc bpc" id="L47" title="3 of 6 branches missed.">        if (totalPrice &gt;=500 &amp; totalPrice &lt;1000){</span>
+<span class="nc" id="L48">            totalDiscount = (totalPrice *0.1);</span>
+<span class="pc bpc" id="L49" title="3 of 6 branches missed.">        }else if (totalPrice &gt;=1000 &amp; totalPrice &lt;5000) {</span>
+<span class="nc" id="L50">            totalDiscount = (totalPrice*0.15);</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        }else if (totalPrice &gt;=5000){</span>
+<span class="nc" id="L52">            totalDiscount = (totalPrice *0.2);</span>
+        } else {
+<span class="fc" id="L54">            totalDiscount = 0.0;</span>
+        }
+<span class="fc" id="L56">        return totalDiscount;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

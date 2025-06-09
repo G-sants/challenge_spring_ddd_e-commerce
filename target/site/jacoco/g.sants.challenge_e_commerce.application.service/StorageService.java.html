@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StorageService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">challenge_e-commerce</a> &gt; <a href="index.source.html" class="el_package">g.sants.challenge_e_commerce.application.service</a> &gt; <span class="el_source">StorageService.java</span></div><h1>StorageService.java</h1><pre class="source lang-java linenums">package g.sants.challenge_e_commerce.application.service;
+
+import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
+import g.sants.challenge_e_commerce.application.dto.ItemDTOResponse;
+import g.sants.challenge_e_commerce.application.exceptions.errors.ItemNotFoundException;
+import g.sants.challenge_e_commerce.application.exceptions.errors.WrongItemEntryException;
+import g.sants.challenge_e_commerce.application.port.output.StorageRepository;
+import g.sants.challenge_e_commerce.domain.Storage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+<span class="fc" id="L17">public class StorageService {</span>
+
+    @Autowired
+    private StorageRepository storageRepository;
+
+    public List&lt;ItemDTOResponse&gt; getAllItems() {
+<span class="fc" id="L23">        return storageRepository.findAll().stream()</span>
+<span class="fc" id="L24">                .map(ItemDTOResponse::new)</span>
+<span class="fc" id="L25">                .collect(Collectors.toList());</span>
+    }
+
+    public ItemDTOResponse getItem(Long id) {
+<span class="fc" id="L29">        Optional&lt;Storage&gt; item = storageRepository.findById(id);</span>
+<span class="fc" id="L30">        return item.map(ItemDTOResponse::new)</span>
+<span class="fc" id="L31">                .orElseThrow(ItemNotFoundException::new);</span>
+    }
+
+    public Storage createItem(ItemDTORequest data) {
+<span class="nc" id="L35">        Storage item = new Storage(data.itemName(),data.price(), data.quantity());</span>
+<span class="nc" id="L36">        return storageRepository.save(item);</span>
+    }
+
+    public Storage updateItem(Long item_id, ItemDTORequest itemDetails) {
+<span class="fc" id="L40">        Storage item = storageRepository.findById(item_id)</span>
+<span class="fc" id="L41">                    .orElseThrow(ItemNotFoundException::new);</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        if (item != null) {</span>
+<span class="fc" id="L43">            item.setName(itemDetails.itemName());</span>
+<span class="fc" id="L44">            item.setPrice(itemDetails.price());</span>
+<span class="fc" id="L45">            item.setQuantity(itemDetails.quantity());</span>
+<span class="fc" id="L46">            return storageRepository.save(item);</span>
+        }
+<span class="nc" id="L48">        throw new WrongItemEntryException();</span>
+    }
+
+
+    public void deleteItem(Long item_id) {
+<span class="nc" id="L53">        Optional&lt;Optional&lt;Storage&gt;&gt; item = Optional.of(storageRepository.findById(item_id));</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        if (item != null){</span>
+<span class="nc" id="L55">            storageRepository.deleteById(item_id);</span>
+        }
+<span class="nc" id="L57">        throw new ItemNotFoundException();</span>
+    }
+
+    public Storage findItemByName(String name){
+<span class="nc" id="L61">        return storageRepository.findByName(name);</span>
+    }
+
+    public void saveItemInStorage(Storage storage){
+<span class="nc" id="L65">        storageRepository.save(storage);</span>
+<span class="nc" id="L66">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
