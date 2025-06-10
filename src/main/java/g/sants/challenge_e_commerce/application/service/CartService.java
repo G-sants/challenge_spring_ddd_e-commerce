@@ -49,26 +49,26 @@ public class CartService {
                 .orElseThrow(() -> new RuntimeException("Order not Found"));
     }
 
-    public CartDTOResponse createKart(Long id, Cart kart) {
+    public CartDTOResponse createKart(Long id, Cart cart) {
         Optional<User> user = userRepository.findById(id);
         if(user.isPresent()) {
-            kart.setUser(user.get());
-            kart.setTotalPrice();
-            kart.setTotalPriceDiscount();
-            kart.setTotalDiscount();
-            cartRepository.save(kart);
-            return new CartDTOResponse(kart);
+            cart.setUser(user.get());
+            cart.setTotalPrice();
+            cart.setTotalPriceDiscount();
+            cart.setTotalDiscount();
+            cartRepository.save(cart);
+            return new CartDTOResponse(cart);
         }
         throw new UserNotFoundException();
     }
 
-    public Cart updateKart(Long id, Long kart_id, CartDTORequest kartDetails) {
+    public Cart updateKart(Long id, Long kart_id, CartDTORequest cartDetails) {
         Optional<User> optionalUser = userRepository.findById(id);
         if(optionalUser.isPresent()) {
             Optional<Cart> optionalKart = cartRepository.findById(kart_id);
             if (optionalKart.isPresent()) {
                 Cart kart = optionalKart.get();
-                Cart.updateCartItems(kart, kartDetails);
+                Cart.updateCartItems(kart, cartDetails);
                 return cartRepository.save(kart);
             }
             throw new OrderNotFoundException();
