@@ -2,6 +2,7 @@ package g.sants.challenge_e_commerce.adapter.security.config;
 
 import g.sants.challenge_e_commerce.adapter.security.methods.SecurityCategory;
 import g.sants.challenge_e_commerce.application.port.filters.SecurityFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,6 +23,7 @@ public class SecurityConfig {
 
     private final SecurityFilter securityFilter;
 
+    @Autowired
     public SecurityConfig(SecurityFilter securityFilter){
         this.securityFilter = securityFilter;
     }
@@ -30,7 +32,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain
             (HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .csrf(AbstractHttpConfigurer::disable) //CSRF protection is disabled because the application is stateless and uses Bearer tokens for authentication.
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session ->session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
