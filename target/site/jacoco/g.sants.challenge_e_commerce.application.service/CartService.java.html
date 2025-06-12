@@ -49,26 +49,26 @@ public class CartService {
 <span class="nc" id="L49">                .orElseThrow(() -&gt; new RuntimeException(&quot;Order not Found&quot;));</span>
     }
 
-    public CartDTOResponse createKart(Long id, Cart kart) {
+    public CartDTOResponse createKart(Long id, Cart cart) {
 <span class="nc" id="L53">        Optional&lt;User&gt; user = userRepository.findById(id);</span>
 <span class="nc bnc" id="L54" title="All 2 branches missed.">        if(user.isPresent()) {</span>
-<span class="nc" id="L55">            kart.setUser(user.get());</span>
-<span class="nc" id="L56">            kart.setTotalPrice();</span>
-<span class="nc" id="L57">            kart.setTotalPriceDiscount();</span>
-<span class="nc" id="L58">            kart.setTotalDiscount();</span>
-<span class="nc" id="L59">            cartRepository.save(kart);</span>
-<span class="nc" id="L60">            return new CartDTOResponse(kart);</span>
+<span class="nc" id="L55">            cart.setUser(user.get());</span>
+<span class="nc" id="L56">            cart.setTotalPrice();</span>
+<span class="nc" id="L57">            cart.setTotalPriceDiscount();</span>
+<span class="nc" id="L58">            cart.setTotalDiscount();</span>
+<span class="nc" id="L59">            cartRepository.save(cart);</span>
+<span class="nc" id="L60">            return new CartDTOResponse(cart);</span>
         }
 <span class="nc" id="L62">        throw new UserNotFoundException();</span>
     }
 
-    public Cart updateKart(Long id, Long kart_id, CartDTORequest kartDetails) {
+    public Cart updateKart(Long id, Long kart_id, CartDTORequest cartDetails) {
 <span class="nc" id="L66">        Optional&lt;User&gt; optionalUser = userRepository.findById(id);</span>
 <span class="nc bnc" id="L67" title="All 2 branches missed.">        if(optionalUser.isPresent()) {</span>
 <span class="nc" id="L68">            Optional&lt;Cart&gt; optionalKart = cartRepository.findById(kart_id);</span>
 <span class="nc bnc" id="L69" title="All 2 branches missed.">            if (optionalKart.isPresent()) {</span>
 <span class="nc" id="L70">                Cart kart = optionalKart.get();</span>
-<span class="nc" id="L71">                Cart.updateCartItems(kart, kartDetails);</span>
+<span class="nc" id="L71">                Cart.updateCartItems(kart, cartDetails);</span>
 <span class="nc" id="L72">                return cartRepository.save(kart);</span>
             }
 <span class="nc" id="L74">            throw new OrderNotFoundException();</span>

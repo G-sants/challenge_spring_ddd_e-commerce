@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Table(name = &quot;users&quot;)
+@Table(name = &quot;user&quot;)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = &quot;id&quot;)
 @Entity
 public class User implements UserDetails {
@@ -89,16 +89,16 @@ public class User implements UserDetails {
     }
 
     public void setName(String name) {
-<span class="fc" id="L92">        this.name = name;</span>
-<span class="fc" id="L93">    }</span>
+<span class="nc" id="L92">        this.name = name;</span>
+<span class="nc" id="L93">    }</span>
 
     public String getLastName() {
 <span class="fc" id="L96">        return lastName;</span>
     }
 
     public void setLastName(String lastName) {
-<span class="fc" id="L100">        this.lastName = lastName;</span>
-<span class="fc" id="L101">    }</span>
+<span class="nc" id="L100">        this.lastName = lastName;</span>
+<span class="nc" id="L101">    }</span>
 
     public String getEmail() {
 <span class="fc" id="L104">        return email;</span>

@@ -2,13 +2,13 @@
 
 import g.sants.challenge_e_commerce.application.dto.RegisterDTORequest;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
-import g.sants.challenge_e_commerce.application.exceptions.errors.LoginException;
 import g.sants.challenge_e_commerce.application.exceptions.errors.RegistrationAlreadyDoneException;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +23,10 @@ public class AuthorizationService implements UserDetailsService {
 <span class="fc" id="L23">    }</span>
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws LoginException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 <span class="nc" id="L27">        UserDetails userDetails = userRepository.findByEmail(email);</span>
 <span class="nc bnc" id="L28" title="All 2 branches missed.">        if (userDetails == null) {</span>
-<span class="nc" id="L29">            throw new LoginException();</span>
+<span class="nc" id="L29">            throw new UsernameNotFoundException(&quot;User not Found&quot;);</span>
         }
 <span class="nc" id="L31">        return userDetails;</span>
     }

@@ -1,6 +1,6 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 challenge_e-commerce,g.sants.challenge_e_commerce.domain,Cart,226,73,20,0,65,27,26,14,16,14
-challenge_e-commerce,g.sants.challenge_e_commerce.domain,User,15,157,1,1,5,47,3,21,2,21
+challenge_e-commerce,g.sants.challenge_e_commerce.domain,User,23,149,1,1,9,43,5,19,4,19
 challenge_e-commerce,g.sants.challenge_e_commerce.domain,Storage,0,43,0,0,0,18,0,10,0,10
 challenge_e-commerce,g.sants.challenge_e_commerce.domain,Item,0,50,0,0,0,21,0,12,0,12
 challenge_e-commerce,g.sants.challenge_e_commerce.adapter.messages.config,MessageConfig,0,19,0,0,0,4,0,5,0,5
@@ -39,5 +39,5 @@ challenge_e-commerce,g.sants.challenge_e_commerce.application.service,CartServic
 challenge_e-commerce,g.sants.challenge_e_commerce.application.service,TokenService,48,3,0,0,19,1,3,1,3,1
 challenge_e-commerce,g.sants.challenge_e_commerce.application.service,StorageService,93,6,2,0,21,3,8,1,7,1
 challenge_e-commerce,g.sants.challenge_e_commerce.application.service,UserService,116,6,2,0,28,3,9,1,8,1
-challenge_e-commerce,g.sants.challenge_e_commerce.application.service,AuthorizationService,55,6,4,0,11,3,4,1,2,1
+challenge_e-commerce,g.sants.challenge_e_commerce.application.service,AuthorizationService,56,6,4,0,11,3,4,1,2,1
 challenge_e-commerce,g.sants.challenge_e_commerce.adapter.messages.listener,OrderCreatedListener,15,9,2,0,3,2,3,1,2,1

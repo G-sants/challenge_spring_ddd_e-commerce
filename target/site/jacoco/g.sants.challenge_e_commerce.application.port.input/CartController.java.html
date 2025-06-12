@@ -33,79 +33,80 @@ public class CartController {
     private final UserService userService;
     private final StorageService storageService;
     private final RabbitTemplate rabbitTemplate;
+
     @Autowired
     public CartController(
             CartService kartService,
             UserService userService,
             StorageService storageService,
-<span class="fc" id="L41">            RabbitTemplate rabbitTemplate) {</span>
-<span class="fc" id="L42">        this.kartService = kartService;</span>
-<span class="fc" id="L43">        this.userService = userService;</span>
-<span class="fc" id="L44">        this.storageService = storageService;</span>
-<span class="fc" id="L45">        this.rabbitTemplate = rabbitTemplate;</span>
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L42">            RabbitTemplate rabbitTemplate) {</span>
+<span class="fc" id="L43">        this.kartService = kartService;</span>
+<span class="fc" id="L44">        this.userService = userService;</span>
+<span class="fc" id="L45">        this.storageService = storageService;</span>
+<span class="fc" id="L46">        this.rabbitTemplate = rabbitTemplate;</span>
+<span class="fc" id="L47">    }</span>
 
     @GetMapping(&quot;/user/{user_id}&quot;)
     public List&lt;CartDTOResponse&gt; getAllKarts(@PathVariable Long user_id) {
-<span class="fc" id="L50">        return kartService.getAllKarts(user_id);</span>
+<span class="fc" id="L51">        return kartService.getAllKarts(user_id);</span>
     }
 
     @GetMapping(&quot;/user/{user_id}/kart/{kart_id}&quot;)
     public ResponseEntity&lt;CartDTOResponse&gt; getKartById(@PathVariable Long user_id,
                                                        @PathVariable Long kart_id) {
-<span class="fc" id="L56">        UserDTOResponse user = userService.getUser(user_id);</span>
-<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (user == null) {</span>
-<span class="nc" id="L58">            throw new UserNotFoundException();</span>
+<span class="fc" id="L57">        UserDTOResponse user = userService.getUser(user_id);</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L59">            throw new UserNotFoundException();</span>
         }
-<span class="fc" id="L60">        CartDTOResponse kart = kartService.getKart(kart_id);</span>
-<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (kart == null) {</span>
-<span class="nc" id="L62">            throw new OrderNotFoundException();</span>
+<span class="fc" id="L61">        CartDTOResponse kart = kartService.getKart(kart_id);</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if (kart == null) {</span>
+<span class="nc" id="L63">            throw new OrderNotFoundException();</span>
         }
-<span class="fc" id="L64">        return ResponseEntity.ok(kart);</span>
+<span class="fc" id="L65">        return ResponseEntity.ok(kart);</span>
     }
 
     @PostMapping(&quot;/user/{user_id}&quot;)
     public ResponseEntity&lt;Object&gt; createKart(@PathVariable Long user_id, @RequestBody List&lt;Item&gt; items) throws Exception {
-<span class="fc" id="L69">        Cart kart = new Cart();</span>
+<span class="fc" id="L70">        Cart kart = new Cart();</span>
 
-<span class="fc bfc" id="L71" title="All 2 branches covered.">        for (Item item : items) {</span>
-<span class="fc" id="L72">            kart.addItem(item);</span>
-<span class="fc" id="L73">        }</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        for (Item item : items) {</span>
+<span class="fc" id="L73">            kart.addItem(item);</span>
+<span class="fc" id="L74">        }</span>
 
-<span class="fc" id="L75">        Optional&lt;User&gt; user = userService.getUserForKart(user_id);</span>
+<span class="fc" id="L76">        Optional&lt;User&gt; user = userService.getUserForKart(user_id);</span>
         CartDTOResponse createdKart;
-<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        if (user.isPresent()) {</span>
-<span class="fc" id="L78">            kart.setUser(user.get());</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (user.isPresent()) {</span>
+<span class="fc" id="L79">            kart.setUser(user.get());</span>
 
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">            for (int i =0;i&lt;kart.getItems().size();i++) {</span>
-<span class="fc" id="L81">                Item itemCheck = kart.getItems().get(i);</span>
-<span class="fc" id="L82">                Storage itemVer = storageService.findItemByName(itemCheck.getItemName());</span>
-<span class="pc bpc" id="L83" title="2 of 4 branches missed.">                if (itemVer != null &amp; itemVer.getName().equalsIgnoreCase(itemCheck.getItemName())) {</span>
-<span class="fc" id="L84">                    int storageCont = Integer.signum(itemVer.getQuantity() - itemCheck.getQuantity());</span>
-<span class="pc bpc" id="L85" title="3 of 4 branches missed.">                    switch (storageCont) {</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">            for (int i =0;i&lt;kart.getItems().size();i++) {</span>
+<span class="fc" id="L82">                Item itemCheck = kart.getItems().get(i);</span>
+<span class="fc" id="L83">                Storage itemVer = storageService.findItemByName(itemCheck.getItemName());</span>
+<span class="pc bpc" id="L84" title="2 of 4 branches missed.">                if (itemVer != null &amp; itemVer.getName().equalsIgnoreCase(itemCheck.getItemName())) {</span>
+<span class="fc" id="L85">                    int storageCont = Integer.signum(itemVer.getQuantity() - itemCheck.getQuantity());</span>
+<span class="pc bpc" id="L86" title="3 of 4 branches missed.">                    switch (storageCont) {</span>
                         case 1:
-<span class="fc" id="L87">                            itemVer.setQuantity(itemVer.getQuantity()-itemCheck.getQuantity());</span>
-<span class="fc" id="L88">                            storageService.saveItemInStorage(itemVer);</span>
-<span class="fc" id="L89">                            createdKart = kartService.createKart(user_id, kart);</span>
+<span class="fc" id="L88">                            itemVer.setQuantity(itemVer.getQuantity()-itemCheck.getQuantity());</span>
+<span class="fc" id="L89">                            storageService.saveItemInStorage(itemVer);</span>
+<span class="fc" id="L90">                            createdKart = kartService.createKart(user_id, kart);</span>
 
-<span class="fc" id="L91">                            rabbitTemplate.convertAndSend(MessageCategory.ORDER_CREATED,kart.getUser().getName());</span>
-<span class="fc" id="L92">                            return ResponseEntity.status(HttpStatus.CREATED).body(createdKart);</span>
+<span class="fc" id="L92">                            rabbitTemplate.convertAndSend(MessageCategory.ORDER_CREATED,kart.getUser().getName());</span>
+<span class="fc" id="L93">                            return ResponseEntity.status(HttpStatus.CREATED).body(createdKart);</span>
 
                         case 0:
-<span class="nc" id="L95">                            itemVer.setQuantity(-itemCheck.getQuantity());</span>
-<span class="nc" id="L96">                            storageService.saveItemInStorage(itemVer);</span>
-<span class="nc" id="L97">                            return ResponseEntity.status(HttpStatus.CREATED).body(&quot;Order was made, but stock is now empty&quot;);</span>
+<span class="nc" id="L96">                            itemVer.setQuantity(-itemCheck.getQuantity());</span>
+<span class="nc" id="L97">                            storageService.saveItemInStorage(itemVer);</span>
+<span class="nc" id="L98">                            return ResponseEntity.status(HttpStatus.CREATED).body(&quot;Order was made, but stock is now empty&quot;);</span>
 
                         case -1:
-<span class="nc" id="L100">                            return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).body(&quot;Error adding to kart, item&quot;+ itemVer.getName()+</span>
+<span class="nc" id="L101">                            return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).body(&quot;Error adding to kart, item&quot;+ itemVer.getName()+</span>
                                     &quot; is out of stock&quot;);
                     }
                 }
             }
 
-<span class="nc" id="L106">            throw new ItemNotFoundException();</span>
+<span class="nc" id="L107">            throw new ItemNotFoundException();</span>
         } else {
-<span class="nc" id="L108">            throw new UserNotFoundException();</span>
+<span class="nc" id="L109">            throw new UserNotFoundException();</span>
         }
     }
 
@@ -113,102 +114,102 @@ public class CartController {
     public ResponseEntity&lt;Object&gt; updatedKart(@PathVariable Long user_id, @PathVariable Long kart_id,
                                             @RequestBody CartDTORequest kartDetails) {
 
-<span class="fc" id="L116">        UserDTOResponse user = userService.getUser(user_id);</span>
-<span class="pc bpc" id="L117" title="1 of 2 branches missed.">        if (user == null){</span>
-<span class="nc" id="L118">            throw new UserNotFoundException();</span>
+<span class="fc" id="L117">        UserDTOResponse user = userService.getUser(user_id);</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        if (user == null){</span>
+<span class="nc" id="L119">            throw new UserNotFoundException();</span>
         }
 
-<span class="fc" id="L121">        CartDTOResponse kart = kartService.getKart(kart_id);</span>
-<span class="pc bpc" id="L122" title="1 of 2 branches missed.">        if (kart == null) {</span>
-<span class="nc" id="L123">            throw new OrderNotFoundException();</span>
+<span class="fc" id="L122">        CartDTOResponse kart = kartService.getKart(kart_id);</span>
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">        if (kart == null) {</span>
+<span class="nc" id="L124">            throw new OrderNotFoundException();</span>
         }
 
-<span class="fc" id="L126">        String kartValidate = kart.status();</span>
-<span class="pc bpc" id="L127" title="1 of 2 branches missed.">        if (&quot;PENDING&quot;.equals(kartValidate)) {</span>
-<span class="fc" id="L128">            Cart updateKart = kartService.updateKart(user_id, kart_id, kartDetails);</span>
-<span class="pc bpc" id="L129" title="1 of 2 branches missed.">             if (updateKart == null) {</span>
-<span class="nc" id="L130">                return ResponseEntity.notFound().build();</span>
+<span class="fc" id="L127">        String kartValidate = kart.status();</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">        if (&quot;PENDING&quot;.equals(kartValidate)) {</span>
+<span class="fc" id="L129">            Cart updateKart = kartService.updateKart(user_id, kart_id, kartDetails);</span>
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">             if (updateKart == null) {</span>
+<span class="nc" id="L131">                return ResponseEntity.notFound().build();</span>
             }
 
-<span class="pc bpc" id="L133" title="1 of 2 branches missed.">            for(int i =0;i&lt;kart.items().size();i++){</span>
-<span class="fc" id="L134">                ItemDTORequest itemCheck = kartDetails.items().get(i);</span>
-<span class="fc" id="L135">                Storage itemVer = storageService.findItemByName(itemCheck.itemName());</span>
-<span class="pc bpc" id="L136" title="2 of 4 branches missed.">                if (itemVer != null &amp; itemVer.getName().equalsIgnoreCase(itemCheck.itemName())) {</span>
-<span class="fc" id="L137">                    int storageCont = Integer.signum(itemVer.getQuantity() - itemCheck.quantity());</span>
-<span class="pc bpc" id="L138" title="3 of 4 branches missed.">                    switch (storageCont) {</span>
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">            for(int i =0;i&lt;kart.items().size();i++){</span>
+<span class="fc" id="L135">                ItemDTORequest itemCheck = kartDetails.items().get(i);</span>
+<span class="fc" id="L136">                Storage itemVer = storageService.findItemByName(itemCheck.itemName());</span>
+<span class="pc bpc" id="L137" title="2 of 4 branches missed.">                if (itemVer != null &amp; itemVer.getName().equalsIgnoreCase(itemCheck.itemName())) {</span>
+<span class="fc" id="L138">                    int storageCont = Integer.signum(itemVer.getQuantity() - itemCheck.quantity());</span>
+<span class="pc bpc" id="L139" title="3 of 4 branches missed.">                    switch (storageCont) {</span>
                         case 1:
-<span class="fc" id="L140">                            itemVer.setQuantity(itemVer.getQuantity()-itemCheck.quantity());</span>
-<span class="fc" id="L141">                            storageService.saveItemInStorage(itemVer);</span>
-<span class="fc" id="L142">                            return ResponseEntity.ok(updateKart);</span>
+<span class="fc" id="L141">                            itemVer.setQuantity(itemVer.getQuantity()-itemCheck.quantity());</span>
+<span class="fc" id="L142">                            storageService.saveItemInStorage(itemVer);</span>
+<span class="fc" id="L143">                            return ResponseEntity.ok(updateKart);</span>
                         case 0: 
-<span class="nc" id="L144">                            itemVer.setQuantity(0);</span>
-<span class="nc" id="L145">                            storageService.saveItemInStorage(itemVer);</span>
-<span class="nc" id="L146">                            return ResponseEntity.status(HttpStatus.ACCEPTED).body(&quot;Order was made, but stock is now empty&quot;);</span>
+<span class="nc" id="L145">                            itemVer.setQuantity(0);</span>
+<span class="nc" id="L146">                            storageService.saveItemInStorage(itemVer);</span>
+<span class="nc" id="L147">                            return ResponseEntity.status(HttpStatus.ACCEPTED).body(&quot;Order was made, but stock is now empty&quot;);</span>
                         case -1:
-<span class="nc" id="L148">                            return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).body(&quot;Error adding to kart, item&quot;+ itemVer.getName()+</span>
+<span class="nc" id="L149">                            return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).body(&quot;Error adding to kart, item&quot;+ itemVer.getName()+</span>
                                     &quot; is out of stock&quot;);
                     }
                 }
             }
-<span class="nc" id="L153">        } throw new OrderCancelledException();</span>
+<span class="nc" id="L154">        } throw new OrderCancelledException();</span>
     }
 
     @PutMapping(&quot;/remove/user/{user_id}/kart/{kart_id}&quot;)
     public ResponseEntity&lt;Object&gt; deletedKart(@PathVariable Long user_id, @PathVariable Long kart_id,
                                             @RequestBody CartDTORequest kartDetails) {
 
-<span class="fc" id="L160">        UserDTOResponse user = userService.getUser(user_id);</span>
-<span class="pc bpc" id="L161" title="1 of 2 branches missed.">        if (user == null){</span>
-<span class="nc" id="L162">            throw new UserNotFoundException();</span>
+<span class="fc" id="L161">        UserDTOResponse user = userService.getUser(user_id);</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">        if (user == null){</span>
+<span class="nc" id="L163">            throw new UserNotFoundException();</span>
         }
 
-<span class="fc" id="L165">        CartDTOResponse kart = kartService.getKart(kart_id);</span>
-<span class="pc bpc" id="L166" title="1 of 2 branches missed.">        if (kart == null) {</span>
-<span class="nc" id="L167">            throw new OrderNotFoundException();</span>
+<span class="fc" id="L166">        CartDTOResponse kart = kartService.getKart(kart_id);</span>
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">        if (kart == null) {</span>
+<span class="nc" id="L168">            throw new OrderNotFoundException();</span>
         }
 
-<span class="fc" id="L170">        String kartValidate = kart.status();</span>
-<span class="pc bpc" id="L171" title="1 of 2 branches missed.">        if (&quot;PENDING&quot;.equals(kartValidate)) {</span>
-<span class="fc" id="L172">            Cart updatedKart = kartService.deletedKart(user_id, kart_id, kartDetails);</span>
-<span class="pc bpc" id="L173" title="1 of 2 branches missed.">            if (updatedKart == null) {</span>
-<span class="nc" id="L174">                return ResponseEntity.notFound().build();</span>
+<span class="fc" id="L171">        String kartValidate = kart.status();</span>
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">        if (&quot;PENDING&quot;.equals(kartValidate)) {</span>
+<span class="fc" id="L173">            Cart updatedKart = kartService.deletedKart(user_id, kart_id, kartDetails);</span>
+<span class="pc bpc" id="L174" title="1 of 2 branches missed.">            if (updatedKart == null) {</span>
+<span class="nc" id="L175">                return ResponseEntity.notFound().build();</span>
             }
-<span class="pc bpc" id="L176" title="1 of 2 branches missed.">            for(int i =0;i&lt;kart.items().size();i++){</span>
-<span class="fc" id="L177">                ItemDTORequest itemCheck = kart.items().get(i);</span>
-<span class="fc" id="L178">                Item itemVer = updatedKart.getItems().get(i);</span>
-<span class="pc bpc" id="L179" title="2 of 4 branches missed.">                if (itemVer != null &amp; itemVer.getItemName().equalsIgnoreCase(itemCheck.itemName())) {</span>
-<span class="fc" id="L180">                    itemVer.setQuantity(+1);</span>
-<span class="fc" id="L181">                    Storage savedItem = storageService.findItemByName(itemVer.getItemName());</span>
-<span class="fc" id="L182">                    savedItem.setQuantity(itemVer.getQuantity());</span>
-<span class="fc" id="L183">                    storageService.saveItemInStorage(savedItem);</span>
-<span class="fc" id="L184">                    return ResponseEntity.ok(updatedKart);</span>
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">            for(int i =0;i&lt;kart.items().size();i++){</span>
+<span class="fc" id="L178">                ItemDTORequest itemCheck = kart.items().get(i);</span>
+<span class="fc" id="L179">                Item itemVer = updatedKart.getItems().get(i);</span>
+<span class="pc bpc" id="L180" title="2 of 4 branches missed.">                if (itemVer != null &amp; itemVer.getItemName().equalsIgnoreCase(itemCheck.itemName())) {</span>
+<span class="fc" id="L181">                    itemVer.setQuantity(+1);</span>
+<span class="fc" id="L182">                    Storage savedItem = storageService.findItemByName(itemVer.getItemName());</span>
+<span class="fc" id="L183">                    savedItem.setQuantity(itemVer.getQuantity());</span>
+<span class="fc" id="L184">                    storageService.saveItemInStorage(savedItem);</span>
+<span class="fc" id="L185">                    return ResponseEntity.ok(updatedKart);</span>
                 }
             }
-<span class="nc" id="L187">        } throw new OrderCancelledException();</span>
+<span class="nc" id="L188">        } throw new OrderCancelledException();</span>
     }
 
     @PutMapping(&quot;/cancel/user/{user_id}/kart/{kart_id}&quot;)
     public ResponseEntity&lt;Cart&gt; newStatus(@PathVariable Long user_id, @PathVariable Long kart_id,
                                           @RequestBody CartDTORequest kartDetails) {
 
-<span class="fc" id="L194">        UserDTOResponse user = userService.getUser(user_id);</span>
-<span class="pc bpc" id="L195" title="1 of 2 branches missed.">        if (user == null){</span>
-<span class="nc" id="L196">            throw new UserNotFoundException();</span>
+<span class="fc" id="L195">        UserDTOResponse user = userService.getUser(user_id);</span>
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">        if (user == null){</span>
+<span class="nc" id="L197">            throw new UserNotFoundException();</span>
         }
 
-<span class="fc" id="L199">        CartDTOResponse kart = kartService.getKart(kart_id);</span>
-<span class="pc bpc" id="L200" title="1 of 2 branches missed.">        if (kart == null) {</span>
-<span class="nc" id="L201">            throw new OrderNotFoundException();</span>
+<span class="fc" id="L200">        CartDTOResponse kart = kartService.getKart(kart_id);</span>
+<span class="pc bpc" id="L201" title="1 of 2 branches missed.">        if (kart == null) {</span>
+<span class="nc" id="L202">            throw new OrderNotFoundException();</span>
         }
 
-<span class="fc" id="L204">        String kartValidate = kart.status();</span>
-<span class="pc bpc" id="L205" title="1 of 2 branches missed.">        if (&quot;PENDING&quot;.equals(kartValidate)) {</span>
-<span class="fc" id="L206">            Cart updatedKart = kartService.deleteKart(user_id, kart_id, kartDetails);</span>
-<span class="pc bpc" id="L207" title="1 of 2 branches missed.">            if (updatedKart == null) {</span>
-<span class="nc" id="L208">                return ResponseEntity.notFound().build();</span>
+<span class="fc" id="L205">        String kartValidate = kart.status();</span>
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">        if (&quot;PENDING&quot;.equals(kartValidate)) {</span>
+<span class="fc" id="L207">            Cart updatedKart = kartService.deleteKart(user_id, kart_id, kartDetails);</span>
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">            if (updatedKart == null) {</span>
+<span class="nc" id="L209">                return ResponseEntity.notFound().build();</span>
             }
-<span class="fc" id="L210">            return ResponseEntity.ok(updatedKart);</span>
-<span class="nc" id="L211">        } throw new OrderCancelledException();</span>
+<span class="fc" id="L211">            return ResponseEntity.ok(updatedKart);</span>
+<span class="nc" id="L212">        } throw new OrderCancelledException();</span>
     }
 
 }

@@ -2,6 +2,7 @@
 
 import g.sants.challenge_e_commerce.adapter.security.methods.SecurityCategory;
 import g.sants.challenge_e_commerce.application.port.filters.SecurityFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,40 +23,41 @@ public class SecurityConfig {
 
     private final SecurityFilter securityFilter;
 
-<span class="fc" id="L25">    public SecurityConfig(SecurityFilter securityFilter){</span>
-<span class="fc" id="L26">        this.securityFilter = securityFilter;</span>
-<span class="fc" id="L27">    }</span>
+    @Autowired
+<span class="fc" id="L27">    public SecurityConfig(SecurityFilter securityFilter){</span>
+<span class="fc" id="L28">        this.securityFilter = securityFilter;</span>
+<span class="fc" id="L29">    }</span>
 
     @Bean
     public SecurityFilterChain securityFilterChain
             (HttpSecurity httpSecurity) throws Exception {
-<span class="fc" id="L32">        return httpSecurity</span>
-<span class="fc" id="L33">                .csrf(AbstractHttpConfigurer::disable) //CSRF protection is disabled because the application is stateless and uses Bearer tokens for authentication.</span>
-<span class="fc" id="L34">                .sessionManagement(session -&gt;session</span>
-<span class="fc" id="L35">                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))</span>
-<span class="fc" id="L36">                .authorizeHttpRequests(authorize -&gt; authorize</span>
-<span class="fc" id="L37">                        .requestMatchers(HttpMethod.POST,&quot;/auth/login&quot;).permitAll()</span>
-<span class="fc" id="L38">                        .requestMatchers(HttpMethod.POST,&quot;/auth/register&quot;).permitAll()</span>
-<span class="fc" id="L39">                        .requestMatchers(HttpMethod.POST, SecurityCategory.ITEM_P1).hasRole(SecurityCategory.ADMIN_ROLE)</span>
-<span class="fc" id="L40">                        .requestMatchers(HttpMethod.PUT,SecurityCategory.ITEM_P1).hasRole(SecurityCategory.ADMIN_ROLE)</span>
-<span class="fc" id="L41">                        .requestMatchers(HttpMethod.DELETE,SecurityCategory.ITEM_P1).hasRole(SecurityCategory.ADMIN_ROLE)</span>
-<span class="fc" id="L42">                        .requestMatchers(HttpMethod.GET,&quot;/users&quot;).hasRole(SecurityCategory.ADMIN_ROLE)</span>
-<span class="fc" id="L43">                        .requestMatchers(HttpMethod.DELETE,&quot;/users&quot;).hasRole(SecurityCategory.ADMIN_ROLE)</span>
-<span class="fc" id="L44">                        .requestMatchers(HttpMethod.PUT,&quot;/users/{id}&quot;).hasRole(SecurityCategory.ADMIN_ROLE)</span>
-<span class="fc" id="L45">                        .anyRequest().fullyAuthenticated())</span>
+<span class="fc" id="L34">        return httpSecurity</span>
+<span class="fc" id="L35">                .csrf(AbstractHttpConfigurer::disable)</span>
+<span class="fc" id="L36">                .sessionManagement(session -&gt;session</span>
+<span class="fc" id="L37">                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))</span>
+<span class="fc" id="L38">                .authorizeHttpRequests(authorize -&gt; authorize</span>
+<span class="fc" id="L39">                        .requestMatchers(HttpMethod.POST,&quot;/auth/login&quot;).permitAll()</span>
+<span class="fc" id="L40">                        .requestMatchers(HttpMethod.POST,&quot;/auth/register&quot;).permitAll()</span>
+<span class="fc" id="L41">                        .requestMatchers(HttpMethod.POST, SecurityCategory.ITEM_P1).hasRole(SecurityCategory.ADMIN_ROLE)</span>
+<span class="fc" id="L42">                        .requestMatchers(HttpMethod.PUT,SecurityCategory.ITEM_P1).hasRole(SecurityCategory.ADMIN_ROLE)</span>
+<span class="fc" id="L43">                        .requestMatchers(HttpMethod.DELETE,SecurityCategory.ITEM_P1).hasRole(SecurityCategory.ADMIN_ROLE)</span>
+<span class="fc" id="L44">                        .requestMatchers(HttpMethod.GET,&quot;/users&quot;).hasRole(SecurityCategory.ADMIN_ROLE)</span>
+<span class="fc" id="L45">                        .requestMatchers(HttpMethod.DELETE,&quot;/users&quot;).hasRole(SecurityCategory.ADMIN_ROLE)</span>
+<span class="fc" id="L46">                        .requestMatchers(HttpMethod.PUT,&quot;/users/{id}&quot;).hasRole(SecurityCategory.ADMIN_ROLE)</span>
+<span class="fc" id="L47">                        .anyRequest().fullyAuthenticated())</span>
 
-<span class="fc" id="L47">                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)</span>
-<span class="fc" id="L48">                .build();</span>
+<span class="fc" id="L49">                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)</span>
+<span class="fc" id="L50">                .build();</span>
     }
     @Bean
     public AuthenticationManager authenticationManager
             (AuthenticationConfiguration authenticationConfiguration) throws Exception {
-<span class="fc" id="L53">        return authenticationConfiguration.getAuthenticationManager();</span>
+<span class="fc" id="L55">        return authenticationConfiguration.getAuthenticationManager();</span>
     }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-<span class="fc" id="L58">        return new BCryptPasswordEncoder();</span>
+<span class="fc" id="L60">        return new BCryptPasswordEncoder();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
