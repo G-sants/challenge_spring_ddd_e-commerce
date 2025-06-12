@@ -25,6 +25,8 @@ ___
 - [ ] Add Payment Checkout structure;
 - [x] Unit Testing Structures;
 - [ ] Connection to another API (microservices training);
+- [x] Scan with SonarQube;
+- [x] Corrected SonarQube Issues;
 - [ ] ...
 ___
 
