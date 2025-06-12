@@ -27,6 +27,7 @@
 		<url/>
 	</scm>
 	<properties>
+		<argLine>-javaagent:${settings.localRepository}/org/mockito/mockito-core/5.14.2/mockito-core-5.14.2.jar</argLine>
 		<java.version>17</java.version>
 		<sonar.projectKey>ecommerce</sonar.projectKey>
 		<sonar.projectName>ecommerce</sonar.projectName>
@@ -126,7 +127,6 @@
                 <configuration>
                     <source>24</source>
                     <target>24</target>
-                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
         </plugins>

@@ -24,23 +24,23 @@ public class AuthorizationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-<span class="nc" id="L27">        UserDetails userDetails = userRepository.findByEmail(email);</span>
-<span class="nc bnc" id="L28" title="All 2 branches missed.">        if (userDetails == null) {</span>
+<span class="fc" id="L27">        UserDetails userDetails = userRepository.findByEmail(email);</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        if (userDetails == null) {</span>
 <span class="nc" id="L29">            throw new UsernameNotFoundException(&quot;User not Found&quot;);</span>
         }
-<span class="nc" id="L31">        return userDetails;</span>
+<span class="fc" id="L31">        return userDetails;</span>
     }
     
     public UserDTOResponse registerNewUser(RegisterDTORequest data){
-<span class="nc bnc" id="L35" title="All 2 branches missed.">        if(this.userRepository.findByEmail(data.email()) != null)</span>
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        if(this.userRepository.findByEmail(data.email()) != null)</span>
 <span class="nc" id="L36">            throw new RegistrationAlreadyDoneException();</span>
 
-<span class="nc" id="L38">        String encrytedPass = new BCryptPasswordEncoder().encode(data.password());</span>
-<span class="nc" id="L39">        User newUser = new User(data.customerID(),data.name(),</span>
-<span class="nc" id="L40">                data.lastName(),data.email(),encrytedPass,data.category());</span>
+<span class="fc" id="L38">        String encrytedPass = new BCryptPasswordEncoder().encode(data.password());</span>
+<span class="fc" id="L39">        User newUser = new User(data.customerID(),data.name(),</span>
+<span class="fc" id="L40">                data.lastName(),data.email(),encrytedPass,data.category());</span>
 
-<span class="nc" id="L42">        this.userRepository.save(newUser);</span>
-<span class="nc" id="L43">        return new UserDTOResponse(newUser);</span>
+<span class="fc" id="L42">        this.userRepository.save(newUser);</span>
+<span class="fc" id="L43">        return new UserDTOResponse(newUser);</span>
     }
 
 }

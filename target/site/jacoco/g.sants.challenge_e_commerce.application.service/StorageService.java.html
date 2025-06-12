@@ -24,15 +24,15 @@ public class StorageService {
 <span class="fc" id="L24">    }</span>
 
     public List&lt;ItemDTOResponse&gt; getAllItems() {
-<span class="nc" id="L27">        return storageRepository.findAll().stream()</span>
-<span class="nc" id="L28">                .map(ItemDTOResponse::new)</span>
-<span class="nc" id="L29">                .collect(Collectors.toList());</span>
+<span class="fc" id="L27">        return storageRepository.findAll().stream()</span>
+<span class="fc" id="L28">                .map(ItemDTOResponse::new)</span>
+<span class="fc" id="L29">                .collect(Collectors.toList());</span>
     }
 
     public ItemDTOResponse getItem(Long id) {
-<span class="nc" id="L33">        Optional&lt;Storage&gt; item = storageRepository.findById(id);</span>
-<span class="nc" id="L34">        return item.map(ItemDTOResponse::new)</span>
-<span class="nc" id="L35">                .orElseThrow(ItemNotFoundException::new);</span>
+<span class="fc" id="L33">        Optional&lt;Storage&gt; item = storageRepository.findById(id);</span>
+<span class="fc" id="L34">        return item.map(ItemDTOResponse::new)</span>
+<span class="fc" id="L35">                .orElseThrow(ItemNotFoundException::new);</span>
     }
 
     public Storage createItem(ItemDTORequest data) {
@@ -41,13 +41,13 @@ public class StorageService {
     }
 
     public Storage updateItem(Long item_id, ItemDTORequest itemDetails) {
-<span class="nc" id="L44">        Storage item = storageRepository.findById(item_id)</span>
-<span class="nc" id="L45">                    .orElseThrow(ItemNotFoundException::new);</span>
-<span class="nc bnc" id="L46" title="All 2 branches missed.">        if (item != null) {</span>
-<span class="nc" id="L47">            item.setName(itemDetails.itemName());</span>
-<span class="nc" id="L48">            item.setPrice(itemDetails.price());</span>
-<span class="nc" id="L49">            item.setQuantity(itemDetails.quantity());</span>
-<span class="nc" id="L50">            return storageRepository.save(item);</span>
+<span class="fc" id="L44">        Storage item = storageRepository.findById(item_id)</span>
+<span class="fc" id="L45">                    .orElseThrow(ItemNotFoundException::new);</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        if (item != null) {</span>
+<span class="fc" id="L47">            item.setName(itemDetails.itemName());</span>
+<span class="fc" id="L48">            item.setPrice(itemDetails.price());</span>
+<span class="fc" id="L49">            item.setQuantity(itemDetails.quantity());</span>
+<span class="fc" id="L50">            return storageRepository.save(item);</span>
         }
 <span class="nc" id="L52">        throw new WrongItemEntryException();</span>
     }

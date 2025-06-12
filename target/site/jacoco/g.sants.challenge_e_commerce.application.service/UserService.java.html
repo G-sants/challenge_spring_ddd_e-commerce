@@ -23,26 +23,26 @@ public class UserService {
 <span class="fc" id="L23">    }</span>
 
     public List&lt;UserDTOResponse&gt; getAllUsers() {
-<span class="nc" id="L26">        return userRepository.findAll ().stream()</span>
-<span class="nc" id="L27">                .map(UserDTOResponse::new)</span>
-<span class="nc" id="L28">                .collect(Collectors.toList());</span>
+<span class="fc" id="L26">        return userRepository.findAll ().stream()</span>
+<span class="fc" id="L27">                .map(UserDTOResponse::new)</span>
+<span class="fc" id="L28">                .collect(Collectors.toList());</span>
     }
 
     public UserDTOResponse getUser(Long id) {
-<span class="nc" id="L32">        Optional&lt;User&gt; user = userRepository.findById(id);</span>
-<span class="nc" id="L33">        return user.map(UserDTOResponse::new).orElseThrow(UserNotFoundException::new);</span>
+<span class="fc" id="L32">        Optional&lt;User&gt; user = userRepository.findById(id);</span>
+<span class="fc" id="L33">        return user.map(UserDTOResponse::new).orElseThrow(UserNotFoundException::new);</span>
     }
 
     public User updateUser(Long id, UserDTORequest userDetails) {
         try{
-<span class="nc" id="L38">            User user = userRepository.findById(id)</span>
-<span class="nc" id="L39">                    .orElseThrow(UserNotFoundException::new);</span>
-<span class="nc bnc" id="L40" title="All 2 branches missed.">            if (user != null) {</span>
-<span class="nc" id="L41">                user.setName(userDetails.name());</span>
-<span class="nc" id="L42">                user.setLastName(userDetails.lastName());</span>
-<span class="nc" id="L43">                user.setCustomerID(userDetails.customerID());</span>
-<span class="nc" id="L44">                user.setEmail(userDetails.email());</span>
-<span class="nc" id="L45">                return userRepository.save(user);</span>
+<span class="fc" id="L38">            User user = userRepository.findById(id)</span>
+<span class="fc" id="L39">                    .orElseThrow(UserNotFoundException::new);</span>
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">            if (user != null) {</span>
+<span class="fc" id="L41">                user.setName(userDetails.name());</span>
+<span class="fc" id="L42">                user.setLastName(userDetails.lastName());</span>
+<span class="fc" id="L43">                user.setCustomerID(userDetails.customerID());</span>
+<span class="fc" id="L44">                user.setEmail(userDetails.email());</span>
+<span class="fc" id="L45">                return userRepository.save(user);</span>
             }
 <span class="nc" id="L47">        }catch (Exception e){</span>
 <span class="nc" id="L48">            throw new RuntimeException(&quot;Error updating user&quot; + e.getMessage());</span>

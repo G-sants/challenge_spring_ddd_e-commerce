@@ -1,12 +1,22 @@
 package g.sants.challenge_e_commerce.services_test;
 
+import g.sants.challenge_e_commerce.application.dto.RegisterDTORequest;
+import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.AuthorizationService;
+import g.sants.challenge_e_commerce.application.service.methods.UserCategory;
+import g.sants.challenge_e_commerce.domain.User;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthorizationServiceTests {
@@ -17,50 +27,44 @@ public class AuthorizationServiceTests {
     @InjectMocks
     private AuthorizationService authorizationService;
 
-    public AuthorizationServiceTests() {
-        MockitoAnnotations.openMocks(this);
+    private User user;
+    private RegisterDTORequest register;
+
+    @BeforeEach
+    public void setup(){
+        user = new User(12312312312L,"Test","User",
+                "test@email.com","tpassword", UserCategory.ADMIN);
+        user.setId(1L);
+
+        register = new RegisterDTORequest(123123123L, "Test", "User",
+                "test@email.com", "tpassword", UserCategory.ADMIN);
     }
-}
-/*    @Test
+
+    @Test
     public void AuthorizationService_RegisterUser(){
-        RegisterDTORequest userRegistration = new RegisterDTORequest(12312312312L,
-                "Test1", "User","test1@email.com",
-                "tpassword", UserCategory.ADMIN);
+        when(userRepository.findByEmail("test@email.com")).thenReturn(user);
 
-        when(userRepository.findByEmail(userRegistration.email())).thenReturn(null);
+        UserDetails userDetails = authorizationService.loadUserByUsername("test@email.com");
 
-        when(userRepository.save(any(User.class))).thenAnswer(arg -> {
-            User user = arg.getArgument(0);
-            user.setId(1L);
-            return user;
-        });
-
-        UserDTOResponse responseUser = authorizationService.registerNewUser(userRegistration);
-
-        Assertions.assertNotNull(responseUser);
-        Assertions.assertEquals("Test1", responseUser.getName());
-        Assertions.assertEquals("User", responseUser.getLastName());
-        Assertions.assertEquals("test1@email.com", responseUser.getEmail());
-        Assertions.assertEquals(1L, responseUser.getId());
+        assertNotNull(userDetails);
+        assertEquals("test@email.com", userDetails.getUsername());
+        verify(userRepository, times(1)).findByEmail("test@email.com");
     }
 
     @Test
     public void AuthorizationService_LogsInUser(){
-        RegisterDTORequest userRegistration = new RegisterDTORequest(12312312312L,
-                "Test1", "User ", "test1@email.com",
-                "tpassword", UserCategory.ADMIN);
+        when(userRepository.findByEmail("test@email.com")).thenReturn(null);
+        when(userRepository.save(any(User.class))).thenAnswer(obj -> {
+            User savedUser  = obj.getArgument(0);
+            savedUser .setId(1L);
+            return savedUser ;
+        });
 
-        User mockUser = new User(12312312312L,
-                userRegistration.name(), userRegistration.lastName(),
-                userRegistration.email(),userRegistration.password(), userRegistration.category());
-        mockUser.setId(1L);
+        UserDTOResponse response = authorizationService.registerNewUser (register);
 
-        when(userRepository.findByEmail(userRegistration.email())).thenReturn(mockUser);
-
-        UserDetails userDetails = authorizationService.loadUserByUsername(userRegistration.email());
-
-        Assertions.assertNotNull(userDetails);
-        Assertions.assertEquals(userRegistration.password(),userDetails.getPassword());
+        assertNotNull(response);
+        assertEquals("test@email.com", response.getEmail());
+        verify(userRepository, times(1)).findByEmail("test@email.com");
+        verify(userRepository, times(1)).save(any(User.class));
     }
 }
-*/
