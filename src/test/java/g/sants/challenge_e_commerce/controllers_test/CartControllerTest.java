@@ -20,13 +20,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -131,7 +129,7 @@ public class CartControllerTest {
     public void CartController_CreatesOrder() throws Exception {
         given(userService.getUserForKart(1L)).willReturn(Optional.of(user));
         given(storageService.findItemByName("Potato")).willReturn(storageItem);
-        given(cartService.createKart(anyLong(),any(Cart.class))).willReturn(cart1);
+        given(cartService.createCart(anyLong(),any(Cart.class))).willReturn(cart1);
 
         Cart newCart = new Cart();
         newCart.addItem(new Item(0.99,"Potato",1));
@@ -147,7 +145,7 @@ public class CartControllerTest {
     public void CartController_GetsOrderById() throws Exception {
 
         given(userService.getUser(any())).willReturn(userDTOResponse);
-        given(cartService.getKart(any())).willReturn(cart1);
+        given(cartService.getCart(any())).willReturn(cart1);
 
         ResultActions response = mockMvc.perform(get("/orders/user/{user_id}/kart/{kart_id}",
                 1L,1L)
@@ -159,7 +157,7 @@ public class CartControllerTest {
 
     @Test
     public void CartController_GetAllOrders() throws Exception {
-        given(cartService.getAllKarts(1L)).willReturn(orderList);
+        given(cartService.getAllCarts(1L)).willReturn(orderList);
 
         ResultActions response = mockMvc.perform(get("/orders/user/{user_id}",1L)
                 .contentType(MediaType.APPLICATION_JSON));
@@ -170,9 +168,9 @@ public class CartControllerTest {
     @Test
     public void CartController_UpdatesItemInOrders() throws Exception{
         given(userService.getUser(1L)).willReturn(userDTOResponse);
-        given(cartService.getKart(1L)).willReturn(cart1);
+        given(cartService.getCart(1L)).willReturn(cart1);
 
-        given(cartService.updateKart(anyLong(), anyLong(), any(CartDTORequest.class))).willReturn(cart);
+        given(cartService.updateCart(anyLong(), anyLong(), any(CartDTORequest.class))).willReturn(cart);
         given(storageService.findItemByName("Potato")).willReturn(storageItem);
 
         ResultActions response = mockMvc.perform(put("/orders/add/user/{user_id}/kart/{kart_id}",
@@ -186,9 +184,9 @@ public class CartControllerTest {
     @Test
     public void CartController_RemovesItemInOrders() throws Exception{
         given(userService.getUser(1L)).willReturn(userDTOResponse);
-        given(cartService.getKart(1L)).willReturn(cart1);
+        given(cartService.getCart(1L)).willReturn(cart1);
 
-        given(cartService.deletedKart(anyLong(), anyLong(), any(CartDTORequest.class))).willReturn(cart);
+        given(cartService.deletedCart(anyLong(), anyLong(), any(CartDTORequest.class))).willReturn(cart);
         given(storageService.findItemByName("Potato")).willReturn(storageItem);
 
         ResultActions response = mockMvc.perform(put("/orders/remove/user/{user_id}/kart/{kart_id}",
@@ -202,9 +200,9 @@ public class CartControllerTest {
     @Test
     public void CartController_CancelOrders() throws Exception{
         given(userService.getUser(any())).willReturn(userDTOResponse);
-        given(cartService.getKart(any())).willReturn(cart1);
+        given(cartService.getCart(any())).willReturn(cart1);
 
-        given(cartService.deleteKart(anyLong(), anyLong(), any(CartDTORequest.class)))
+        given(cartService.deleteCart(anyLong(), anyLong(), any(CartDTORequest.class)))
                 .willReturn(cart);
 
         ResultActions response = mockMvc.perform(put("/orders/cancel/user/{user_id}/kart/{kart_id}",

@@ -3,11 +3,9 @@ package g.sants.challenge_e_commerce.services_test;
 import g.sants.challenge_e_commerce.application.dto.CartDTORequest;
 import g.sants.challenge_e_commerce.application.dto.CartDTOResponse;
 import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
-import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
 import g.sants.challenge_e_commerce.application.port.output.CartRepository;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
 import g.sants.challenge_e_commerce.application.service.CartService;
-import g.sants.challenge_e_commerce.application.service.UserService;
 import g.sants.challenge_e_commerce.application.service.methods.UserCategory;
 import g.sants.challenge_e_commerce.domain.Cart;
 import g.sants.challenge_e_commerce.domain.Item;
@@ -26,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -38,11 +36,9 @@ public class CartServicesTests {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private UserService userService;
-
     @InjectMocks
     private CartService cartService;
+
 
     @Test
     public void GetAllCart_Returns_All_Cart() {
@@ -60,7 +56,7 @@ public class CartServicesTests {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(cartRepository.findAll()).thenReturn(List.of(cart1, cart2));
 
-        List<CartDTOResponse> cartList = cartService.getAllKarts(1L);
+        List<CartDTOResponse> cartList = cartService.getAllCarts(1L);
 
         Assertions.assertNotNull(cartList);
         Assertions.assertEquals(2, cartList.size());
@@ -73,7 +69,7 @@ public class CartServicesTests {
 
         when(cartRepository.findById(1L)).thenReturn(Optional.of(cart1));
 
-        CartDTOResponse cartResponse = cartService.getKart(1L);
+        CartDTOResponse cartResponse = cartService.getCart(1L);
 
         Assertions.assertNotNull(cartResponse);
         Assertions.assertEquals("PENDING", cartResponse.status());
@@ -93,19 +89,20 @@ public class CartServicesTests {
             return savedCart1;
         });
 
-        CartDTOResponse cartResponse = cartService.createKart(1L, cart1);
+        CartDTOResponse cartResponse = cartService.createCart(1L, cart1);
 
         Assertions.assertNotNull(cartResponse);
         Assertions.assertEquals("PENDING", cartResponse.status());
     }
 
     @Test
-    public void DeleteCart_RemovesOneSpecifiedItemInCart() {
+    public void UpdateCart_UpdatesItemsInCart() {
+        User user = new User(12312312312L,
+                "Test", "User", "test@email.com","tpassword");
+        user.setId(1L);
+
         Cart cart1 = new Cart();
         cart1.setId(1L);
-        UserDTOResponse user = new UserDTOResponse(1L,12312312312L,
-                "Test", "User", "test@email.com");
-
         Item itemCart1 = new Item(0.99, "Potato", 10);
         cart1.addItem(itemCart1);
 
@@ -113,15 +110,78 @@ public class CartServicesTests {
         ItemDTORequest item1 = new ItemDTORequest("Potato", 0.99, 1);
         itemList.add(item1);
 
-        when(userService.getUser(1L)).thenReturn(user);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(cartRepository.findById(1L)).thenReturn(Optional.of(cart1));
+        when(cartRepository.save(any(Cart.class))).thenAnswer(arg ->
+                arg.getArgument(0));
+
 
         CartDTORequest cartList = new CartDTORequest(itemList, "`PENDING");
 
-        Cart updatedCart = cartService.deletedKart(1L, 1L, cartList);
+        Cart updatedCart = cartService.updateCart(1L, 1L, cartList);
+
+        Assertions.assertNotNull(updatedCart);
+        Assertions.assertEquals(1, updatedCart.getItems().size());
+        Assertions.assertEquals(11, updatedCart.getItems().get(0).getQuantity());
+    }
+
+    @Test
+    public void DeleteCart_RemovesOneSpecifiedItemInCart() {
+        User user = new User(12312312312L,
+                "Test", "User", "test@email.com","tpassword");
+        user.setId(1L);
+
+        Cart cart1 = new Cart();
+        cart1.setId(1L);
+        Item itemCart1 = new Item(0.99, "Potato", 10);
+        cart1.addItem(itemCart1);
+
+        List<ItemDTORequest> itemList = new ArrayList<>();
+        ItemDTORequest item1 = new ItemDTORequest("Potato", 0.99, 1);
+        itemList.add(item1);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(cartRepository.findById(1L)).thenReturn(Optional.of(cart1));
+        when(cartRepository.save(any(Cart.class))).thenAnswer(arg ->
+                arg.getArgument(0));
+
+
+        CartDTORequest cartList = new CartDTORequest(itemList, "`PENDING");
+
+        Cart updatedCart = cartService.deletedCart(1L, 1L, cartList);
 
         Assertions.assertNotNull(updatedCart);
         Assertions.assertEquals(1, updatedCart.getItems().size());
         Assertions.assertEquals(9, updatedCart.getItems().get(0).getQuantity());
     }
+
+    @Test
+    public void DeleteCart_CancelsCart() {
+        User user = new User(12312312312L,
+                "Test", "User", "test@email.com","tpassword");
+        user.setId(1L);
+
+        Cart cart1 = new Cart();
+        cart1.setId(1L);
+        Item itemCart1 = new Item(0.99, "Potato", 10);
+        cart1.addItem(itemCart1);
+
+        List<ItemDTORequest> itemList = new ArrayList<>();
+        ItemDTORequest item1 = new ItemDTORequest("Potato", 0.99, 1);
+        itemList.add(item1);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(cartRepository.findById(1L)).thenReturn(Optional.of(cart1));
+        when(cartRepository.save(any(Cart.class))).thenAnswer(arg ->
+                arg.getArgument(0));
+
+
+        CartDTORequest cartList = new CartDTORequest(itemList, "cancel");
+
+        Cart updatedCart = cartService.deleteCart(1L, 1L, cartList);
+
+        Assertions.assertNotNull(updatedCart);
+        Assertions.assertEquals("CANCELLED",updatedCart.getStatus());
+    }
+
 }

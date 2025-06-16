@@ -5,6 +5,7 @@
     import com.fasterxml.jackson.annotation.JsonIgnore;
     import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     import g.sants.challenge_e_commerce.application.dto.CartDTORequest;
+    import g.sants.challenge_e_commerce.application.dto.CartDTOResponse;
     import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
     import g.sants.challenge_e_commerce.application.exceptions.errors.ItemNotFoundException;
     import g.sants.challenge_e_commerce.application.service.methods.CartOperations;
@@ -14,6 +15,8 @@
     import java.util.HashMap;
     import java.util.Iterator;
     import java.util.List;
+    import java.util.stream.Collectors;
+
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @Entity
     public class Cart {
@@ -49,6 +52,15 @@
             this.totalDiscount = 0.0;
             this.status = CartOperations.status();
             this.date = CartOperations.dateCreation();
+        }
+
+        public static Cart dtoCreateCart(CartDTOResponse cartResponse){
+            Cart newcart = new Cart();
+            newcart.items = cartResponse.items().stream().map(Item::new)
+                    .collect(Collectors.toList());
+            newcart.date = cartResponse.date();
+            newcart.status = cartResponse.status();
+            return newcart;
         }
 
         public void setId(long id) {

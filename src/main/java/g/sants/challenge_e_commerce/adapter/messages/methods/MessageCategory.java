@@ -2,6 +2,10 @@ package g.sants.challenge_e_commerce.adapter.messages.methods;
 
 public abstract class MessageCategory {
 
+    private MessageCategory(){
+        throw  new IllegalStateException("Utility Class");
+    }
+
     public static String concatMessage(String a, String b){
         return a + b;
     }

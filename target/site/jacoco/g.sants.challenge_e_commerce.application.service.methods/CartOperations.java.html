@@ -30,9 +30,9 @@ import java.util.List;
 
     public static double totalPriceDiscount(double totalPrice) {
 <span class="fc" id="L32">        double totalPriceDiscount = 0.0;</span>
-<span class="pc bpc" id="L33" title="3 of 6 branches missed.">        if (totalPrice &gt;=500 &amp; totalPrice &lt;1000){</span>
+<span class="pc bpc" id="L33" title="3 of 4 branches missed.">        if (totalPrice &gt;=500 &amp;&amp; totalPrice &lt;1000){</span>
 <span class="nc" id="L34">            totalPriceDiscount = totalPrice -(totalPrice *0.1);</span>
-<span class="pc bpc" id="L35" title="3 of 6 branches missed.">        }else if (totalPrice &gt;=1000 &amp; totalPrice &lt;5000) {</span>
+<span class="pc bpc" id="L35" title="3 of 4 branches missed.">        }else if (totalPrice &gt;=1000 &amp;&amp; totalPrice &lt;5000) {</span>
 <span class="nc" id="L36">            totalPriceDiscount = totalPrice -(totalPrice*0.15);</span>
 <span class="pc bpc" id="L37" title="1 of 2 branches missed.">        }else if (totalPrice &gt;=5000){</span>
 <span class="nc" id="L38">            totalPriceDiscount = totalPrice - (totalPrice *0.2);</span>
@@ -44,9 +44,9 @@ import java.util.List;
 
     public static double totalDiscount(double totalPrice){
 <span class="fc" id="L46">        double totalDiscount = 0.0;</span>
-<span class="pc bpc" id="L47" title="3 of 6 branches missed.">        if (totalPrice &gt;=500 &amp; totalPrice &lt;1000){</span>
+<span class="pc bpc" id="L47" title="3 of 4 branches missed.">        if (totalPrice &gt;=500 &amp;&amp; totalPrice &lt;1000){</span>
 <span class="nc" id="L48">            totalDiscount = (totalPrice *0.1);</span>
-<span class="pc bpc" id="L49" title="3 of 6 branches missed.">        }else if (totalPrice &gt;=1000 &amp; totalPrice &lt;5000) {</span>
+<span class="pc bpc" id="L49" title="3 of 4 branches missed.">        }else if (totalPrice &gt;=1000 &amp;&amp; totalPrice &lt;5000) {</span>
 <span class="nc" id="L50">            totalDiscount = (totalPrice*0.15);</span>
 <span class="pc bpc" id="L51" title="1 of 2 branches missed.">        }else if (totalPrice &gt;=5000){</span>
 <span class="nc" id="L52">            totalDiscount = (totalPrice *0.2);</span>

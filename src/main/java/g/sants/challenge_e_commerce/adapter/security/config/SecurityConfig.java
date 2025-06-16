@@ -1,6 +1,5 @@
 package g.sants.challenge_e_commerce.adapter.security.config;
 
-import g.sants.challenge_e_commerce.adapter.security.methods.SecurityCategory;
 import g.sants.challenge_e_commerce.application.port.filters.SecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -38,12 +37,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST,"/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, SecurityCategory.ITEM_P1).hasRole(SecurityCategory.ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.PUT,SecurityCategory.ITEM_P1).hasRole(SecurityCategory.ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.DELETE,SecurityCategory.ITEM_P1).hasRole(SecurityCategory.ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.GET,"/users").hasRole(SecurityCategory.ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.DELETE,"/users").hasRole(SecurityCategory.ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.PUT,"/users/{id}").hasRole(SecurityCategory.ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.POST, "/item").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/item/{item_id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/item/{item_id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/users").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/users/{user_id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/users/{user_id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/users/{user_id}").hasRole("ADMIN")
                         .anyRequest().fullyAuthenticated())
 
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

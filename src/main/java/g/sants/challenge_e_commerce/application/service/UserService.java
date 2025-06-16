@@ -53,8 +53,7 @@ public class UserService {
     public void deleteUser(Long id) {
         try {
             Optional<User> user = Optional.ofNullable(userRepository.findById(id)
-                    .orElseThrow(() ->
-                            new RuntimeException("User not Found with this id: " + id)));
+                    .orElseThrow(UserNotFoundException::new));
             userRepository.deleteById(id);
         }catch (Exception e) {
             throw new RuntimeException("Error deleting user" + e.getMessage());
@@ -65,9 +64,4 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-
-    User findUserById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User  not found with id: " + userId));
-    }
 }

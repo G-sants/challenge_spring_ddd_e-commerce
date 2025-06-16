@@ -1,5 +1,6 @@
 package g.sants.challenge_e_commerce.domain;
 
+import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import jakarta.persistence.*;
 
 @Entity
@@ -26,6 +27,12 @@ public class Item {
         this.price = price;
         this.itemName = itemName;
         this.quantity = quantity;
+    }
+
+    public Item(ItemDTORequest itemDTORequest) {
+        this.price = itemDTORequest.price();
+        this.itemName = itemDTORequest.itemName();
+        this.quantity = itemDTORequest.quantity();
     }
 
     public long getId() {

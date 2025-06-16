@@ -1,10 +1,13 @@
 package g.sants.challenge_e_commerce.services_test;
 
+import g.sants.challenge_e_commerce.application.dto.CartDTOResponse;
 import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import g.sants.challenge_e_commerce.application.dto.ItemDTOResponse;
 import g.sants.challenge_e_commerce.application.port.output.StorageRepository;
 import g.sants.challenge_e_commerce.application.service.StorageService;
+import g.sants.challenge_e_commerce.domain.Cart;
 import g.sants.challenge_e_commerce.domain.Storage;
+import g.sants.challenge_e_commerce.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,6 +66,16 @@ public class StorageServicesTests {
     }
 
     @Test
+    public void storageService_CreatesItem() {
+        ItemDTORequest item = new ItemDTORequest("Potato",0.99,100);
+
+        Storage storage = storageService.createItem(item);
+
+        Assertions.assertNotNull(storage);
+        Assertions.assertEquals("Potato", storage.getName());
+    }
+
+    @Test
     public void storageService_UpdateItem_UpdatesItemInDataBase(){
         Storage item1 = new Storage("Potato",0.99,100);
         item1.setId(1L);
@@ -79,7 +92,7 @@ public class StorageServicesTests {
     }
 
     @Test
-    public void userService_DeleteUser_ReturnsNull(){
+    public void storageService_DeleteItem_ReturnsNull(){
         Storage item1 = new Storage("Potato",0.99,100);
         List<Storage> itemList = new ArrayList<>();
 

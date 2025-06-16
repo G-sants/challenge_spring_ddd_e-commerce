@@ -37,7 +37,8 @@ public class StorageService {
 
     public Storage createItem(ItemDTORequest data) {
         Storage item = new Storage(data.itemName(),data.price(), data.quantity());
-        return storageRepository.save(item);
+        storageRepository.save(item);
+        return item;
     }
 
     public Storage updateItem(Long item_id, ItemDTORequest itemDetails) {
@@ -54,8 +55,13 @@ public class StorageService {
 
 
     public void deleteItem(Long item_id) {
-        storageRepository.deleteById(item_id);
-        throw new ItemNotFoundException();
+        try {
+            storageRepository.findById(item_id)
+                    .orElseThrow(ItemNotFoundException::new);
+            storageRepository.deleteById(item_id);
+        }catch (Exception e) {
+            throw new RuntimeException("Error deleting item" + e.getMessage());
+        }
     }
 
     public Storage findItemByName(String name){

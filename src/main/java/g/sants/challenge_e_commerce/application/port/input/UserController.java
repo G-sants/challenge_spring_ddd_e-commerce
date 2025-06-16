@@ -3,7 +3,6 @@ package g.sants.challenge_e_commerce.application.port.input;
 import g.sants.challenge_e_commerce.application.dto.UserDTORequest;
 import g.sants.challenge_e_commerce.application.dto.UserDTOResponse;
 import g.sants.challenge_e_commerce.application.exceptions.errors.NoInfoReceivedException;
-import g.sants.challenge_e_commerce.application.exceptions.errors.UserNotFoundException;
 import g.sants.challenge_e_commerce.application.service.UserService;
 import g.sants.challenge_e_commerce.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,27 +27,27 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTOResponse> getUsersById(@PathVariable Long id){
-        UserDTOResponse user = userService.getUser(id);
+    @GetMapping("/{user_id}")
+    public ResponseEntity<UserDTOResponse> getUsersById(@PathVariable Long user_id){
+        UserDTOResponse user = userService.getUser(user_id);
         if (user == null) {
             throw new NoInfoReceivedException();
         }
         return ResponseEntity.ok(user);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserDTORequest userDetails){
-        User updateUser =userService.updateUser(id, userDetails);
+    @PutMapping("/{user_id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long user_id, @RequestBody UserDTORequest userDetails){
+        User updateUser =userService.updateUser(user_id, userDetails);
         if(updateUser ==null){
             throw new NoInfoReceivedException();
         }
         return ResponseEntity.ok(updateUser);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
-        userService.deleteUser(id);
+    @DeleteMapping("/{user_id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long user_id){
+        userService.deleteUser(user_id);
         return ResponseEntity.noContent().build();
     }
 }

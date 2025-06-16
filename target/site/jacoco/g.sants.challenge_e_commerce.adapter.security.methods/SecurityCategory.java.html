@@ -2,11 +2,15 @@
 
 public abstract class SecurityCategory {
 
+    public static final String AUTH = &quot;/auth&quot;;
+    public static final String USER = &quot;/users&quot;;
     public static final String ITEM_P1 = &quot;/item&quot;;
     public static final String ADMIN_ROLE = &quot;ADMIN&quot;;
+    public static final String USER_ROLE = &quot;USER&quot;;
 
-<span class="nc" id="L8">    protected SecurityCategory(){</span>
-<span class="nc" id="L9">        throw  new IllegalStateException(&quot;Utility Class&quot;);</span>
+
+<span class="nc" id="L12">    protected SecurityCategory(){</span>
+<span class="nc" id="L13">        throw  new IllegalStateException(&quot;Utility Class&quot;);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

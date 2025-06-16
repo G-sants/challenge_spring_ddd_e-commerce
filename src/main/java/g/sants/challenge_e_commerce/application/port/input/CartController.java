@@ -48,7 +48,7 @@ public class CartController {
 
     @GetMapping("/user/{user_id}")
     public List<CartDTOResponse> getAllKarts(@PathVariable Long user_id) {
-        return kartService.getAllKarts(user_id);
+        return kartService.getAllCarts(user_id);
     }
 
     @GetMapping("/user/{user_id}/kart/{kart_id}")
@@ -58,7 +58,7 @@ public class CartController {
         if (user == null) {
             throw new UserNotFoundException();
         }
-        CartDTOResponse kart = kartService.getKart(kart_id);
+        CartDTOResponse kart = kartService.getCart(kart_id);
         if (kart == null) {
             throw new OrderNotFoundException();
         }
@@ -81,13 +81,13 @@ public class CartController {
             for (int i =0;i<kart.getItems().size();i++) {
                 Item itemCheck = kart.getItems().get(i);
                 Storage itemVer = storageService.findItemByName(itemCheck.getItemName());
-                if (itemVer != null & itemVer.getName().equalsIgnoreCase(itemCheck.getItemName())) {
+                if (itemVer != null && itemVer.getName().equalsIgnoreCase(itemCheck.getItemName())) {
                     int storageCont = Integer.signum(itemVer.getQuantity() - itemCheck.getQuantity());
                     switch (storageCont) {
                         case 1:
                             itemVer.setQuantity(itemVer.getQuantity()-itemCheck.getQuantity());
                             storageService.saveItemInStorage(itemVer);
-                            createdKart = kartService.createKart(user_id, kart);
+                            createdKart = kartService.createCart(user_id, kart);
 
                             rabbitTemplate.convertAndSend(MessageCategory.ORDER_CREATED,kart.getUser().getName());
                             return ResponseEntity.status(HttpStatus.CREATED).body(createdKart);
@@ -119,14 +119,14 @@ public class CartController {
             throw new UserNotFoundException();
         }
 
-        CartDTOResponse kart = kartService.getKart(kart_id);
+        CartDTOResponse kart = kartService.getCart(kart_id);
         if (kart == null) {
             throw new OrderNotFoundException();
         }
 
         String kartValidate = kart.status();
         if ("PENDING".equals(kartValidate)) {
-            Cart updateKart = kartService.updateKart(user_id, kart_id, kartDetails);
+            Cart updateKart = kartService.updateCart(user_id, kart_id, kartDetails);
              if (updateKart == null) {
                 return ResponseEntity.notFound().build();
             }
@@ -134,7 +134,7 @@ public class CartController {
             for(int i =0;i<kart.items().size();i++){
                 ItemDTORequest itemCheck = kartDetails.items().get(i);
                 Storage itemVer = storageService.findItemByName(itemCheck.itemName());
-                if (itemVer != null & itemVer.getName().equalsIgnoreCase(itemCheck.itemName())) {
+                if (itemVer != null && itemVer.getName().equalsIgnoreCase(itemCheck.itemName())) {
                     int storageCont = Integer.signum(itemVer.getQuantity() - itemCheck.quantity());
                     switch (storageCont) {
                         case 1:
@@ -163,21 +163,21 @@ public class CartController {
             throw new UserNotFoundException();
         }
 
-        CartDTOResponse kart = kartService.getKart(kart_id);
+        CartDTOResponse kart = kartService.getCart(kart_id);
         if (kart == null) {
             throw new OrderNotFoundException();
         }
 
         String kartValidate = kart.status();
         if ("PENDING".equals(kartValidate)) {
-            Cart updatedKart = kartService.deletedKart(user_id, kart_id, kartDetails);
+            Cart updatedKart = kartService.deletedCart(user_id, kart_id, kartDetails);
             if (updatedKart == null) {
                 return ResponseEntity.notFound().build();
             }
             for(int i =0;i<kart.items().size();i++){
                 ItemDTORequest itemCheck = kart.items().get(i);
                 Item itemVer = updatedKart.getItems().get(i);
-                if (itemVer != null & itemVer.getItemName().equalsIgnoreCase(itemCheck.itemName())) {
+                if (itemVer != null && itemVer.getItemName().equalsIgnoreCase(itemCheck.itemName())) {
                     itemVer.setQuantity(+1);
                     Storage savedItem = storageService.findItemByName(itemVer.getItemName());
                     savedItem.setQuantity(itemVer.getQuantity());
@@ -197,14 +197,14 @@ public class CartController {
             throw new UserNotFoundException();
         }
 
-        CartDTOResponse kart = kartService.getKart(kart_id);
+        CartDTOResponse kart = kartService.getCart(kart_id);
         if (kart == null) {
             throw new OrderNotFoundException();
         }
 
         String kartValidate = kart.status();
         if ("PENDING".equals(kartValidate)) {
-            Cart updatedKart = kartService.deleteKart(user_id, kart_id, kartDetails);
+            Cart updatedKart = kartService.deleteCart(user_id, kart_id, kartDetails);
             if (updatedKart == null) {
                 return ResponseEntity.notFound().build();
             }
