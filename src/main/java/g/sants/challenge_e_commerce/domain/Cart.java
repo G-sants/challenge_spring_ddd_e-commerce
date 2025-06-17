@@ -141,48 +141,48 @@
             items.remove(item);
         }
 
-        public static void updateCartItems(Cart kart, CartDTORequest kartDetails) {
-            if (!kart.getItems().isEmpty()) {
-                for (ItemDTORequest itemDTO : kartDetails.items()) {
-                    updateExistingItem(kart, itemDTO);
+        public static void updateCartItems(Cart cart, CartDTORequest cartDetails) {
+            if (!cart.getItems().isEmpty()) {
+                for (ItemDTORequest itemDTO : cartDetails.items()) {
+                    updateExistingItem(cart, itemDTO);
                 }
             } else {
-                initializeCartItems(kart, kartDetails);
+                initializeCartItems(cart, cartDetails);
             }
         }
 
-        private static void updateExistingItem(Cart kart, ItemDTORequest itemDTO) {
-            for (Item item : kart.getItems()) {
+        private static void updateExistingItem(Cart cart, ItemDTORequest itemDTO) {
+            for (Item item : cart.getItems()) {
                 if (item.getItemName().equalsIgnoreCase(itemDTO.itemName())) {
                     item.setQuantity(item.getQuantity() + itemDTO.quantity());
-                    updateCartTotals(kart);
+                    updateCartTotals(cart);
                     return;
                 }
             }
-            addNewItem(kart, itemDTO);
+            addNewItem(cart, itemDTO);
         }
 
-        private static void addNewItem(Cart kart, ItemDTORequest itemDTO) {
+        private static void addNewItem(Cart cart, ItemDTORequest itemDTO) {
             Item newItem = new Item();
             newItem.setItemName(itemDTO.itemName());
             newItem.setPrice(itemDTO.price());
             newItem.setQuantity(itemDTO.quantity());
-            kart.addItem(newItem);
+            cart.addItem(newItem);
         }
 
-        private static void initializeCartItems(Cart kart, CartDTORequest kartDetails) {
+        private static void initializeCartItems(Cart cart, CartDTORequest cartDetails) {
             List<Item> newItemList = new ArrayList<>();
-            kart.setItems(newItemList);
-            for (ItemDTORequest itemDTO : kartDetails.items()) {
-                addNewItem(kart, itemDTO);
+            cart.setItems(newItemList);
+            for (ItemDTORequest itemDTO : cartDetails.items()) {
+                addNewItem(cart, itemDTO);
             }
-            updateCartTotals(kart);
+            updateCartTotals(cart);
         }
 
-        public static void updateCartTotals(Cart kart) {
-            kart.setTotalPrice();
-            kart.setTotalPriceDiscount();
-            kart.setTotalDiscount();
+        public static void updateCartTotals(Cart cart) {
+            cart.setTotalPrice();
+            cart.setTotalPriceDiscount();
+            cart.setTotalDiscount();
         }
 
         public static void processItemsInCart(Cart cart, CartDTORequest cartDetails) {

@@ -46,34 +46,35 @@ public class CartController {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    @GetMapping("/user/{user_id}")
-    public List<CartDTOResponse> getAllKarts(@PathVariable Long user_id) {
-        return kartService.getAllCarts(user_id);
+    @GetMapping("/user/{userId}")
+    public List<CartDTOResponse> getAllKarts(@PathVariable Long userId) {
+        return kartService.getAllCarts(userId);
     }
 
-    @GetMapping("/user/{user_id}/kart/{kart_id}")
-    public ResponseEntity<CartDTOResponse> getKartById(@PathVariable Long user_id,
-                                                       @PathVariable Long kart_id) {
-        UserDTOResponse user = userService.getUser(user_id);
+    @GetMapping("/user/{userId}/kart/{kartId}")
+    public ResponseEntity<CartDTOResponse> getKartById(@PathVariable Long userId,
+                                                       @PathVariable Long kartId) {
+        UserDTOResponse user = userService.getUser(userId);
         if (user == null) {
             throw new UserNotFoundException();
         }
-        CartDTOResponse kart = kartService.getCart(kart_id);
+        CartDTOResponse kart = kartService.getCart(kartId);
         if (kart == null) {
             throw new OrderNotFoundException();
         }
         return ResponseEntity.ok(kart);
     }
 
-    @PostMapping("/user/{user_id}")
-    public ResponseEntity<Object> createKart(@PathVariable Long user_id, @RequestBody List<Item> items) throws Exception {
+    @PostMapping("/user/{userId}")
+    public ResponseEntity<Object> createKart(@PathVariable Long userId,
+                                             @RequestBody List<Item> items) {
         Cart kart = new Cart();
 
         for (Item item : items) {
             kart.addItem(item);
         }
 
-        Optional<User> user = userService.getUserForKart(user_id);
+        Optional<User> user = userService.getUserForKart(userId);
         CartDTOResponse createdKart;
         if (user.isPresent()) {
             kart.setUser(user.get());
@@ -87,7 +88,7 @@ public class CartController {
                         case 1:
                             itemVer.setQuantity(itemVer.getQuantity()-itemCheck.getQuantity());
                             storageService.saveItemInStorage(itemVer);
-                            createdKart = kartService.createCart(user_id, kart);
+                            createdKart = kartService.createCart(userId, kart);
 
                             rabbitTemplate.convertAndSend(MessageCategory.ORDER_CREATED,kart.getUser().getName());
                             return ResponseEntity.status(HttpStatus.CREATED).body(createdKart);
@@ -110,23 +111,23 @@ public class CartController {
         }
     }
 
-    @PutMapping("/add/user/{user_id}/kart/{kart_id}")
-    public ResponseEntity<Object> updatedKart(@PathVariable Long user_id, @PathVariable Long kart_id,
-                                            @RequestBody CartDTORequest kartDetails) {
+    @PutMapping("/add/user/{userId}/kart/{kartId}")
+    public ResponseEntity<Object> updatedKart(@PathVariable Long userId, @PathVariable Long kartId,
+                                              @RequestBody CartDTORequest kartDetails) {
 
-        UserDTOResponse user = userService.getUser(user_id);
+        UserDTOResponse user = userService.getUser(userId);
         if (user == null){
             throw new UserNotFoundException();
         }
 
-        CartDTOResponse kart = kartService.getCart(kart_id);
+        CartDTOResponse kart = kartService.getCart(kartId);
         if (kart == null) {
             throw new OrderNotFoundException();
         }
 
         String kartValidate = kart.status();
         if ("PENDING".equals(kartValidate)) {
-            Cart updateKart = kartService.updateCart(user_id, kart_id, kartDetails);
+            Cart updateKart = kartService.updateCart(userId, kartId, kartDetails);
              if (updateKart == null) {
                 return ResponseEntity.notFound().build();
             }
@@ -154,23 +155,23 @@ public class CartController {
         } throw new OrderCancelledException();
     }
 
-    @PutMapping("/remove/user/{user_id}/kart/{kart_id}")
-    public ResponseEntity<Object> deletedKart(@PathVariable Long user_id, @PathVariable Long kart_id,
-                                            @RequestBody CartDTORequest kartDetails) {
+    @PutMapping("/remove/user/{userId}/kart/{kartId}")
+    public ResponseEntity<Object> deletedKart(@PathVariable Long userId, @PathVariable Long kartId,
+                                              @RequestBody CartDTORequest kartDetails) {
 
-        UserDTOResponse user = userService.getUser(user_id);
+        UserDTOResponse user = userService.getUser(userId);
         if (user == null){
             throw new UserNotFoundException();
         }
 
-        CartDTOResponse kart = kartService.getCart(kart_id);
+        CartDTOResponse kart = kartService.getCart(kartId);
         if (kart == null) {
             throw new OrderNotFoundException();
         }
 
         String kartValidate = kart.status();
         if ("PENDING".equals(kartValidate)) {
-            Cart updatedKart = kartService.deletedCart(user_id, kart_id, kartDetails);
+            Cart updatedKart = kartService.deletedCart(userId, kartId, kartDetails);
             if (updatedKart == null) {
                 return ResponseEntity.notFound().build();
             }
@@ -188,23 +189,23 @@ public class CartController {
         } throw new OrderCancelledException();
     }
 
-    @PutMapping("/cancel/user/{user_id}/kart/{kart_id}")
-    public ResponseEntity<Cart> newStatus(@PathVariable Long user_id, @PathVariable Long kart_id,
+    @PutMapping("/cancel/user/{userId}/kart/{kartId}")
+    public ResponseEntity<Cart> newStatus(@PathVariable Long userId, @PathVariable Long kartId,
                                           @RequestBody CartDTORequest kartDetails) {
 
-        UserDTOResponse user = userService.getUser(user_id);
+        UserDTOResponse user = userService.getUser(userId);
         if (user == null){
             throw new UserNotFoundException();
         }
 
-        CartDTOResponse kart = kartService.getCart(kart_id);
+        CartDTOResponse kart = kartService.getCart(kartId);
         if (kart == null) {
             throw new OrderNotFoundException();
         }
 
         String kartValidate = kart.status();
         if ("PENDING".equals(kartValidate)) {
-            Cart updatedKart = kartService.deleteCart(user_id, kart_id, kartDetails);
+            Cart updatedKart = kartService.deleteCart(userId, kartId, kartDetails);
             if (updatedKart == null) {
                 return ResponseEntity.notFound().build();
             }

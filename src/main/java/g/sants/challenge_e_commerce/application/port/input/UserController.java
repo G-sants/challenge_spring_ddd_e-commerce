@@ -27,27 +27,27 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/{user_id}")
-    public ResponseEntity<UserDTOResponse> getUsersById(@PathVariable Long user_id){
-        UserDTOResponse user = userService.getUser(user_id);
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDTOResponse> getUsersById(@PathVariable Long userId){
+        UserDTOResponse user = userService.getUser(userId);
         if (user == null) {
             throw new NoInfoReceivedException();
         }
         return ResponseEntity.ok(user);
     }
 
-    @PutMapping("/{user_id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long user_id, @RequestBody UserDTORequest userDetails){
-        User updateUser =userService.updateUser(user_id, userDetails);
+    @PutMapping("/{userId}")
+    public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody UserDTORequest userDetails){
+        User updateUser =userService.updateUser(userId, userDetails);
         if(updateUser ==null){
             throw new NoInfoReceivedException();
         }
         return ResponseEntity.ok(updateUser);
     }
 
-    @DeleteMapping("/{user_id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long user_id){
-        userService.deleteUser(user_id);
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId){
+        userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }
 }

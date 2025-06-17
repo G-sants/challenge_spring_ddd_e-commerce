@@ -19,17 +19,17 @@ public class UserRepositoryTests {
     private UserRepository userRepository;
 
     @Test
-    public void UserRepository_SavesUser(){
+    void UserRepository_SavesUser(){
         User user = new User(1L,"Test",
                 "User","test@email.com","tpassword");
         User savedUser = userRepository.save(user);
 
         Assertions.assertNotNull(savedUser);
-        Assertions.assertEquals("test@email.com", savedUser.getEmail());
+        Assertions.assertEquals("test@email.com", savedUser.getUsername());
     }
 
     @Test
-    public void UserRepository_FindAllUsers(){
+    void UserRepository_FindAllUsers(){
         User user1 = new User(1L,"Test1","User","test1@email.com","t2password");
         User savedUser1 = userRepository.save(user1);
 
@@ -43,17 +43,17 @@ public class UserRepositoryTests {
     }
 
     @Test
-    public void UserRepository_FindUserByEmail(){
+    void UserRepository_FindUserByEmail(){
         User user1 = new User(1L,"Test1","User","test1@email.com","t2password");
         User savedUser1 = userRepository.save(user1);
 
         User idUser = (User) userRepository.findByEmail("test1@email.com");
 
-        Assertions.assertEquals(savedUser1.getEmail(),idUser.getEmail());
+        Assertions.assertEquals(savedUser1.getUsername(),idUser.getUsername());
     }
 
     @Test
-    public void UserRepository_UpdatesUser(){
+    void UserRepository_UpdatesUser(){
         User user1 = new User(1L,"Test1","User","test1@email.com","t2password");
         User savedUser1 = userRepository.save(user1);
 
@@ -67,7 +67,7 @@ public class UserRepositoryTests {
     }
 
     @Test
-    public void UserRepository_DeleteUser(){
+    void UserRepository_DeleteUser(){
         User user1 = new User(1L,"Test1","User","test1@email.com","t2password");
         User savedUser1 = userRepository.save(user1);
 

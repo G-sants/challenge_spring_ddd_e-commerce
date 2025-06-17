@@ -19,7 +19,7 @@ public class StorageRepositoryTests {
     StorageRepository storageRepository;
 
     @Test
-    public void StorageRepository_SavesItem(){
+    void StorageRepository_SavesItem(){
         Storage item = new Storage("Potato",0.99,100);
         Storage savedItem = storageRepository.save(item);
 
@@ -28,7 +28,7 @@ public class StorageRepositoryTests {
     }
 
     @Test
-    public void StorageRepository_FindAllItems(){
+    void StorageRepository_FindAllItems(){
         Storage item1 = new Storage("Potato",0.99,100);
         Storage savedItem1 = storageRepository.save(item1);
 
@@ -42,7 +42,7 @@ public class StorageRepositoryTests {
     }
 
     @Test
-    public void StorageRepository_FindItemByName(){
+    void StorageRepository_FindItemByName(){
         Storage item1 = new Storage("Potato",0.99,100);
         Storage savedItem1 = storageRepository.save(item1);
 
@@ -52,7 +52,7 @@ public class StorageRepositoryTests {
     }
 
     @Test
-    public void StorageRepository_UpdatesItem(){
+    void StorageRepository_UpdatesItem(){
         Storage item1 = new Storage("Potato",0.99,100);
         Storage savedItem1 = storageRepository.save(item1);
 
@@ -66,7 +66,7 @@ public class StorageRepositoryTests {
     }
 
     @Test
-    public void StorageRepository_DeleteItem(){
+    void StorageRepository_DeleteItem(){
         Storage item1 = new Storage("Potato",0.99,100);
         Storage savedItem1 = storageRepository.save(item1);
 

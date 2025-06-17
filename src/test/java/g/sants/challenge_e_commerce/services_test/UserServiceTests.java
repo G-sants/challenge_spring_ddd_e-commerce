@@ -34,20 +34,16 @@ public class UserServiceTests {
     private UserService userService;
 
     private User user;
-    private UserDTOResponse dtoresponse;
 
     @BeforeEach
     void setup() {
         user = new User(12312312312L,"Test","User",
                 "test@email.com","tpassword", UserCategory.ADMIN);
         user.setId(1L);
-
-        dtoresponse = new UserDTOResponse(1L,12312312312L,"Test",
-                "User", "test@email.com");
     }
 
     @Test
-    public void userService_FindAll_ReturnsAllUsers() {
+    void userService_FindAll_ReturnsAllUsers() {
         User user1 = new User(12312312312L, "Test1", "User",
                 "test1@email.com", "t2Password", UserCategory.ADMIN);
         user1.setId(1L);
@@ -66,7 +62,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void userService_FindByID_ReturnsUserByID() {
+    void userService_FindByID_ReturnsUserByID() {
         when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(user));
 
         UserDTOResponse response = userService.getUser(1L);
@@ -78,10 +74,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void userService_UpdateUser_UpdatesUserInDataBase() {
-        User user = new User(12312312312L, "Test1", "User",
-                "test1@email.com", "t2Password", UserCategory.ADMIN);
-
+    void userService_UpdateUser_UpdatesUserInDataBase() {
         when(userRepository.save(any(User.class))).thenAnswer(arg -> {
             User savedUser  = arg.getArgument(0);
             savedUser .setId(1L);
@@ -99,10 +92,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void userService_DeleteUser_ReturnsNull() {
-        User user = new User(12312312312L, "Test1", "User",
-                "test1@email.com", "t2Password", UserCategory.ADMIN);
-
+    void userService_DeleteUser_ReturnsNull() {
         List<User> userList = new ArrayList<>();
 
         when(userRepository.save(any(User.class))).thenAnswer(arg -> {

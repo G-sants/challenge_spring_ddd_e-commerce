@@ -17,7 +17,7 @@ class UserTests {
         assertEquals(1L, user.getCustomerID());
         assertEquals("Test", user.getName());
         assertEquals("User", user.getLastName());
-        assertEquals("test@example.com", user.getEmail());
+        assertEquals("test@example.com", user.getUsername());
         assertEquals("apass", user.getPassword());
     }
 
@@ -30,7 +30,7 @@ class UserTests {
         assertEquals(2L, user.getCustomerID());
         assertEquals("User", user.getName());
         assertEquals("Test", user.getLastName());
-        assertEquals("test@example.com", user.getEmail());
+        assertEquals("test@example.com", user.getUsername());
         assertEquals("apass", user.getPassword());
     }
 
@@ -42,7 +42,7 @@ class UserTests {
         assertEquals(3L, user.getCustomerID());
         assertEquals("User", user.getName());
         assertEquals("Test", user.getLastName());
-        assertEquals("test@example.com", user.getEmail());
+        assertEquals("test@example.com", user.getUsername());
         assertEquals("apass", user.getPassword());
     }
 

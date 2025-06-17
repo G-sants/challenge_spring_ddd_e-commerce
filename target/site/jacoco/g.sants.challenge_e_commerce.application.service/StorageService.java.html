@@ -36,39 +36,36 @@ public class StorageService {
     }
 
     public Storage createItem(ItemDTORequest data) {
-<span class="nc" id="L39">        Storage item = new Storage(data.itemName(),data.price(), data.quantity());</span>
-<span class="nc" id="L40">        return storageRepository.save(item);</span>
+<span class="fc" id="L39">        Storage item = new Storage(data.itemName(),data.price(), data.quantity());</span>
+<span class="fc" id="L40">        storageRepository.save(item);</span>
+<span class="fc" id="L41">        return item;</span>
     }
 
     public Storage updateItem(Long item_id, ItemDTORequest itemDetails) {
-<span class="fc" id="L44">        Storage item = storageRepository.findById(item_id)</span>
-<span class="fc" id="L45">                    .orElseThrow(ItemNotFoundException::new);</span>
-<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        if (item != null) {</span>
-<span class="fc" id="L47">            item.setName(itemDetails.itemName());</span>
-<span class="fc" id="L48">            item.setPrice(itemDetails.price());</span>
-<span class="fc" id="L49">            item.setQuantity(itemDetails.quantity());</span>
-<span class="fc" id="L50">            return storageRepository.save(item);</span>
+<span class="fc" id="L45">        Storage item = storageRepository.findById(item_id)</span>
+<span class="fc" id="L46">                    .orElseThrow(ItemNotFoundException::new);</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">        if (item != null) {</span>
+<span class="fc" id="L48">            item.setName(itemDetails.itemName());</span>
+<span class="fc" id="L49">            item.setPrice(itemDetails.price());</span>
+<span class="fc" id="L50">            item.setQuantity(itemDetails.quantity());</span>
+<span class="fc" id="L51">            return storageRepository.save(item);</span>
         }
-<span class="nc" id="L52">        throw new WrongItemEntryException();</span>
+<span class="nc" id="L53">        throw new WrongItemEntryException();</span>
     }
 
 
     public void deleteItem(Long item_id) {
-        try {
-<span class="nc" id="L58">            storageRepository.findById(item_id)</span>
-<span class="nc" id="L59">                    .orElseThrow(ItemNotFoundException::new);</span>
-<span class="nc" id="L60">            storageRepository.deleteById(item_id);</span>
-<span class="nc" id="L61">        }catch (Exception e) {</span>
-<span class="nc" id="L62">            throw new RuntimeException(&quot;Error deleting item&quot; + e.getMessage());</span>
-<span class="nc" id="L63">        }</span>
-<span class="nc" id="L64">    }</span>
+<span class="nc" id="L58">        storageRepository.findById(item_id)</span>
+<span class="nc" id="L59">                .orElseThrow(ItemNotFoundException::new);</span>
+<span class="nc" id="L60">        storageRepository.deleteById(item_id);</span>
+<span class="nc" id="L61">    }</span>
 
     public Storage findItemByName(String name){
-<span class="nc" id="L67">        return storageRepository.findByName(name);</span>
+<span class="nc" id="L64">        return storageRepository.findByName(name);</span>
     }
 
     public void saveItemInStorage(Storage storage){
-<span class="nc" id="L71">        storageRepository.save(storage);</span>
-<span class="nc" id="L72">    }</span>
+<span class="nc" id="L68">        storageRepository.save(storage);</span>
+<span class="nc" id="L69">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

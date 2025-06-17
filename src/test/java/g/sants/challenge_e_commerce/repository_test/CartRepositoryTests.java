@@ -21,7 +21,7 @@ public class CartRepositoryTests {
     CartRepository cartRepository;
 
     @Test
-    public void CartRepository_SavesCart(){
+    void CartRepository_SavesCart(){
         Cart cart = new Cart();
         Cart savedCart = cartRepository.save(cart);
 
@@ -29,7 +29,7 @@ public class CartRepositoryTests {
     }
 
     @Test
-    public void CartRepository_FindAllCarts(){
+    void CartRepository_FindAllCarts(){
         Cart cart1 = new Cart();
         Cart savedCart1 = cartRepository.save(cart1);
 
@@ -43,7 +43,7 @@ public class CartRepositoryTests {
     }
 
     @Test
-    public void CartRepository_FindCartById(){
+    void CartRepository_FindCartById(){
         Cart cart = new Cart();
         Cart savedCart = cartRepository.save(cart);
 
@@ -53,7 +53,7 @@ public class CartRepositoryTests {
     }
 
     @Test
-    public void CartRepository_AddsItemToCart(){
+    void CartRepository_AddsItemToCart(){
         Cart cart = new Cart();
         Item item1 = new Item(0.99,"Potato",10);
 
@@ -67,7 +67,7 @@ public class CartRepositoryTests {
     }
 
     @Test
-    public void CartRepository_CancelledStatusOnCart(){
+    void CartRepository_CancelledStatusOnCart(){
         Cart cart = new Cart();
 
         cart.setStatus("CANCELLED");

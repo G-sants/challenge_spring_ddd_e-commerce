@@ -55,13 +55,9 @@ public class StorageService {
 
 
     public void deleteItem(Long item_id) {
-        try {
-            storageRepository.findById(item_id)
-                    .orElseThrow(ItemNotFoundException::new);
-            storageRepository.deleteById(item_id);
-        }catch (Exception e) {
-            throw new RuntimeException("Error deleting item" + e.getMessage());
-        }
+        storageRepository.findById(item_id)
+                .orElseThrow(ItemNotFoundException::new);
+        storageRepository.deleteById(item_id);
     }
 
     public Storage findItemByName(String name){

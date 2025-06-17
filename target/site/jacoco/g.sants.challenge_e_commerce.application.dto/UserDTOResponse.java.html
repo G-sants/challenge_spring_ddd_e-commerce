@@ -2,28 +2,26 @@
 
 import g.sants.challenge_e_commerce.domain.User;
 
-import java.util.List;
-
-<span class="pc" id="L7">public record UserDTOResponse(Long id, Long customerid, String name, String lastName,</span>
+<span class="pc" id="L5">public record UserDTOResponse(Long id, Long customerid, String name, String lastName,</span>
                               String email) {
 
     public UserDTOResponse(User user){
-<span class="fc" id="L11">        this(user.getId(),user.getCustomerID(),user.getName(),</span>
-<span class="fc" id="L12">                user.getLastName(),user.getEmail());</span>
-<span class="fc" id="L13">    }</span>
+<span class="fc" id="L9">        this(user.getId(),user.getCustomerID(),user.getName(),</span>
+<span class="fc" id="L10">                user.getLastName(),user.getUsername());</span>
+<span class="fc" id="L11">    }</span>
 
 
     public Long getId() {
-<span class="fc" id="L17">        return id;</span>
+<span class="fc" id="L15">        return id;</span>
     }
     public String getName() {
-<span class="fc" id="L20">        return name;</span>
+<span class="fc" id="L18">        return name;</span>
     }
     public String getLastName() {
-<span class="fc" id="L23">        return lastName;</span>
+<span class="fc" id="L21">        return lastName;</span>
     }
     public String getEmail() {
-<span class="fc" id="L26">        return email;</span>
+<span class="fc" id="L24">        return email;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

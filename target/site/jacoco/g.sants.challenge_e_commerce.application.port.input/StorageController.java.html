@@ -26,9 +26,9 @@ public class StorageController {
 <span class="fc" id="L26">        return storageService.getAllItems();</span>
     }
 
-    @GetMapping(&quot;/{item_id}&quot;)
-    public ResponseEntity&lt;ItemDTOResponse&gt; getItemById (@PathVariable Long item_id) {
-<span class="fc" id="L31">        ItemDTOResponse item = storageService.getItem(item_id);</span>
+    @GetMapping(&quot;/{itemId}&quot;)
+    public ResponseEntity&lt;ItemDTOResponse&gt; getItemById (@PathVariable Long itemId) {
+<span class="fc" id="L31">        ItemDTOResponse item = storageService.getItem(itemId);</span>
 <span class="pc bpc" id="L32" title="1 of 2 branches missed.">        if (item == null){</span>
 <span class="nc" id="L33">            return ResponseEntity.noContent().build();</span>
         }
@@ -41,18 +41,18 @@ public class StorageController {
 <span class="fc" id="L41">        return ResponseEntity.ok().build();</span>
     }
 
-    @PutMapping(&quot;/{item_id}&quot;)
-    public ResponseEntity&lt;Storage&gt; updateItem( @PathVariable Long item_id,@RequestBody ItemDTORequest itemDetails){
-<span class="fc" id="L46">        Storage updateItem =storageService.updateItem(item_id,itemDetails);</span>
+    @PutMapping(&quot;/{itemId}&quot;)
+    public ResponseEntity&lt;Storage&gt; updateItem(@PathVariable Long itemId, @RequestBody ItemDTORequest itemDetails){
+<span class="fc" id="L46">        Storage updateItem =storageService.updateItem(itemId,itemDetails);</span>
 <span class="pc bpc" id="L47" title="1 of 2 branches missed.">        if(updateItem ==null){</span>
 <span class="nc" id="L48">            return ResponseEntity.notFound().build();</span>
         }
 <span class="fc" id="L50">        return ResponseEntity.ok(updateItem);</span>
     }
 
-    @DeleteMapping(&quot;/{item_id}&quot;)
-    public ResponseEntity&lt;Void&gt; deleteItem(@PathVariable Long item_id){
-<span class="fc" id="L55">        storageService.deleteItem(item_id);</span>
+    @DeleteMapping(&quot;/{itemId}&quot;)
+    public ResponseEntity&lt;Void&gt; deleteItem(@PathVariable Long itemId){
+<span class="fc" id="L55">        storageService.deleteItem(itemId);</span>
 <span class="fc" id="L56">        return ResponseEntity.noContent().build();</span>
     }
 }

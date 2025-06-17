@@ -2,7 +2,7 @@ package g.sants.challenge_e_commerce.adapter.messages.methods;
 
 public abstract class MessageCategory {
 
-    private MessageCategory(){
+    protected MessageCategory(){
         throw  new IllegalStateException("Utility Class");
     }
 

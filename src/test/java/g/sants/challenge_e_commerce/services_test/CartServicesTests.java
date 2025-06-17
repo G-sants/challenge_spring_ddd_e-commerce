@@ -11,12 +11,10 @@ import g.sants.challenge_e_commerce.domain.Cart;
 import g.sants.challenge_e_commerce.domain.Item;
 import g.sants.challenge_e_commerce.domain.User;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -41,7 +39,7 @@ public class CartServicesTests {
 
 
     @Test
-    public void GetAllCart_Returns_All_Cart() {
+    void GetAllCart_Returns_All_Cart() {
 
         Cart cart1 = new Cart();
         cart1.setId(1L);
@@ -63,7 +61,7 @@ public class CartServicesTests {
     }
 
     @Test
-    public void GetCartById_Returns_Cart() {
+    void GetCartById_Returns_Cart() {
         Cart cart1 = new Cart();
         cart1.setId(1L);
 
@@ -76,7 +74,7 @@ public class CartServicesTests {
     }
 
     @Test
-    public void CreateCart_Creates_a_Cart() {
+    void CreateCart_Creates_a_Cart() {
         Cart cart1 = new Cart();
         User user = new User();
         user.setId(1L);
@@ -96,7 +94,7 @@ public class CartServicesTests {
     }
 
     @Test
-    public void UpdateCart_UpdatesItemsInCart() {
+    void UpdateCart_UpdatesItemsInCart() {
         User user = new User(12312312312L,
                 "Test", "User", "test@email.com","tpassword");
         user.setId(1L);
@@ -126,7 +124,7 @@ public class CartServicesTests {
     }
 
     @Test
-    public void DeleteCart_RemovesOneSpecifiedItemInCart() {
+    void DeleteCart_RemovesOneSpecifiedItemInCart() {
         User user = new User(12312312312L,
                 "Test", "User", "test@email.com","tpassword");
         user.setId(1L);
@@ -156,7 +154,7 @@ public class CartServicesTests {
     }
 
     @Test
-    public void DeleteCart_CancelsCart() {
+    void DeleteCart_CancelsCart() {
         User user = new User(12312312312L,
                 "Test", "User", "test@email.com","tpassword");
         user.setId(1L);

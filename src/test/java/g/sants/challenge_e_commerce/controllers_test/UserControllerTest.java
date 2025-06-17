@@ -55,7 +55,7 @@ class UserControllerTest {
     User user;
 
     @BeforeEach
-    public void initUsers() {
+    void initUsers() {
         user = new User(12312312312L,"TesteUp", "UserUp",
                 "test1@email.com","apassword", UserCategory.ADMIN);
         user.setId(1L);
@@ -77,10 +77,10 @@ class UserControllerTest {
     }
 
     @Test
-    public void UserController_GetsUserById() throws Exception {
+    void UserController_GetsUserById() throws Exception {
         given(userService.getUser(ArgumentMatchers.any())).willReturn(userDTOResponse);
 
-        ResultActions response = mockMvc.perform(get("/users/{id}",1L)
+        ResultActions response = mockMvc.perform(get("/users/{userId}",1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userDTOResponse)));
 
@@ -88,7 +88,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void UserController_GetAllUsers() throws Exception {
+    void UserController_GetAllUsers() throws Exception {
         given(userService.getAllUsers()).willReturn(userList);
 
         ResultActions response = mockMvc.perform(get("/users")
@@ -98,22 +98,22 @@ class UserControllerTest {
     }
 
     @Test
-    public void UserController_UpdatesUsers() throws Exception {
+    void UserController_UpdatesUsers() throws Exception {
 
         given(userService.updateUser(1L,userDTORequest)).willReturn(user);
 
-        ResultActions response = mockMvc.perform(put("/users/{id}",1L)
+        ResultActions response = mockMvc.perform(put("/users/{userId}",1L)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user)));
+                .content(objectMapper.writeValueAsString(userDTORequest)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
-    public void UserController_DeletesUser() throws Exception {
+    void UserController_DeletesUser() throws Exception {
         doNothing().when(userService).deleteUser(ArgumentMatchers.anyLong());
 
-        ResultActions response = mockMvc.perform(delete("/users/{id}",1L)
+        ResultActions response = mockMvc.perform(delete("/users/{userId}",1L)
                 .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(MockMvcResultMatchers.status().isNoContent());

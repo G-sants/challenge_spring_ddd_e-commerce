@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class AuthorizationServiceTests {
+class AuthorizationServiceTests {
 
     @Mock
     private UserRepository userRepository;
@@ -31,7 +31,7 @@ public class AuthorizationServiceTests {
     private RegisterDTORequest register;
 
     @BeforeEach
-    public void setup(){
+    void setup(){
         user = new User(12312312312L,"Test","User",
                 "test@email.com","tpassword", UserCategory.ADMIN);
         user.setId(1L);
@@ -41,7 +41,7 @@ public class AuthorizationServiceTests {
     }
 
     @Test
-    public void AuthorizationService_RegisterUser(){
+    void AuthorizationService_RegisterUser(){
         when(userRepository.findByEmail("test@email.com")).thenReturn(user);
 
         UserDetails userDetails = authorizationService.loadUserByUsername("test@email.com");
@@ -52,7 +52,7 @@ public class AuthorizationServiceTests {
     }
 
     @Test
-    public void AuthorizationService_LogsInUser(){
+    void AuthorizationService_LogsInUser(){
         when(userRepository.findByEmail("test@email.com")).thenReturn(null);
         when(userRepository.save(any(User.class))).thenAnswer(obj -> {
             User savedUser  = obj.getArgument(0);

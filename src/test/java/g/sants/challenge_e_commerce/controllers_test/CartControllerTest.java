@@ -87,7 +87,7 @@ public class CartControllerTest {
     Storage storageItem;
 
     @BeforeEach
-    public void initCarts(){
+    void initCarts(){
         itemDTO = new ItemDTORequest("Potato",0.99,1);
         itemList = new ArrayList<>();
         itemList.add(itemDTO);
@@ -126,7 +126,7 @@ public class CartControllerTest {
     }
 
     @Test
-    public void CartController_CreatesOrder() throws Exception {
+    void CartController_CreatesOrder() throws Exception {
         given(userService.getUserForKart(1L)).willReturn(Optional.of(user));
         given(storageService.findItemByName("Potato")).willReturn(storageItem);
         given(cartService.createCart(anyLong(),any(Cart.class))).willReturn(cart1);
@@ -142,12 +142,12 @@ public class CartControllerTest {
     }
 
     @Test
-    public void CartController_GetsOrderById() throws Exception {
+    void CartController_GetsOrderById() throws Exception {
 
         given(userService.getUser(any())).willReturn(userDTOResponse);
         given(cartService.getCart(any())).willReturn(cart1);
 
-        ResultActions response = mockMvc.perform(get("/orders/user/{user_id}/kart/{kart_id}",
+        ResultActions response = mockMvc.perform(get("/orders/user/{userId}/kart/{kartId}",
                 1L,1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dtoCart)));
@@ -156,24 +156,24 @@ public class CartControllerTest {
     }
 
     @Test
-    public void CartController_GetAllOrders() throws Exception {
+    void CartController_GetAllOrders() throws Exception {
         given(cartService.getAllCarts(1L)).willReturn(orderList);
 
-        ResultActions response = mockMvc.perform(get("/orders/user/{user_id}",1L)
+        ResultActions response = mockMvc.perform(get("/orders/user/{userId}",1L)
                 .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
-    public void CartController_UpdatesItemInOrders() throws Exception{
+    void CartController_UpdatesItemInOrders() throws Exception{
         given(userService.getUser(1L)).willReturn(userDTOResponse);
         given(cartService.getCart(1L)).willReturn(cart1);
 
         given(cartService.updateCart(anyLong(), anyLong(), any(CartDTORequest.class))).willReturn(cart);
         given(storageService.findItemByName("Potato")).willReturn(storageItem);
 
-        ResultActions response = mockMvc.perform(put("/orders/add/user/{user_id}/kart/{kart_id}",
+        ResultActions response = mockMvc.perform(put("/orders/add/user/{userId}/kart/{kartId}",
                 1L,1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cartRequest1)));
@@ -182,14 +182,14 @@ public class CartControllerTest {
     }
 
     @Test
-    public void CartController_RemovesItemInOrders() throws Exception{
+    void CartController_RemovesItemInOrders() throws Exception{
         given(userService.getUser(1L)).willReturn(userDTOResponse);
         given(cartService.getCart(1L)).willReturn(cart1);
 
         given(cartService.deletedCart(anyLong(), anyLong(), any(CartDTORequest.class))).willReturn(cart);
         given(storageService.findItemByName("Potato")).willReturn(storageItem);
 
-        ResultActions response = mockMvc.perform(put("/orders/remove/user/{user_id}/kart/{kart_id}",
+        ResultActions response = mockMvc.perform(put("/orders/remove/user/{userId}/kart/{kartId}",
                 1L,1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dtoCart)));
@@ -198,14 +198,14 @@ public class CartControllerTest {
     }
 
     @Test
-    public void CartController_CancelOrders() throws Exception{
+    void CartController_CancelOrders() throws Exception{
         given(userService.getUser(any())).willReturn(userDTOResponse);
         given(cartService.getCart(any())).willReturn(cart1);
 
         given(cartService.deleteCart(anyLong(), anyLong(), any(CartDTORequest.class)))
                 .willReturn(cart);
 
-        ResultActions response = mockMvc.perform(put("/orders/cancel/user/{user_id}/kart/{kart_id}",
+        ResultActions response = mockMvc.perform(put("/orders/cancel/user/{userId}/kart/{kartId}",
                 1L,1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cartRequest2)));

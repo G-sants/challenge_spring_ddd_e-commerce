@@ -59,9 +59,9 @@ public class CartService {
 <span class="nc" id="L59">        throw new UserNotFoundException();</span>
     }
 
-    public Cart updateCart(Long id, Long cart_id, CartDTORequest cartDetails) {
+    public Cart updateCart(Long id, Long cartId, CartDTORequest cartDetails) {
 <span class="fc" id="L63">        userRepository.findById(id);</span>
-<span class="fc" id="L64">        CartDTOResponse dtoCart = getCart(cart_id);</span>
+<span class="fc" id="L64">        CartDTOResponse dtoCart = getCart(cartId);</span>
 <span class="fc" id="L65">        Cart newCart = Cart.dtoCreateCart(dtoCart);</span>
 <span class="fc" id="L66">        Cart.updateCartItems(newCart, cartDetails);</span>
 <span class="fc" id="L67">        return cartRepository.save(newCart);</span>

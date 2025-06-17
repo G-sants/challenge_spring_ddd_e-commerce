@@ -58,7 +58,7 @@ public class AuthorizationControllerTest {
     AuthorizationDTORequest authorizationDTORequest;
 
     @BeforeEach
-    public void initUsers(){
+    void initUsers(){
 
         MockitoAnnotations.openMocks(this);
 
@@ -79,7 +79,7 @@ public class AuthorizationControllerTest {
     }
 
     @Test
-    public void AuthorizationController_RegisterUser() throws Exception {
+    void AuthorizationController_RegisterUser() throws Exception {
         UserDTOResponse mockUser = new UserDTOResponse(1L,123123123L,
                 "Test1","User","test1@email.com");
         given(authorizationService.registerNewUser(ArgumentMatchers.any()))
@@ -93,7 +93,7 @@ public class AuthorizationControllerTest {
     }
 
     @Test
-    public void AuthorizationController_LogsUserIn() throws Exception {
+    void AuthorizationController_LogsUserIn() throws Exception {
         String token = "tokenloginresponsetest123";
 
         given(tokenService.generateToken(ArgumentMatchers.any()))

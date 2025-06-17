@@ -23,7 +23,7 @@ import java.time.ZoneOffset;
 <span class="nc" id="L23">            Algorithm algorithm = Algorithm.HMAC256(secret);</span>
 <span class="nc" id="L24">            String token = JWT.create()</span>
 <span class="nc" id="L25">                    .withIssuer(&quot;auth-api&quot;)</span>
-<span class="nc" id="L26">                    .withSubject(user.getEmail())</span>
+<span class="nc" id="L26">                    .withSubject(user.getUsername())</span>
 <span class="nc" id="L27">                    .withExpiresAt(genExpTime())</span>
 <span class="nc" id="L28">                    .sign(algorithm);</span>
 <span class="nc" id="L29">            return token;</span>

@@ -51,17 +51,13 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        try {
-<span class="nc" id="L55">            Optional&lt;User&gt; user = Optional.ofNullable(userRepository.findById(id)</span>
-<span class="nc" id="L56">                    .orElseThrow(UserNotFoundException::new));</span>
-<span class="nc" id="L57">            userRepository.deleteById(id);</span>
-<span class="nc" id="L58">        }catch (Exception e) {</span>
-<span class="nc" id="L59">            throw new RuntimeException(&quot;Error deleting user&quot; + e.getMessage());</span>
-<span class="nc" id="L60">        }</span>
-<span class="nc" id="L61">    }</span>
+<span class="nc" id="L54">       userRepository.findById(id)</span>
+<span class="nc" id="L55">                    .orElseThrow(UserNotFoundException::new);</span>
+<span class="nc" id="L56">       userRepository.deleteById(id);</span>
+<span class="nc" id="L57">    }</span>
 
     public Optional&lt;User&gt; getUserForKart(Long id) {
-<span class="nc" id="L64">        return userRepository.findById(id);</span>
+<span class="nc" id="L60">        return userRepository.findById(id);</span>
     }
 
 }

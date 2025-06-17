@@ -26,9 +26,9 @@ public class StorageController {
         return storageService.getAllItems();
     }
 
-    @GetMapping("/{item_id}")
-    public ResponseEntity<ItemDTOResponse> getItemById (@PathVariable Long item_id) {
-        ItemDTOResponse item = storageService.getItem(item_id);
+    @GetMapping("/{itemId}")
+    public ResponseEntity<ItemDTOResponse> getItemById (@PathVariable Long itemId) {
+        ItemDTOResponse item = storageService.getItem(itemId);
         if (item == null){
             return ResponseEntity.noContent().build();
         }
@@ -41,18 +41,18 @@ public class StorageController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{item_id}")
-    public ResponseEntity<Storage> updateItem( @PathVariable Long item_id,@RequestBody ItemDTORequest itemDetails){
-        Storage updateItem =storageService.updateItem(item_id,itemDetails);
+    @PutMapping("/{itemId}")
+    public ResponseEntity<Storage> updateItem(@PathVariable Long itemId, @RequestBody ItemDTORequest itemDetails){
+        Storage updateItem =storageService.updateItem(itemId,itemDetails);
         if(updateItem ==null){
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(updateItem);
     }
 
-    @DeleteMapping("/{item_id}")
-    public ResponseEntity<Void> deleteItem(@PathVariable Long item_id){
-        storageService.deleteItem(item_id);
+    @DeleteMapping("/{itemId}")
+    public ResponseEntity<Void> deleteItem(@PathVariable Long itemId){
+        storageService.deleteItem(itemId);
         return ResponseEntity.noContent().build();
     }
 }

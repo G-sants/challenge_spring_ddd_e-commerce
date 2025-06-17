@@ -59,7 +59,7 @@ public class StorageControllerTest {
     Storage storage;
 
     @BeforeEach
-    public void initItems() {
+    void initItems() {
         storage = new Storage("Potato", 0.99,100);
         storage.setId(1L);
 
@@ -77,7 +77,7 @@ public class StorageControllerTest {
     }
 
     @Test
-    public void StorageController_CreatesItem() throws Exception {
+    void StorageController_CreatesItem() throws Exception {
         given(storageService.createItem(itemDTORequest)).willReturn(storage);
 
         ResultActions response = mockMvc.perform(post("/item")
@@ -88,7 +88,7 @@ public class StorageControllerTest {
     }
 
     @Test
-    public void StorageController_GetsItemById() throws Exception {
+    void StorageController_GetsItemById() throws Exception {
         given(storageService.getItem(ArgumentMatchers.any())).willReturn(itemDTOResponse);
 
         ResultActions response = mockMvc.perform(get("/item/{item_id}",1L)
@@ -99,7 +99,7 @@ public class StorageControllerTest {
     }
 
     @Test
-    public void StorageController_GetAllItems() throws Exception {
+    void StorageController_GetAllItems() throws Exception {
         given(storageService.getAllItems()).willReturn(itemList);
 
         ResultActions response = mockMvc.perform(get("/item")
@@ -109,7 +109,7 @@ public class StorageControllerTest {
     }
 
     @Test
-    public void StorageController_UpdatesItems() throws Exception {
+    void StorageController_UpdatesItems() throws Exception {
         given(storageService.updateItem(1L,itemDTORequest)).willReturn(storage);
 
         ResultActions response = mockMvc.perform(put("/item/{item_id}",1L)
@@ -120,7 +120,7 @@ public class StorageControllerTest {
     }
 
     @Test
-    public void StorageController_DeletesItem() throws Exception {
+    void StorageController_DeletesItem() throws Exception {
         doNothing().when(storageService).deleteItem(ArgumentMatchers.anyLong());
 
         ResultActions response = mockMvc.perform(delete("/item/{item_id}",1L)

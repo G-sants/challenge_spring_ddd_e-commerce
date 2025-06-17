@@ -1,20 +1,15 @@
 package g.sants.challenge_e_commerce.services_test;
 
-import g.sants.challenge_e_commerce.application.dto.CartDTOResponse;
 import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
 import g.sants.challenge_e_commerce.application.dto.ItemDTOResponse;
 import g.sants.challenge_e_commerce.application.port.output.StorageRepository;
 import g.sants.challenge_e_commerce.application.service.StorageService;
-import g.sants.challenge_e_commerce.domain.Cart;
 import g.sants.challenge_e_commerce.domain.Storage;
-import g.sants.challenge_e_commerce.domain.User;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -35,7 +30,7 @@ public class StorageServicesTests {
     private StorageService storageService;
 
     @Test
-    public void storageService_FindAll_ReturnsAllItems(){
+    void storageService_FindAll_ReturnsAllItems(){
         Storage item1 = new Storage("Potato", 0.99, 100);
         item1.setId(1L);
         Storage item2 = new Storage("Apple", 2.99, 100);
@@ -50,7 +45,7 @@ public class StorageServicesTests {
     }
 
     @Test
-    public void storageService_FindById_ReturnsItemById(){
+    void storageService_FindById_ReturnsItemById(){
         Storage item1 = new Storage("Potato",0.99,100);
         item1.setId(1L);
         storageRepository.save(item1);
@@ -66,7 +61,7 @@ public class StorageServicesTests {
     }
 
     @Test
-    public void storageService_CreatesItem() {
+    void storageService_CreatesItem() {
         ItemDTORequest item = new ItemDTORequest("Potato",0.99,100);
 
         Storage storage = storageService.createItem(item);
@@ -76,7 +71,7 @@ public class StorageServicesTests {
     }
 
     @Test
-    public void storageService_UpdateItem_UpdatesItemInDataBase(){
+    void storageService_UpdateItem_UpdatesItemInDataBase(){
         Storage item1 = new Storage("Potato",0.99,100);
         item1.setId(1L);
         storageRepository.save(item1);
@@ -92,7 +87,7 @@ public class StorageServicesTests {
     }
 
     @Test
-    public void storageService_DeleteItem_ReturnsNull(){
+    void storageService_DeleteItem_ReturnsNull(){
         Storage item1 = new Storage("Potato",0.99,100);
         List<Storage> itemList = new ArrayList<>();
 
