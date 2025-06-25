@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,58 +30,60 @@ import java.util.Optional;
 @RequestMapping("/orders")
 public class CartController {
 
-    private final CartService kartService;
+    private final CartService cartService;
     private final UserService userService;
     private final StorageService storageService;
     private final RabbitTemplate rabbitTemplate;
+    private final RestTemplate restTemplate;
 
     @Autowired
     public CartController(
-            CartService kartService,
+            CartService cartService,
             UserService userService,
             StorageService storageService,
-            RabbitTemplate rabbitTemplate) {
-        this.kartService = kartService;
+            RabbitTemplate rabbitTemplate, RestTemplate restTemplate) {
+        this.cartService = cartService;
         this.userService = userService;
         this.storageService = storageService;
         this.rabbitTemplate = rabbitTemplate;
+        this.restTemplate = restTemplate;
     }
 
     @GetMapping("/user/{userId}")
-    public List<CartDTOResponse> getAllKarts(@PathVariable Long userId) {
-        return kartService.getAllCarts(userId);
+    public List<CartDTOResponse> getAllcarts(@PathVariable Long userId) {
+        return cartService.getAllCarts(userId);
     }
 
-    @GetMapping("/user/{userId}/kart/{kartId}")
-    public ResponseEntity<CartDTOResponse> getKartById(@PathVariable Long userId,
-                                                       @PathVariable Long kartId) {
+    @GetMapping("/user/{userId}/cart/{cartId}")
+    public ResponseEntity<CartDTOResponse> getcartById(@PathVariable Long userId,
+                                                       @PathVariable Long cartId) {
         UserDTOResponse user = userService.getUser(userId);
         if (user == null) {
             throw new UserNotFoundException();
         }
-        CartDTOResponse kart = kartService.getCart(kartId);
-        if (kart == null) {
+        CartDTOResponse cart = cartService.getCart(cartId);
+        if (cart == null) {
             throw new OrderNotFoundException();
         }
-        return ResponseEntity.ok(kart);
+        return ResponseEntity.ok(cart);
     }
 
     @PostMapping("/user/{userId}")
-    public ResponseEntity<Object> createKart(@PathVariable Long userId,
+    public ResponseEntity<Object> createcart(@PathVariable Long userId,
                                              @RequestBody List<Item> items) {
-        Cart kart = new Cart();
+        Cart cart = new Cart();
 
         for (Item item : items) {
-            kart.addItem(item);
+            cart.addItem(item);
         }
 
-        Optional<User> user = userService.getUserForKart(userId);
-        CartDTOResponse createdKart;
+        Optional<User> user = userService.getUserForCart(userId);
+        CartDTOResponse createdcart;
         if (user.isPresent()) {
-            kart.setUser(user.get());
+            cart.setUser(user.get());
 
-            for (int i =0;i<kart.getItems().size();i++) {
-                Item itemCheck = kart.getItems().get(i);
+            for (int i =0;i<cart.getItems().size();i++) {
+                Item itemCheck = cart.getItems().get(i);
                 Storage itemVer = storageService.findItemByName(itemCheck.getItemName());
                 if (itemVer != null && itemVer.getName().equalsIgnoreCase(itemCheck.getItemName())) {
                     int storageCont = Integer.signum(itemVer.getQuantity() - itemCheck.getQuantity());
@@ -88,10 +91,10 @@ public class CartController {
                         case 1:
                             itemVer.setQuantity(itemVer.getQuantity()-itemCheck.getQuantity());
                             storageService.saveItemInStorage(itemVer);
-                            createdKart = kartService.createCart(userId, kart);
+                            createdcart = cartService.createCart(userId, cart);
 
-                            rabbitTemplate.convertAndSend(MessageCategory.ORDER_CREATED,kart.getUser().getName());
-                            return ResponseEntity.status(HttpStatus.CREATED).body(createdKart);
+                            rabbitTemplate.convertAndSend(MessageCategory.ORDER_CREATED,cart.getUser().getName());
+                            return ResponseEntity.status(HttpStatus.CREATED).body(createdcart);
 
                         case 0:
                             itemVer.setQuantity(-itemCheck.getQuantity());
@@ -99,7 +102,7 @@ public class CartController {
                             return ResponseEntity.status(HttpStatus.CREATED).body("Order was made, but stock is now empty");
 
                         case -1:
-                            return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).body("Error adding to kart, item"+ itemVer.getName()+
+                            return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).body("Error adding to cart, item"+ itemVer.getName()+
                                     " is out of stock");
                     }
                 }
@@ -110,30 +113,54 @@ public class CartController {
             throw new UserNotFoundException();
         }
     }
+    
+    @GetMapping("/checkout/user/{userId}/order/{cartId}")
+    public ResponseEntity<CartDTORequest> checkOutOrder(@PathVariable Long userId,@PathVariable Long cartId){
 
-    @PutMapping("/add/user/{userId}/kart/{kartId}")
-    public ResponseEntity<Object> updatedKart(@PathVariable Long userId, @PathVariable Long kartId,
-                                              @RequestBody CartDTORequest kartDetails) {
+        String paymentCheck = restTemplate.getForObject("http://localhost:8081/checkout/order",String.class);
+
+        if(paymentCheck!=null && paymentCheck.equalsIgnoreCase("confirmed")) {
+            UserDTOResponse user = userService.getUser(userId);
+            if (user == null) {
+                throw new UserNotFoundException();
+            }
+            CartDTOResponse cart = cartService.getCart(cartId);
+            if (cart == null) {
+                throw new OrderNotFoundException();
+            }
+
+            String cartValidate = cart.status();
+            if ("PENDING".equals(cartValidate)) {
+                cartService.payedCart(userId, cartId);
+            } else throw new OrderCancelledException();
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/add/user/{userId}/cart/{cartId}")
+    public ResponseEntity<Object> updatedcart(@PathVariable Long userId, @PathVariable Long cartId,
+                                              @RequestBody CartDTORequest cartDetails) {
 
         UserDTOResponse user = userService.getUser(userId);
         if (user == null){
             throw new UserNotFoundException();
         }
 
-        CartDTOResponse kart = kartService.getCart(kartId);
-        if (kart == null) {
+        CartDTOResponse cart = cartService.getCart(cartId);
+        if (cart == null) {
             throw new OrderNotFoundException();
         }
 
-        String kartValidate = kart.status();
-        if ("PENDING".equals(kartValidate)) {
-            Cart updateKart = kartService.updateCart(userId, kartId, kartDetails);
-             if (updateKart == null) {
+        String cartValidate = cart.status();
+        if ("PENDING".equals(cartValidate)) {
+            Cart updatecart = cartService.updateCart(userId, cartId, cartDetails);
+             if (updatecart == null) {
                 return ResponseEntity.notFound().build();
             }
 
-            for(int i =0;i<kart.items().size();i++){
-                ItemDTORequest itemCheck = kartDetails.items().get(i);
+            for(int i =0;i<cart.items().size();i++){
+                ItemDTORequest itemCheck = cartDetails.items().get(i);
                 Storage itemVer = storageService.findItemByName(itemCheck.itemName());
                 if (itemVer != null && itemVer.getName().equalsIgnoreCase(itemCheck.itemName())) {
                     int storageCont = Integer.signum(itemVer.getQuantity() - itemCheck.quantity());
@@ -141,13 +168,13 @@ public class CartController {
                         case 1:
                             itemVer.setQuantity(itemVer.getQuantity()-itemCheck.quantity());
                             storageService.saveItemInStorage(itemVer);
-                            return ResponseEntity.ok(updateKart);
+                            return ResponseEntity.ok(updatecart);
                         case 0: 
                             itemVer.setQuantity(0);
                             storageService.saveItemInStorage(itemVer);
                             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Order was made, but stock is now empty");
                         case -1:
-                            return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).body("Error adding to kart, item"+ itemVer.getName()+
+                            return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).body("Error adding to cart, item"+ itemVer.getName()+
                                     " is out of stock");
                     }
                 }
@@ -155,61 +182,61 @@ public class CartController {
         } throw new OrderCancelledException();
     }
 
-    @PutMapping("/remove/user/{userId}/kart/{kartId}")
-    public ResponseEntity<Object> deletedKart(@PathVariable Long userId, @PathVariable Long kartId,
-                                              @RequestBody CartDTORequest kartDetails) {
+    @PutMapping("/remove/user/{userId}/cart/{cartId}")
+    public ResponseEntity<Object> deletedcart(@PathVariable Long userId, @PathVariable Long cartId,
+                                              @RequestBody CartDTORequest cartDetails) {
 
         UserDTOResponse user = userService.getUser(userId);
         if (user == null){
             throw new UserNotFoundException();
         }
 
-        CartDTOResponse kart = kartService.getCart(kartId);
-        if (kart == null) {
+        CartDTOResponse cart = cartService.getCart(cartId);
+        if (cart == null) {
             throw new OrderNotFoundException();
         }
 
-        String kartValidate = kart.status();
-        if ("PENDING".equals(kartValidate)) {
-            Cart updatedKart = kartService.deletedCart(userId, kartId, kartDetails);
-            if (updatedKart == null) {
+        String cartValidate = cart.status();
+        if ("PENDING".equals(cartValidate)) {
+            Cart updatedcart = cartService.deletedCart(userId, cartId, cartDetails);
+            if (updatedcart == null) {
                 return ResponseEntity.notFound().build();
             }
-            for(int i =0;i<kart.items().size();i++){
-                ItemDTORequest itemCheck = kart.items().get(i);
-                Item itemVer = updatedKart.getItems().get(i);
+            for(int i =0;i<cart.items().size();i++){
+                ItemDTORequest itemCheck = cart.items().get(i);
+                Item itemVer = updatedcart.getItems().get(i);
                 if (itemVer != null && itemVer.getItemName().equalsIgnoreCase(itemCheck.itemName())) {
                     itemVer.setQuantity(+1);
                     Storage savedItem = storageService.findItemByName(itemVer.getItemName());
                     savedItem.setQuantity(itemVer.getQuantity());
                     storageService.saveItemInStorage(savedItem);
-                    return ResponseEntity.ok(updatedKart);
+                    return ResponseEntity.ok(updatedcart);
                 }
             }
         } throw new OrderCancelledException();
     }
 
-    @PutMapping("/cancel/user/{userId}/kart/{kartId}")
-    public ResponseEntity<Cart> newStatus(@PathVariable Long userId, @PathVariable Long kartId,
-                                          @RequestBody CartDTORequest kartDetails) {
+    @PutMapping("/cancel/user/{userId}/cart/{cartId}")
+    public ResponseEntity<Cart> newStatus(@PathVariable Long userId, @PathVariable Long cartId,
+                                          @RequestBody CartDTORequest cartDetails) {
 
         UserDTOResponse user = userService.getUser(userId);
         if (user == null){
             throw new UserNotFoundException();
         }
 
-        CartDTOResponse kart = kartService.getCart(kartId);
-        if (kart == null) {
+        CartDTOResponse cart = cartService.getCart(cartId);
+        if (cart == null) {
             throw new OrderNotFoundException();
         }
 
-        String kartValidate = kart.status();
-        if ("PENDING".equals(kartValidate)) {
-            Cart updatedKart = kartService.deleteCart(userId, kartId, kartDetails);
-            if (updatedKart == null) {
+        String cartValidate = cart.status();
+        if ("PENDING".equals(cartValidate)) {
+            Cart updatedcart = cartService.deleteCart(userId, cartId, cartDetails);
+            if (updatedcart == null) {
                 return ResponseEntity.notFound().build();
             }
-            return ResponseEntity.ok(updatedKart);
+            return ResponseEntity.ok(updatedcart);
         } throw new OrderCancelledException();
     }
 

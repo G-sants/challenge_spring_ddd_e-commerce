@@ -8,12 +8,10 @@ import java.util.List;
 
 public class CartOperations {
 
-    public static String dateCreation(){
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        String formatedDate = now.format(formatter);
-        return "Created at "+formatedDate;
+    public static LocalDateTime dateCreation(){
+        return LocalDateTime.now();
     }
+
     public static String status(){
         return "PENDING";
     }

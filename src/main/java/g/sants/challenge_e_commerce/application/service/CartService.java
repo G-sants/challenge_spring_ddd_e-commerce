@@ -89,4 +89,12 @@ public class CartService {
             throw new OrderCancelledException();
         }
     }
+
+    public void payedCart(Long userId, Long cartId){
+        userRepository.findById((userId));
+        CartDTOResponse dtoCart = getCart(cartId);
+        Cart cart = Cart.dtoCreateCart(dtoCart);
+        cart.setStatus("PAYED");
+        cartRepository.save(cart);
+    }
 }

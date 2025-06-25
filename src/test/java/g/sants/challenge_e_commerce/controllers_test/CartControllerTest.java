@@ -127,7 +127,7 @@ public class CartControllerTest {
 
     @Test
     void CartController_CreatesOrder() throws Exception {
-        given(userService.getUserForKart(1L)).willReturn(Optional.of(user));
+        given(userService.getUserForCart(1L)).willReturn(Optional.of(user));
         given(storageService.findItemByName("Potato")).willReturn(storageItem);
         given(cartService.createCart(anyLong(),any(Cart.class))).willReturn(cart1);
 

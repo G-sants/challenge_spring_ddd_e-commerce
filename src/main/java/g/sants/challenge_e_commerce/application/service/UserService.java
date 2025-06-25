@@ -56,7 +56,7 @@ public class UserService {
        userRepository.deleteById(id);
     }
 
-    public Optional<User> getUserForKart(Long id) {
+    public Optional<User> getUserForCart(Long id) {
         return userRepository.findById(id);
     }
 

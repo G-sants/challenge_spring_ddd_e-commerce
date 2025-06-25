@@ -11,8 +11,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
     import g.sants.challenge_e_commerce.application.service.methods.CartOperations;
     import jakarta.persistence.*;
 
-    import java.util.ArrayList;
-    import java.util.HashMap;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
     import java.util.Iterator;
     import java.util.List;
     import java.util.stream.Collectors;
@@ -33,8 +33,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
         @Column(nullable = false)
         private String status;
         @Column(nullable = false)
-        public String date;
-        private static HashMap<Long, Item> usercart;
+        public LocalDateTime date;
 
         @ManyToOne
         @JoinColumn(name = "user_id")
@@ -109,11 +108,11 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
             this.status = status;
         }
 
-        public String getDate() {
+        public LocalDateTime getDate() {
             return date;
         }
 
-        public void setDate(String date) {
+        public void setDate(LocalDateTime date) {
             this.date = date;
         }
 
