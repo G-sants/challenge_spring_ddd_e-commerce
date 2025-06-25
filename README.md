@@ -113,6 +113,7 @@ As the application at the moment does not block the creation of administrator ac
 
 ````
 {
+"customerID":"12312312312",
 "name":"yourname",
 "lastName":"yourlastname",
 "email":"youremail",
@@ -123,6 +124,7 @@ JSON Input Body for ADMIN creation:
 
 ````
 {
+"customerID":"12312312312", 
 "name":"yourname",
 "lastName":"yourlastname",
 "email":"youremail",
