@@ -25,6 +25,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/orders")
@@ -113,29 +114,27 @@ public class CartController {
             throw new UserNotFoundException();
         }
     }
-    
-    @GetMapping("/checkout/user/{userId}/order/{cartId}")
-    public ResponseEntity<CartDTORequest> checkOutOrder(@PathVariable Long userId,@PathVariable Long cartId){
 
-        String paymentCheck = restTemplate.getForObject("http://localhost:8081/checkout/order",String.class);
+    @PostMapping("/checkout/user/{userId}/order/{cartId}")
+    public ResponseEntity<UUID> sentCheckOutOrder(@PathVariable Long userId,@PathVariable Long cartId) {
 
-        if(paymentCheck!=null && paymentCheck.equalsIgnoreCase("confirmed")) {
-            UserDTOResponse user = userService.getUser(userId);
-            if (user == null) {
-                throw new UserNotFoundException();
-            }
-            CartDTOResponse cart = cartService.getCart(cartId);
-            if (cart == null) {
-                throw new OrderNotFoundException();
-            }
-
-            String cartValidate = cart.status();
-            if ("PENDING".equals(cartValidate)) {
-                cartService.payedCart(userId, cartId);
-            } else throw new OrderCancelledException();
+        UserDTOResponse user = userService.getUser(userId);
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+        CartDTOResponse cart = cartService.getCart(cartId);
+        if (cart == null) {
+            throw new OrderNotFoundException();
         }
 
-        return ResponseEntity.ok().build();
+        String cartValidate = cart.status();
+        UUID id;
+        if ("PENDING".equals(cartValidate)) {
+            String url = "http://localhost:8081/checkout/order-new";
+            id = cartService.sentCheckoutOrder(url, cartId);
+        } else throw new OrderCancelledException();
+
+        return ResponseEntity.ok(id);
     }
 
     @PutMapping("/add/user/{userId}/cart/{cartId}")
