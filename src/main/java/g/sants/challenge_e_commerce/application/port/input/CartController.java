@@ -179,7 +179,8 @@ public class CartController {
                     }
                 }
             }
-        } throw new OrderCancelledException();
+        } else throw new OrderCancelledException();
+        return ResponseEntity.badRequest().body("Invalid cart status or no items processed.");
     }
 
     @PutMapping("/remove/user/{userId}/cart/{cartId}")

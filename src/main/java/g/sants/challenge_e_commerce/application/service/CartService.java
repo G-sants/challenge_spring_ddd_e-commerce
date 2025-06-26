@@ -3,6 +3,7 @@ package g.sants.challenge_e_commerce.application.service;
 import g.sants.challenge_e_commerce.application.dto.CartDTORequest;
 import g.sants.challenge_e_commerce.application.dto.CartDTOResponse;
 import g.sants.challenge_e_commerce.application.exceptions.errors.OrderCancelledException;
+import g.sants.challenge_e_commerce.application.exceptions.errors.OrderNotFoundException;
 import g.sants.challenge_e_commerce.application.exceptions.errors.UserNotFoundException;
 import g.sants.challenge_e_commerce.application.port.output.CartRepository;
 import g.sants.challenge_e_commerce.application.port.output.UserRepository;
@@ -61,16 +62,16 @@ public class CartService {
 
     public Cart updateCart(Long id, Long cartId, CartDTORequest cartDetails) {
         userRepository.findById(id);
-        CartDTOResponse dtoCart = getCart(cartId);
-        Cart newCart = Cart.dtoCreateCart(dtoCart);
-        Cart.updateCartItems(newCart, cartDetails);
-        return cartRepository.save(newCart);
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(OrderNotFoundException::new);
+        Cart.updateCartItems(cart, cartDetails);
+        return cartRepository.save(cart);
     }
 
     public Cart deletedCart(Long userId, Long cartId, CartDTORequest cartDetails) {
         userRepository.findById(userId);
-        CartDTOResponse dtoCart = getCart(cartId);
-        Cart cart = Cart.dtoCreateCart(dtoCart);
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(OrderNotFoundException::new);
         Cart.processItemsInCart(cart, cartDetails);
         updateCartTotals(cart);
         return cartRepository.save(cart);
@@ -78,8 +79,8 @@ public class CartService {
 
     public Cart deleteCart(Long userId, Long cartId, CartDTORequest statusDetails) {
         userRepository.findById(userId);
-        CartDTOResponse dtoCart = getCart(cartId);
-        Cart cart = Cart.dtoCreateCart(dtoCart);
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(OrderNotFoundException::new);
         String checkStatus = statusDetails.status();
         if (checkStatus.equalsIgnoreCase("cancel")) {
             cart.setStatus("CANCELLED");
@@ -92,8 +93,8 @@ public class CartService {
 
     public void payedCart(Long userId, Long cartId){
         userRepository.findById((userId));
-        CartDTOResponse dtoCart = getCart(cartId);
-        Cart cart = Cart.dtoCreateCart(dtoCart);
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(OrderNotFoundException::new);
         cart.setStatus("PAYED");
         cartRepository.save(cart);
     }

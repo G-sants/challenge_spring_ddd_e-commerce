@@ -67,11 +67,7 @@ public class Item {
         this.quantity = quantity;
     }
 
-    public Cart getcart() {
-        return cart;
-    }
-
-    public void setcart(Cart cart) {
+    public void setCart(Cart cart) {
         this.cart = cart;
     }
 }

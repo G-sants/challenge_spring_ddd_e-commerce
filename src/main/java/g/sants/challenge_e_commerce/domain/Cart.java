@@ -5,8 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
     import com.fasterxml.jackson.annotation.JsonIgnore;
     import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     import g.sants.challenge_e_commerce.application.dto.CartDTORequest;
-    import g.sants.challenge_e_commerce.application.dto.CartDTOResponse;
-    import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
+import g.sants.challenge_e_commerce.application.dto.ItemDTORequest;
     import g.sants.challenge_e_commerce.application.exceptions.errors.ItemNotFoundException;
     import g.sants.challenge_e_commerce.application.service.methods.CartOperations;
     import jakarta.persistence.*;
@@ -15,9 +14,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
     import java.util.Iterator;
     import java.util.List;
-    import java.util.stream.Collectors;
 
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @Entity
     public class Cart {
 
@@ -51,15 +49,6 @@ import java.util.ArrayList;
             this.totalDiscount = 0.0;
             this.status = CartOperations.status();
             this.date = CartOperations.dateCreation();
-        }
-
-        public static Cart dtoCreateCart(CartDTOResponse cartResponse){
-            Cart newcart = new Cart();
-            newcart.items = cartResponse.items().stream().map(Item::new)
-                    .collect(Collectors.toList());
-            newcart.date = cartResponse.date();
-            newcart.status = cartResponse.status();
-            return newcart;
         }
 
         public void setId(long id) {
@@ -133,14 +122,11 @@ import java.util.ArrayList;
         }
 
         public void addItem(Item item) {
+            item.setCart(this);
             items.add(item);
         }
 
-        public void removeItem(Item item) {
-            items.remove(item);
-        }
-
-        public static void updateCartItems(Cart cart, CartDTORequest cartDetails) {
+    public static void updateCartItems(Cart cart, CartDTORequest cartDetails) {
             if (!cart.getItems().isEmpty()) {
                 for (ItemDTORequest itemDTO : cartDetails.items()) {
                     updateExistingItem(cart, itemDTO);
