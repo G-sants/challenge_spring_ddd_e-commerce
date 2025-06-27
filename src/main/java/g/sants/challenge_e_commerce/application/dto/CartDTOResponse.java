@@ -12,7 +12,7 @@ public record CartDTOResponse(List<ItemDTORequest> items, Double totalPrice, Dou
         this(cart.getItems().stream().map(item -> new ItemDTORequest(item.getItemName(), item.getPrice(),
                         item.getQuantity())).collect(Collectors.toList())
                 , cart.getTotalPrice(), cart.getTotalPriceDiscount(),
-                cart.getTotalDiscount(), cart.getStatus(), cart.date);
+                cart.getTotalDiscount(), cart.getStatus(), cart.getDate());
     }
 
 }

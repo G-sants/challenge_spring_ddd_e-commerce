@@ -31,7 +31,8 @@ import java.util.ArrayList;
         @Column(nullable = false)
         private String status;
         @Column(nullable = false)
-        public LocalDateTime date;
+        private LocalDateTime date;
+        private String paymentCode;
 
         @ManyToOne
         @JoinColumn(name = "user_id")
@@ -121,7 +122,15 @@ import java.util.ArrayList;
             return items;
         }
 
-        public void addItem(Item item) {
+    public String getPaymentCode() {
+        return paymentCode;
+    }
+
+    public void setPaymentCode(String paymentCode) {
+        this.paymentCode = paymentCode;
+    }
+
+    public void addItem(Item item) {
             item.setCart(this);
             items.add(item);
         }

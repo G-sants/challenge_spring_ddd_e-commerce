@@ -69,6 +69,13 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
 
+    @GetMapping("/checkout/user/{userId}/order/{cartId}/paycode")
+    public ResponseEntity<String> getPaymentCode(@PathVariable Long userId,
+                                                 @PathVariable Long cartId){
+        String payment = cartService.getCode(userId, cartId);
+        return ResponseEntity.ok(payment);
+    }
+
     @PostMapping("/user/{userId}")
     public ResponseEntity<Object> createcart(@PathVariable Long userId,
                                              @RequestBody List<Item> items) {
@@ -116,7 +123,7 @@ public class CartController {
     }
 
     @PostMapping("/checkout/user/{userId}/order/{cartId}")
-    public ResponseEntity<UUID> sentCheckOutOrder(@PathVariable Long userId,@PathVariable Long cartId) {
+    public ResponseEntity<String> sentCheckOutOrder(@PathVariable Long userId,@PathVariable Long cartId) {
 
         UserDTOResponse user = userService.getUser(userId);
         if (user == null) {
@@ -128,9 +135,9 @@ public class CartController {
         }
 
         String cartValidate = cart.status();
-        UUID id;
+        String id;
         if ("PENDING".equals(cartValidate)) {
-            String url = "http://localhost:8081/checkout/order-new";
+            String url = "http://localhost:8081/checkout/order/new";
             id = cartService.sentCheckoutOrder(url, cartId);
         } else throw new OrderCancelledException();
 

@@ -100,7 +100,7 @@ public class CartService {
         }
     }
 
-    public UUID sentCheckoutOrder(String url, Long cartId){
+    public String sentCheckoutOrder(String url, Long cartId){
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(OrderNotFoundException::new);
 
@@ -111,8 +111,11 @@ public class CartService {
 
         HttpEntity<CheckOutOrder> requestEntity = new HttpEntity<>(check, headers);
 
-        ResponseEntity<UUID> response = restTemplate.exchange(url,
-                HttpMethod.POST, requestEntity, UUID.class);
+        ResponseEntity<String> response = restTemplate.exchange(url,
+                HttpMethod.POST, requestEntity, String.class);
+
+        cart.setPaymentCode(response.getBody());
+        cartRepository.save(cart);
 
         return response.getBody();
     }
@@ -123,5 +126,12 @@ public class CartService {
                 .orElseThrow(OrderNotFoundException::new);
         cart.setStatus("PAYED");
         cartRepository.save(cart);
+    }
+
+    public String getCode(Long userId, Long cartId) {
+        userRepository.findById(userId);
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(OrderNotFoundException::new);
+        return cart.getPaymentCode();
     }
 }
