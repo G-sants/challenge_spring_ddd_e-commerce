@@ -120,10 +120,8 @@ public class CartService {
         return response.getBody();
     }
 
-    public void payedCart(Long userId, Long cartId){
-        userRepository.findById((userId));
-        Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(OrderNotFoundException::new);
+    public void payedCart(String paymentCode){
+        Cart cart = cartRepository.findByPaymentCode(paymentCode);
         cart.setStatus("PAYED");
         cartRepository.save(cart);
     }

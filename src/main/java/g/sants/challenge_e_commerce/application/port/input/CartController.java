@@ -25,7 +25,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/orders")
@@ -51,12 +50,12 @@ public class CartController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<CartDTOResponse> getAllcarts(@PathVariable Long userId) {
+    public List<CartDTOResponse> getAllCarts(@PathVariable Long userId) {
         return cartService.getAllCarts(userId);
     }
 
     @GetMapping("/user/{userId}/cart/{cartId}")
-    public ResponseEntity<CartDTOResponse> getcartById(@PathVariable Long userId,
+    public ResponseEntity<CartDTOResponse> getCartById(@PathVariable Long userId,
                                                        @PathVariable Long cartId) {
         UserDTOResponse user = userService.getUser(userId);
         if (user == null) {
@@ -77,7 +76,7 @@ public class CartController {
     }
 
     @PostMapping("/user/{userId}")
-    public ResponseEntity<Object> createcart(@PathVariable Long userId,
+    public ResponseEntity<Object> createCart(@PathVariable Long userId,
                                              @RequestBody List<Item> items) {
         Cart cart = new Cart();
 
@@ -86,7 +85,7 @@ public class CartController {
         }
 
         Optional<User> user = userService.getUserForCart(userId);
-        CartDTOResponse createdcart;
+        CartDTOResponse createdCart;
         if (user.isPresent()) {
             cart.setUser(user.get());
 
@@ -99,10 +98,10 @@ public class CartController {
                         case 1:
                             itemVer.setQuantity(itemVer.getQuantity()-itemCheck.getQuantity());
                             storageService.saveItemInStorage(itemVer);
-                            createdcart = cartService.createCart(userId, cart);
+                            createdCart = cartService.createCart(userId, cart);
 
                             rabbitTemplate.convertAndSend(MessageCategory.ORDER_CREATED,cart.getUser().getName());
-                            return ResponseEntity.status(HttpStatus.CREATED).body(createdcart);
+                            return ResponseEntity.status(HttpStatus.CREATED).body(createdCart);
 
                         case 0:
                             itemVer.setQuantity(-itemCheck.getQuantity());
@@ -144,8 +143,14 @@ public class CartController {
         return ResponseEntity.ok(id);
     }
 
+    @PutMapping("/checkout/user/order/{paymentCode}")
+    public ResponseEntity<String> confirmPayedOrder(@PathVariable String paymentCode){
+        cartService.payedCart(paymentCode);
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("/add/user/{userId}/cart/{cartId}")
-    public ResponseEntity<Object> updatedcart(@PathVariable Long userId, @PathVariable Long cartId,
+    public ResponseEntity<Object> updatedCart(@PathVariable Long userId, @PathVariable Long cartId,
                                               @RequestBody CartDTORequest cartDetails) {
 
         UserDTOResponse user = userService.getUser(userId);
@@ -190,7 +195,7 @@ public class CartController {
     }
 
     @PutMapping("/remove/user/{userId}/cart/{cartId}")
-    public ResponseEntity<Object> deletedcart(@PathVariable Long userId, @PathVariable Long cartId,
+    public ResponseEntity<Object> deletedCart(@PathVariable Long userId, @PathVariable Long cartId,
                                               @RequestBody CartDTORequest cartDetails) {
 
         UserDTOResponse user = userService.getUser(userId);

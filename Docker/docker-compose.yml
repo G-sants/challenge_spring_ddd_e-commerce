@@ -1,0 +1,3 @@
+services:
+  database-server:
+    container_name: mysql_server
